@@ -67,6 +67,26 @@ python app.py
 ```
 
 5. 打开浏览器访问：http://localhost:7860
+## Docker 部署（推荐）
+
+### 一键启动
+```bash
+docker run -d -p 7860:7860 --name ml-lab jakejrc/ml-lab:latest
+```
+
+### 配置 AI 助教 API Key
+```bash
+docker run -d -p 7860:7860 -e DASHSCOPE_API_KEY=your_api_key_here --name ml-lab jakejrc/ml-lab:latest
+```
+
+### 访问
+浏览器打开 http://localhost:7860
+
+### 停止与删除
+```bash
+docker stop ml-lab && docker rm ml-lab
+```
+
 
 ## 项目结构
 
