@@ -7,6 +7,15 @@ LABEL org.opencontainers.image.source="https://github.com/jakejrc/ML-Lab"
 
 WORKDIR /app
 
+# 安装中文字体（matplotlib 中文渲染需要）
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fonts-noto-cjk \
+    && rm -rf /var/lib/apt/lists/* \
+    && fc-cache -fv
+
+# 清除 matplotlib 字体缓存（首次启动时重建）
+ENV MPLBACKEND=Agg
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
