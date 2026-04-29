@@ -1,4 +1,6 @@
-# ML-Lab：面向高职教学的机器学习可视化实验平台
+# ML-Lab
+
+![v3.1](https://img.shields.io/badge/version-v3.1-green)：面向高职教学的机器学习可视化实验平台
 
 > 基于通义千问国产大模型辅助开发 | 江苏工程职业技术学院
 
