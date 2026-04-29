@@ -19,8 +19,32 @@ try:
 except ImportError:
     HAS_SCIPY = False
 
-plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'DejaVu Sans']
-plt.rcParams['axes.unicode_minus'] = False
+import platform, os, matplotlib.font_manager as fm
+
+def _setup_chinese_font():
+    """跨平台中文字体配置"""
+    _system = platform.system()
+    if _system == 'Windows':
+        _fonts = ['SimHei', 'Microsoft YaHei', 'KaiTi']
+    elif _system == 'Darwin':
+        _fonts = ['PingFang SC', 'Heiti SC', 'STHeiti', 'Arial Unicode MS']
+    else:
+        # Linux / Docker — 优先查找已安装的 CJK 字体
+        _fonts = []
+        _candidates = [
+            'Noto Sans CJK SC', 'Noto Sans SC', 'WenQuanYi Micro Hei',
+            'WenQuanYi Zen Hei', 'Droid Sans Fallback', 'DejaVu Sans',
+        ]
+        _available = {f.name for f in fm.fontManager.ttflist}
+        for _c in _candidates:
+            if _c in _available:
+                _fonts.append(_c)
+        if not _fonts:
+            _fonts = ['DejaVu Sans']
+    plt.rcParams['font.sans-serif'] = _fonts
+    plt.rcParams['axes.unicode_minus'] = False
+
+_setup_chinese_font()
 
 
 # ═══════════════════════════════════════════════════════════════
