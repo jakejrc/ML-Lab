@@ -81,7 +81,7 @@ def plot_preprocessing_comparison(X_before, X_after, title="预处理对比", fe
     axes[1].set_title(f"预处理后 — 特征 {feature_idx}"); axes[1].set_xlabel("特征值"); axes[1].set_ylabel("频数")
     axes[1].axvline(np.nanmean(X_after[:, feature_idx]), color='red', linestyle='--', label=f'均值: {np.nanmean(X_after[:, feature_idx]):.2f}')
     axes[1].legend(fontsize=8)
-    plt.suptitle(title, fontsize=12, fontweight='bold'); plt.tight_layout()
+    plt.suptitle(title, fontsize=12, fontweight='bold'); plt.tight_layout(rect=[0, 0, 1, 0.95])
     return fig
 
 
@@ -106,7 +106,7 @@ def plot_training_history(history, title="训练过程"):
         axes[1].set_xlabel("迭代次数"); axes[1].set_ylabel("权重值"); axes[1].set_title("权重变化曲线"); axes[1].legend(fontsize=8); axes[1].grid(True, alpha=0.3)
     else:
         axes[1].text(0.5, 0.5, "无权重变化数据", ha='center', va='center', transform=axes[1].transAxes); axes[1].set_title("权重变化曲线")
-    plt.suptitle(title, fontsize=12, fontweight='bold'); plt.tight_layout()
+    plt.suptitle(title, fontsize=12, fontweight='bold'); plt.tight_layout(rect=[0, 0, 1, 0.95])
     return fig
 
 
@@ -190,7 +190,7 @@ def plot_regression_results(y_true, y_pred, title="回归结果"):
     residuals = y_true - y_pred
     axes[1].hist(residuals, bins=30, color='steelblue', edgecolor='k', alpha=0.7)
     axes[1].axvline(0, color='red', linestyle='--', label='零残差线'); axes[1].set_xlabel("残差"); axes[1].set_ylabel("频数"); axes[1].set_title("残差分布"); axes[1].legend()
-    plt.suptitle(title, fontsize=12, fontweight='bold'); plt.tight_layout()
+    plt.suptitle(title, fontsize=12, fontweight='bold'); plt.tight_layout(rect=[0, 0, 1, 0.95])
     return fig
 
 
@@ -666,7 +666,7 @@ def plot_regularization_comparison(X_train, y_train, X_test, y_test,
     axes[2].grid(True, alpha=0.3)
 
     plt.suptitle(title, fontsize=13, fontweight='bold')
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
     return fig
 
 
@@ -778,7 +778,7 @@ def plot_regression_comparison(X_train, y_train, X_test, y_test,
         axes[j].set_visible(False)
 
     plt.suptitle(title, fontsize=14, fontweight='bold')
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
     return fig
 
 
@@ -847,7 +847,7 @@ def plot_search_results(search_result, param_name, title="超参数搜索结果"
     axes[1].grid(True, alpha=0.3)
 
     plt.suptitle(title, fontsize=13, fontweight='bold')
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
     return fig
 
 
@@ -882,7 +882,7 @@ def plot_feature_scaling_comparison(X_before, X_after, feature_names=None, title
         axes[1, i].grid(True, alpha=0.3, axis='y')
 
     plt.suptitle(title, fontsize=13, fontweight='bold', y=1.02)
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
     return fig
 
 
@@ -914,7 +914,7 @@ def plot_feature_scaling_distribution(X_before, X_after, feature_idx=0,
     axes[1].grid(True, alpha=0.3)
 
     plt.suptitle(title, fontsize=13, fontweight='bold', y=1.02)
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
     return fig
 
 
@@ -1109,7 +1109,7 @@ def plot_feature_engineering_summary(results, title="特征工程流水线摘要
         ax.axis('off')
 
     plt.suptitle(title, fontsize=13, fontweight='bold', y=1.02)
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
     return fig
 
 
@@ -1140,5 +1140,5 @@ def plot_feature_distribution_after_construction(X_new, original_n_features,
         axes[i].grid(True, alpha=0.3)
 
     plt.suptitle(title, fontsize=13, fontweight='bold', y=1.02)
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
     return fig
