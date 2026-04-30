@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -480,4 +481,488 @@
 </table>
 
 </body>
+=======
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>ML-Lab 机器学习可视化实验平台 — 开发记录</title>
+<style>
+  @page { size: A4; margin: 25mm 20mm 25mm 20mm; }
+  body { font-family: '微软雅黑', 'Microsoft YaHei', sans-serif; font-size: 11pt; line-height: 1.8; color: #222; }
+  h1 { font-size: 22pt; color: #1a56db; text-align: center; border-bottom: 3px solid #1a56db; padding-bottom: 10px; margin-top: 40px; }
+  h2 { font-size: 16pt; color: #1a56db; border-left: 5px solid #1a56db; padding-left: 12px; margin-top: 30px; }
+  h3 { font-size: 13pt; color: #2563eb; margin-top: 20px; }
+  h4 { font-size: 12pt; color: #374151; margin-top: 15px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 10pt; }
+  th, td { border: 1px solid #d1d5db; padding: 6px 10px; text-align: left; }
+  th { background-color: #eff6ff; color: #1e40af; font-weight: bold; }
+  tr:nth-child(even) { background-color: #f9fafb; }
+  code { background-color: #f3f4f6; padding: 1px 5px; border-radius: 3px; font-family: 'Consolas', monospace; font-size: 10pt; }
+  pre { background-color: #f3f4f6; padding: 12px; border-radius: 5px; font-family: 'Consolas', monospace; font-size: 10pt; white-space: pre-wrap; word-wrap: break-word; border-left: 4px solid #1a56db; }
+  .tip { background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 10px 14px; margin: 12px 0; border-radius: 0 5px 5px 0; }
+  .tip-title { font-weight: bold; color: #065f46; }
+  .warn { background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 10px 14px; margin: 12px 0; border-radius: 0 5px 5px 0; }
+  .warn-title { font-weight: bold; color: #92400e; }
+  .info { background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 10px 14px; margin: 12px 0; border-radius: 0 5px 5px 0; }
+  .info-title { font-weight: bold; color: #1e40af; }
+  ul, ol { margin: 8px 0; padding-left: 24px; }
+  li { margin-bottom: 4px; }
+  .toc { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px 28px; margin: 20px 0; }
+  .toc a { color: #1a56db; text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  .toc ul { list-style: none; padding-left: 0; }
+  .toc ul ul { padding-left: 20px; }
+  .cover { text-align: center; padding: 80px 0 40px 0; }
+  .cover h1 { font-size: 28pt; border: none; color: #1a56db; }
+  .cover .subtitle { font-size: 14pt; color: #6b7280; margin-top: 10px; }
+  .cover .version { font-size: 12pt; color: #9ca3af; margin-top: 30px; }
+  .page-break { page-break-after: always; }
+</style>
+</head>
+<body>
+
+<!-- 封面 -->
+<div class="cover">
+  <h1>ML-Lab 机器学习可视化实验平台</h1>
+  <p class="subtitle">开 发 记 录</p>
+  <p class="version">版本 v1.0.0</p>
+  <p class="version">2026 年 4 月</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- 目录 -->
+<div class="toc">
+  <h2 style="border-left:none; padding-left:0;">目 录</h2>
+  <ul>
+    <li><a href="#ch1">第1章 项目概述</a>
+      <ul>
+        <li><a href="#s1-1">1.1 项目背景</a></li>
+        <li><a href="#s1-2">1.2 设计目标</a></li>
+        <li><a href="#s1-3">1.3 技术栈选型</a></li>
+      </ul>
+    </li>
+    <li><a href="#ch2">第2章 系统架构</a>
+      <ul>
+        <li><a href="#s2-1">2.1 整体架构</a></li>
+        <li><a href="#s2-2">2.2 模块划分</a></li>
+        <li><a href="#s2-3">2.3 数据流</a></li>
+      </ul>
+    </li>
+    <li><a href="#ch3">第3章 模块设计详解</a>
+      <ul>
+        <li><a href="#s3-1">3.1 主界面模块 (app.py)</a></li>
+        <li><a href="#s3-2">3.2 算法引擎模块 (algorithms.py)</a></li>
+        <li><a href="#s3-3">3.3 数据处理模块 (preprocessing.py)</a></li>
+        <li><a href="#s3-4">3.4 模型评估模块 (evaluation.py)</a></li>
+        <li><a href="#s3-5">3.5 可视化模块 (visualization.py)</a></li>
+        <li><a href="#s3-6">3.6 AI 助教模块 (llm_assistant.py)</a></li>
+      </ul>
+    </li>
+    <li><a href="#ch4">第4章 算法注册表设计</a>
+      <ul>
+        <li><a href="#s4-1">4.1 注册表结构</a></li>
+        <li><a href="#s4-2">4.2 工厂函数</a></li>
+        <li><a href="#s4-3">4.3 扩展新算法</a></li>
+      </ul>
+    </li>
+    <li><a href="#ch5">第5章 界面设计</a>
+      <ul>
+        <li><a href="#s5-1">5.1 布局方案</a></li>
+        <li><a href="#s5-2">5.2 页面切换机制</a></li>
+        <li><a href="#s5-3">5.3 视觉主题</a></li>
+      </ul>
+    </li>
+    <li><a href="#ch6">第6章 版本历史与规划</a></li>
+  </ul>
+</div>
+
+<div class="page-break"></div>
+
+<!-- 第1章 -->
+<h2 id="ch1">第1章 项目概述</h2>
+
+<h3 id="s1-1">1.1 项目背景</h3>
+<p>ML-Lab（Machine Learning Laboratory）是为机器学习教学和实验而开发的可视化实验平台。项目旨在为职业院校和高校的机器学习课程提供一个<strong>零代码门槛、全流程可视化</strong>的实验环境，让学生无需编写代码即可体验数据预处理、算法训练、模型评估的完整流程。</p>
+
+<p>同时，项目集成了大语言模型（通义千问）作为 AI 助教，为学生提供实时的概念解释和学习辅导，形成"做中学"与"问中学"相结合的教学模式。</p>
+
+<h3 id="s1-2">1.2 设计目标</h3>
+<table>
+  <tr><th>目标</th><th>描述</th><th>实现方式</th></tr>
+  <tr><td>零代码操作</td><td>用户无需编写任何代码即可完成机器学习全流程实验</td><td>Gradio 交互式界面</td></tr>
+  <tr><td>全流程覆盖</td><td>从数据加载到模型评估，完整覆盖机器学习工作流</td><td>四大功能页面：数据工作台、算法实验室、模型评估、AI助教</td></tr>
+  <tr><td>多算法支持</td><td>涵盖分类和回归两大类任务的经典算法</td><td>统一注册表封装 6 大算法</td></tr>
+  <tr><td>可视化驱动</td><td>通过丰富的图表帮助用户理解模型行为</td><td>10+ 种可视化图表</td></tr>
+  <tr><td>AI 辅助教学</td><td>集成大语言模型提供智能问答</td><td>通义千问 API + 多轮对话管理</td></tr>
+  <tr><td>易于部署</td><td>支持本地安装和 Docker 容器化部署</td><td>Dockerfile + requirements.txt</td></tr>
+</table>
+
+<h3 id="s1-3">1.3 技术栈选型</h3>
+<table>
+  <tr><th>技术层</th><th>选型</th><th>选型理由</th></tr>
+  <tr><td>编程语言</td><td>Python 3.11</td><td>机器学习生态最丰富的语言，教学普及度高</td></tr>
+  <tr><td>Web 框架</td><td>Gradio 4+</td><td>专为机器学习演示设计，快速构建交互界面，内置组件丰富</td></tr>
+  <tr><td>机器学习</td><td>Scikit-learn 1.0+</td><td>经典 ML 算法最成熟的 Python 库，API 统一稳定</td></tr>
+  <tr><td>数据计算</td><td>NumPy + Pandas</td><td>高效数值计算和数据表处理</td></tr>
+  <tr><td>可视化</td><td>Matplotlib</td><td>Python 最经典的绑图库，支持丰富的图表类型</td></tr>
+  <tr><td>大语言模型</td><td>通义千问 (Qwen)</td><td>国产大模型，中文能力强，API 接入简便</td></tr>
+  <tr><td>容器化</td><td>Docker</td><td>标准化部署，消除环境差异</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<!-- 第2章 -->
+<h2 id="ch2">第2章 系统架构</h2>
+
+<h3 id="s2-1">2.1 整体架构</h3>
+<p>ML-Lab 采用<strong>分层架构</strong>设计，从上到下分为：</p>
+<ol>
+  <li><strong>表现层 (Presentation)</strong>：<code>app.py</code> — Gradio Web 界面，负责用户交互和结果展示</li>
+  <li><strong>业务逻辑层 (Business Logic)</strong>：<code>ml_lab/</code> 包 — 各功能模块的具体实现
+    <ul>
+      <li>算法引擎 (<code>algorithms.py</code>)</li>
+      <li>数据处理 (<code>preprocessing.py</code>)</li>
+      <li>模型评估 (<code>evaluation.py</code>)</li>
+      <li>可视化 (<code>visualization.py</code>)</li>
+      <li>AI 助教 (<code>llm_assistant.py</code>)</li>
+    </ul>
+  </li>
+  <li><strong>基础层 (Foundation)</strong>：第三方库 — Scikit-learn、NumPy、Pandas、Matplotlib、Requests</li>
+</ol>
+
+<h3 id="s2-2">2.2 模块划分</h3>
+<table>
+  <tr><th>模块</th><th>职责</th><th>对外接口</th><th>依赖</th></tr>
+  <tr><td>app.py</td><td>界面编排、事件处理、状态管理</td><td>Gradio Blocks</td><td>所有 ml_lab 子模块</td></tr>
+  <tr><td>algorithms.py</td><td>算法实例化、训练、预测</td><td>ALGORITHM_REGISTRY, create_algorithm()</td><td>scikit-learn</td></tr>
+  <tr><td>preprocessing.py</td><td>数据加载、清洗、缩放、划分</td><td>load_dataset(), inject_missing(), handle_missing(), scale_features(), split_data()</td><td>sklearn.datasets, pandas, numpy</td></tr>
+  <tr><td>evaluation.py</td><td>评估指标计算、报告生成</td><td>evaluate_classification(), evaluate_regression()</td><td>sklearn.metrics</td></tr>
+  <tr><td>visualization.py</td><td>各类图表生成</td><td>10+ 个绑图函数</td><td>matplotlib, sklearn</td></tr>
+  <tr><td>llm_assistant.py</td><td>LLM API 调用、对话管理</td><td>call_qwen_api(), ConversationManager</td><td>requests</td></tr>
+</table>
+
+<h3 id="s2-3">2.3 数据流</h3>
+<p>平台的核心数据流如下：</p>
+<ol>
+  <li>用户在<strong>数据工作台</strong>选择数据集 → <code>preprocessing.py</code> 加载数据 → 展示预览和统计信息</li>
+  <li>用户配置预处理参数 → <code>preprocessing.py</code> 执行缺失值处理/特征缩放 → <code>visualization.py</code> 生成对比图</li>
+  <li>用户划分数据集 → <code>preprocessing.py</code> 返回训练集和测试集</li>
+  <li>用户在<strong>算法实验室</strong>选择算法和参数 → <code>algorithms.py</code> 通过工厂函数创建算法实例 → 调用 <code>train()</code> 训练模型</li>
+  <li>训练完成后 → <code>evaluation.py</code> 计算评估指标 → <code>visualization.py</code> 生成结果图表</li>
+  <li>用户在<strong>AI 助教</strong>提问 → <code>llm_assistant.py</code> 构建请求 → 调用通义千问 API → 返回回答</li>
+</ol>
+
+<div class="page-break"></div>
+
+<!-- 第3章 -->
+<h2 id="ch3">第3章 模块设计详解</h2>
+
+<h3 id="s3-1">3.1 主界面模块 (app.py)</h3>
+
+<p><code>app.py</code> 是平台的入口文件（约 27KB），负责构建完整的 Gradio Web 界面。</p>
+
+<h4>核心设计</h4>
+<ul>
+  <li><strong>Gradio Blocks</strong>：使用 Gradio Blocks API 构建自定义布局，而非简单的 Interface</li>
+  <li><strong>四页面架构</strong>：通过 CSS 显隐控制实现单页应用的标签切换效果</li>
+  <li><strong>状态管理</strong>：使用 Gradio 的 <code>gr.State()</code> 组件在页面间共享数据（如加载的数据集、训练好的模型）</li>
+</ul>
+
+<h4>页面组成</h4>
+<table>
+  <tr><th>页面</th><th>Gradio 组件</th><th>核心功能</th></tr>
+  <tr><td>数据工作台</td><td>Dropdown, Slider, RadioGroup, Button, DataFrame, Plot</td><td>数据集选择、预处理配置、数据探索</td></tr>
+  <tr><td>算法实验室</td><td>Dropdown, Slider, Textbox, Button, Text, Plot</td><td>算法选择、参数调节、模型训练</td></tr>
+  <tr><td>模型评估</td><td>Button, Text, Plot</td><td>评估指标展示、可视化图表</td></tr>
+  <tr><td>AI 助教</td><td>Chatbot, Textbox, Button, Dropdown</td><td>对话交互、预设问题</td></tr>
+</table>
+
+<h3 id="s3-2">3.2 算法引擎模块 (algorithms.py)</h3>
+
+<p><code>algorithms.py</code> 实现了 6 大机器学习算法的面向对象封装。</p>
+
+<h4>设计模式</h4>
+<p>采用<strong>策略模式 + 工厂模式</strong>：</p>
+<ul>
+  <li>每个算法封装为一个独立类，实现统一的接口方法：<code>train()</code>、<code>predict()</code>、<code>get_params()</code></li>
+  <li>通过 <code>ALGORITHM_REGISTRY</code> 字典注册所有可用算法</li>
+  <li>通过 <code>create_algorithm()</code> 工厂函数根据名称创建算法实例</li>
+</ul>
+
+<h4>算法类一览</h4>
+<table>
+  <tr><th>类名</th><th>任务类型</th><th>Scikit-learn 实现</th><th>关键特性</th></tr>
+  <tr><td>LinearRegressionModel</td><td>回归</td><td>LinearRegression</td><td>最小二乘法，支持正则化</td></tr>
+  <tr><td>LogisticRegressionModel</td><td>分类</td><td>LogisticRegression</td><td>支持多分类，可配 C/solver</td></tr>
+  <tr><td>KNNModel</td><td>分类/回归</td><td>KNeighborsClassifier/Regressor</td><td>可调 K 值、权重、距离度量</td></tr>
+  <tr><td>DecisionTreeModel</td><td>分类/回归</td><td>DecisionTreeClassifier/Regressor</td><td>可调深度、分裂准则</td></tr>
+  <tr><td>SVMModel</td><td>分类/回归</td><td>SVC/SVR</td><td>支持多种核函数</td></tr>
+  <tr><td>NeuralNetworkModel</td><td>分类/回归</td><td>MLPClassifier/MLPRegressor</td><td>可配隐藏层、激活函数</td></tr>
+</table>
+
+<h4>统一接口设计</h4>
+<pre>class BaseAlgorithmModel:
+    def train(self, X_train, y_train): ...  # 训练模型
+    def predict(self, X_test): ...          # 预测
+    def get_params(self): ...               # 获取当前参数</pre>
+
+<h3 id="s3-3">3.3 数据处理模块 (preprocessing.py)</h3>
+
+<p><code>preprocessing.py</code> 负责数据集管理和预处理流水线。</p>
+
+<h4>内置数据集管理</h4>
+<p>通过 <code>datasets_map</code> 字典管理 6 个内置数据集的加载器配置：</p>
+<ul>
+  <li>分类数据集：鸢尾花、葡萄酒、乳腺癌、手写数字</li>
+  <li>回归数据集：合成分类 (Moons)、合成回归</li>
+</ul>
+
+<h4>核心函数</h4>
+<table>
+  <tr><th>函数</th><th>功能</th><th>关键参数</th></tr>
+  <tr><td>load_dataset()</td><td>加载指定数据集</td><td>dataset_name: 数据集名称</td></tr>
+  <tr><td>inject_missing()</td><td>在数据中注入缺失值</td><td>ratio: 缺失值比例</td></tr>
+  <tr><td>handle_missing()</td><td>处理缺失值</td><td>strategy: drop/mean/median/mode</td></tr>
+  <tr><td>scale_features()</td><td>特征缩放</td><td>method: standard/minmax/maxabs/robust</td></tr>
+  <tr><td>split_data()</td><td>数据集划分</td><td>test_size, random_state</td></tr>
+  <tr><td>get_summary()</td><td>统计摘要</td><td>返回 DataFrame 统计信息</td></tr>
+</table>
+
+<h3 id="s3-4">3.4 模型评估模块 (evaluation.py)</h3>
+
+<p><code>evaluation.py</code> 提供分类和回归两大类任务的评估能力。</p>
+
+<h4>分类评估</h4>
+<pre>evaluate_classification(y_true, y_pred, y_prob=None)</pre>
+<p>计算并返回以下指标：</p>
+<ul>
+  <li>准确率 (Accuracy)</li>
+  <li>精确率 (Precision) — 宏平均</li>
+  <li>召回率 (Recall) — 宏平均</li>
+  <li>F1 分数 — 宏平均</li>
+  <li>分类报告 (Classification Report) — 每类别的详细指标</li>
+</ul>
+
+<h4>回归评估</h4>
+<pre>evaluate_regression(y_true, y_pred)</pre>
+<p>计算并返回以下指标：</p>
+<ul>
+  <li>均方误差 (MSE)</li>
+  <li>均方根误差 (RMSE)</li>
+  <li>平均绝对误差 (MAE)</li>
+  <li>决定系数 (R²)</li>
+</ul>
+
+<h3 id="s3-5">3.5 可视化模块 (visualization.py)</h3>
+
+<p><code>visualization.py</code> 提供了 10+ 种可视化函数，覆盖数据探索、训练过程和结果分析全流程。</p>
+
+<table>
+  <tr><th>函数</th><th>图表类型</th><th>应用场景</th></tr>
+  <tr><td>plot_data_distribution()</td><td>数据分布图</td><td>数据探索阶段，了解特征分布</td></tr>
+  <tr><td>plot_preprocessing_comparison()</td><td>预处理前后对比图</td><td>对比缺失值处理/特征缩放效果</td></tr>
+  <tr><td>plot_decision_boundary()</td><td>决策边界图</td><td>展示分类器在二维特征空间的决策区域</td></tr>
+  <tr><td>plot_training_history()</td><td>训练历史曲线</td><td>展示损失/准确率随迭代次数的变化</td></tr>
+  <tr><td>plot_confusion_matrix()</td><td>混淆矩阵热力图</td><td>分类结果详细分析</td></tr>
+  <tr><td>plot_roc_curve()</td><td>ROC 曲线</td><td>评估分类器在不同阈值下的表现</td></tr>
+  <tr><td>plot_feature_importance()</td><td>特征重要性图</td><td>分析各特征对模型预测的贡献度</td></tr>
+  <tr><td>plot_regression_results()</td><td>回归拟合图</td><td>真实值 vs 预测值散点对比</td></tr>
+  <tr><td>plot_gradient_descent_2d()</td><td>梯度下降 2D 可视化</td><td>展示梯度下降优化过程</td></tr>
+</table>
+
+<h4>设计原则</h4>
+<ul>
+  <li>所有绑图函数返回 <code>matplotlib.Figure</code> 对象，与 Gradio 的 <code>gr.Plot</code> 组件兼容</li>
+  <li>统一设置中文字体支持，避免图表中文乱码</li>
+  <li>配色风格一致，使用蓝白主题色系</li>
+  <li>自动适配分类/回归任务类型，选择合适的图表</li>
+</ul>
+
+<h3 id="s3-6">3.6 AI 助教模块 (llm_assistant.py)</h3>
+
+<p><code>llm_assistant.py</code> 实现了基于通义千问大语言模型的智能问答功能。</p>
+
+<h4>核心组件</h4>
+
+<p><strong>1. API 调用函数</strong></p>
+<pre>call_qwen_api(prompt, conversation_history=None, system_prompt=None)</pre>
+<ul>
+  <li>向通义千问 API 发送请求</li>
+  <li>支持传入对话历史实现上下文连贯</li>
+  <li>支持自定义系统提示词</li>
+  <li>返回模型生成的文本回答</li>
+</ul>
+
+<p><strong>2. ConversationManager 对话管理器</strong></p>
+<ul>
+  <li>维护多轮对话历史</li>
+  <li>自动拼接系统提示词 + 历史消息 + 当前问题</li>
+  <li>支持清空对话历史</li>
+  <li>限制历史长度，避免上下文过长</li>
+</ul>
+
+<p><strong>3. 系统提示词 (SYSTEM_PROMPT)</strong></p>
+<p>定义 AI 助教的角色和行为准则：</p>
+<ul>
+  <li>角色定位：机器学习教学助手</li>
+  <li>内置知识库：6 个 ML 核心概念领域</li>
+  <li>回答风格：清晰易懂，适合初学者，使用中文</li>
+  <li>回答格式：结构化、分段落、善用示例</li>
+</ul>
+
+<p><strong>4. 预设问题列表</strong></p>
+<p>预置 8 个高频问题，覆盖过拟合、算法选型、交叉验证、特征工程、偏差-方差权衡、不平衡数据、正则化、梯度下降等核心知识点。</p>
+
+<div class="page-break"></div>
+
+<!-- 第4章 -->
+<h2 id="ch4">第4章 算法注册表设计</h2>
+
+<h3 id="s4-1">4.1 注册表结构</h3>
+<p>算法注册表 <code>ALGORITHM_REGISTRY</code> 是一个字典，键为算法名称，值为算法配置信息：</p>
+
+<pre>ALGORITHM_REGISTRY = {
+    "linear_regression": {
+        "name": "线性回归",
+        "class": LinearRegressionModel,
+        "type": "regression",
+        "description": "使用最小二乘法拟合线性关系",
+        "default_params": { ... }
+    },
+    "logistic_regression": {
+        "name": "逻辑回归",
+        "class": LogisticRegressionModel,
+        "type": "classification",
+        ...
+    },
+    ...
+}</pre>
+
+<h4>注册表字段说明</h4>
+<table>
+  <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+  <tr><td>name</td><td>str</td><td>算法的中文显示名称</td></tr>
+  <tr><td>class</td><td>type</td><td>算法实现类的引用</td></tr>
+  <tr><td>type</td><td>str</td><td>算法类型："classification" 或 "regression"</td></tr>
+  <tr><td>description</td><td>str</td><td>算法简要描述</td></tr>
+  <tr><td>default_params</td><td>dict</td><td>默认超参数配置</td></tr>
+</table>
+
+<h3 id="s4-2">4.2 工厂函数</h3>
+<p><code>create_algorithm()</code> 工厂函数根据算法名称创建实例：</p>
+<pre>def create_algorithm(algorithm_name, **kwargs):
+    if algorithm_name not in ALGORITHM_REGISTRY:
+        raise ValueError(f"未知算法: {algorithm_name}")
+    config = ALGORITHM_REGISTRY[algorithm_name]
+    params = {**config["default_params"], **kwargs}
+    return config["class"](**params)</pre>
+
+<p>工厂函数的设计优势：</p>
+<ul>
+  <li>调用方无需知道具体类名，只需传入算法标识符</li>
+  <li>自动合并默认参数与用户自定义参数</li>
+  <li>集中管理算法的创建逻辑，新增算法只需更新注册表</li>
+</ul>
+
+<h3 id="s4-3">4.3 扩展新算法</h3>
+<p>如需新增算法，按以下步骤操作：</p>
+<ol>
+  <li><strong>实现算法类</strong>：在 <code>algorithms.py</code> 中创建新类，继承或实现统一的接口方法</li>
+  <li><strong>注册算法</strong>：在 <code>ALGORITHM_REGISTRY</code> 中添加新条目</li>
+  <li><strong>更新界面</strong>：如需自定义参数 UI，在 <code>app.py</code> 的算法实验室页面中添加对应组件</li>
+</ol>
+
+<div class="tip">
+  <p class="tip-title">示例：添加随机森林算法</p>
+  <p>1) 创建 <code>RandomForestModel</code> 类，实现 <code>train()</code>、<code>predict()</code>、<code>get_params()</code><br>
+  2) 在注册表中添加：<code>"random_forest": {"name": "随机森林", "class": RandomForestModel, "type": "classification", ...}</code><br>
+  3) 界面下拉菜单将自动包含新算法（如通过注册表动态生成选项）</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- 第5章 -->
+<h2 id="ch5">第5章 界面设计</h2>
+
+<h3 id="s5-1">5.1 布局方案</h3>
+<p>界面采用<strong>单页多标签</strong>布局方案：</p>
+<ul>
+  <li>顶部：平台标题栏，居中显示 "ML-Lab 机器学习可视化实验平台"</li>
+  <li>中部：4 个功能页面通过标签切换显示，每次仅展示一个页面</li>
+  <li>底部：每个页面内部采用上下布局，上方为输入控件区域，下方为结果展示区域</li>
+</ul>
+
+<h3 id="s5-2">5.2 页面切换机制</h3>
+<p>页面切换采用<strong>纯 CSS 显隐控制</strong>实现，而非多页面路由：</p>
+<ul>
+  <li>每个功能页面对应一个 Gradio <code>gr.Column</code> 容器</li>
+  <li>通过 JavaScript/CSS 控制各容器的 <code>display</code> 属性实现显隐切换</li>
+  <li>导航按钮触发页面切换事件</li>
+</ul>
+
+<p>该方案的优势：</p>
+<ul>
+  <li>无需页面刷新，切换流畅</li>
+  <li>状态保持在内存中，切换页面不丢失数据</li>
+  <li>实现简单，不依赖前端路由框架</li>
+</ul>
+
+<h3 id="s5-3">5.3 视觉主题</h3>
+<table>
+  <tr><th>元素</th><th>样式</th></tr>
+  <tr><td>主题色</td><td>蓝色 (#1a56db)</td></tr>
+  <tr><td>背景色</td><td>白色 (#ffffff) / 浅灰 (#f9fafb)</td></tr>
+  <tr><td>文字色</td><td>深灰 (#222222)</td></tr>
+  <tr><td>按钮样式</td><td>蓝色填充、白色文字、圆角</td></tr>
+  <tr><td>卡片样式</td><td>白色背景、浅灰边框、微阴影</td></tr>
+  <tr><td>字体</td><td>无衬线体（系统默认）</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<!-- 第6章 -->
+<h2 id="ch6">第6章 版本历史与规划</h2>
+
+<h3>6.1 当前版本 (v1.0.0)</h3>
+<p>v1.0.0 为项目的首个正式版本，包含以下完整功能：</p>
+<ul>
+  <li>4 大功能页面：数据工作台、算法实验室、模型评估、AI 助教</li>
+  <li>6 大经典机器学习算法：线性回归、逻辑回归、KNN、决策树、SVM、神经网络</li>
+  <li>6 个内置数据集：鸢尾花、葡萄酒、乳腺癌、手写数字、合成分类、合成回归</li>
+  <li>完整的预处理流水线：缺失值注入/处理、4 种特征缩放方法、数据集划分</li>
+  <li>10+ 种可视化图表：数据分布、决策边界、混淆矩阵、ROC 曲线等</li>
+  <li>AI 助教：通义千问集成、8 个预设问题、多轮对话</li>
+  <li>Docker 部署支持</li>
+</ul>
+
+<h3>6.2 项目文件清单</h3>
+<table>
+  <tr><th>文件路径</th><th>大小</th><th>说明</th></tr>
+  <tr><td>app.py</td><td>~27 KB</td><td>主入口，Gradio 界面</td></tr>
+  <tr><td>ml_lab/__init__.py</td><td>~0.1 KB</td><td>包初始化，版本号 v1.0.0</td></tr>
+  <tr><td>ml_lab/algorithms.py</td><td>-</td><td>6 大算法封装与注册表</td></tr>
+  <tr><td>ml_lab/preprocessing.py</td><td>-</td><td>数据集管理、预处理流水线</td></tr>
+  <tr><td>ml_lab/evaluation.py</td><td>-</td><td>分类/回归评估指标</td></tr>
+  <tr><td>ml_lab/visualization.py</td><td>-</td><td>可视化图表生成</td></tr>
+  <tr><td>ml_lab/llm_assistant.py</td><td>-</td><td>AI 助教（通义千问）</td></tr>
+  <tr><td>requirements.txt</td><td>-</td><td>Python 依赖清单</td></tr>
+  <tr><td>Dockerfile</td><td>-</td><td>Docker 容器化部署</td></tr>
+  <tr><td>README.md</td><td>-</td><td>项目说明文档</td></tr>
+</table>
+
+<h3>6.3 后续规划</h3>
+<table>
+  <tr><th>方向</th><th>规划内容</th><th>优先级</th></tr>
+  <tr><td>算法扩展</td><td>添加随机森林、XGBoost、朴素贝叶斯等更多算法</td><td>高</td></tr>
+  <tr><td>数据扩展</td><td>支持用户上传 CSV/Excel 自定义数据集</td><td>高</td></tr>
+  <tr><td>实验管理</td><td>添加实验历史记录和结果对比功能</td><td>中</td></tr>
+  <tr><td>模型导出</td><td>支持训练模型导出为 .pkl 文件</td><td>中</td></tr>
+  <tr><td>LLM 增强</td><td>支持更多 LLM 提供商（如文心一言、ChatGLM）</td><td>低</td></tr>
+  <tr><td>多用户支持</td><td>添加用户认证和实验数据隔离</td><td>低</td></tr>
+</table>
+
+</body>
+>>>>>>> Stashed changes
 </html>

@@ -22,3 +22,20 @@ layout_patch.py
 # OS
 Thumbs.db
 .DS_Store
+
+# 备份与临时文件
+backup_*/
+*.backup
+*.bak
+app.py.v*
+*.v30_backup
+startup_*.log
+fix_verify_report.png
+report_error_debug.png
+screenshot*.png
+screenshots/
+
+# 启动脚本（开发用）
+_start_*.py
+start_*.bat
+run_ml_lab.bat

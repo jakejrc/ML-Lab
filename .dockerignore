@@ -1,21 +1,39 @@
+# Git
 .git
 .gitignore
+
+# Python
 __pycache__
 *.pyc
 *.pyo
 *.egg-info
+.venv
+venv
+env
+
+# 环境变量与密钥
 .env
 *.env
+
+# 备份文件
+backup_*/
 *.bak*
-startup.log
-layout_patch.py
+app.py.bak*
+
+# IDE
 .vscode
 .idea
-Thumbs.db
-.DS_Store
+
+# 不需要打包的目录
 docs/
 ppt/
+screenshots/
+
+# 日志与临时文件
+startup.log
+layout_patch.py
+Thumbs.db
+.DS_Store
 run_ml_lab.bat
-app.py.bak_broken
-app.py.bak_layout
-README.md.bak
+_start_v32.py
+.github/

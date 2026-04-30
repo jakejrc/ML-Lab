@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -498,4 +499,506 @@
 </div>
 
 </body>
+=======
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>ML-Lab 机器学习可视化实验平台 — 使用手册</title>
+<style>
+  @page { size: A4; margin: 25mm 20mm 25mm 20mm; }
+  body { font-family: '微软雅黑', 'Microsoft YaHei', sans-serif; font-size: 11pt; line-height: 1.8; color: #222; }
+  h1 { font-size: 22pt; color: #1a56db; text-align: center; border-bottom: 3px solid #1a56db; padding-bottom: 10px; margin-top: 40px; }
+  h2 { font-size: 16pt; color: #1a56db; border-left: 5px solid #1a56db; padding-left: 12px; margin-top: 30px; }
+  h3 { font-size: 13pt; color: #2563eb; margin-top: 20px; }
+  h4 { font-size: 12pt; color: #374151; margin-top: 15px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 10pt; }
+  th, td { border: 1px solid #d1d5db; padding: 6px 10px; text-align: left; }
+  th { background-color: #eff6ff; color: #1e40af; font-weight: bold; }
+  tr:nth-child(even) { background-color: #f9fafb; }
+  code { background-color: #f3f4f6; padding: 1px 5px; border-radius: 3px; font-family: 'Consolas', monospace; font-size: 10pt; }
+  pre { background-color: #f3f4f6; padding: 12px; border-radius: 5px; font-family: 'Consolas', monospace; font-size: 10pt; white-space: pre-wrap; word-wrap: break-word; border-left: 4px solid #1a56db; }
+  .tip { background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 10px 14px; margin: 12px 0; border-radius: 0 5px 5px 0; }
+  .tip-title { font-weight: bold; color: #065f46; }
+  .warn { background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 10px 14px; margin: 12px 0; border-radius: 0 5px 5px 0; }
+  .warn-title { font-weight: bold; color: #92400e; }
+  .info { background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 10px 14px; margin: 12px 0; border-radius: 0 5px 5px 0; }
+  .info-title { font-weight: bold; color: #1e40af; }
+  ul, ol { margin: 8px 0; padding-left: 24px; }
+  li { margin-bottom: 4px; }
+  .toc { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px 28px; margin: 20px 0; }
+  .toc a { color: #1a56db; text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  .toc ul { list-style: none; padding-left: 0; }
+  .toc ul ul { padding-left: 20px; }
+  .cover { text-align: center; padding: 80px 0 40px 0; }
+  .cover h1 { font-size: 28pt; border: none; color: #1a56db; }
+  .cover .subtitle { font-size: 14pt; color: #6b7280; margin-top: 10px; }
+  .cover .version { font-size: 12pt; color: #9ca3af; margin-top: 30px; }
+  .page-break { page-break-after: always; }
+</style>
+</head>
+<body>
+
+<!-- 封面 -->
+<div class="cover">
+  <h1>ML-Lab 机器学习可视化实验平台</h1>
+  <p class="subtitle">使 用 手 册</p>
+  <p class="version">版本 v1.0.0</p>
+  <p class="version">2026 年 4 月</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- 目录 -->
+<div class="toc">
+  <h2 style="border-left:none; padding-left:0;">目 录</h2>
+  <ul>
+    <li><a href="#ch1">第1章 平台概述</a>
+      <ul>
+        <li><a href="#s1-1">1.1 平台简介</a></li>
+        <li><a href="#s1-2">1.2 功能架构</a></li>
+        <li><a href="#s1-3">1.3 界面布局</a></li>
+      </ul>
+    </li>
+    <li><a href="#ch2">第2章 数据工作台</a>
+      <ul>
+        <li><a href="#s2-1">2.1 内置数据集</a></li>
+        <li><a href="#s2-2">2.2 数据预览与统计</a></li>
+        <li><a href="#s2-3">2.3 缺失值处理</a></li>
+        <li><a href="#s2-4">2.4 特征缩放</a></li>
+        <li><a href="#s2-5">2.5 数据集划分</a></li>
+      </ul>
+    </li>
+    <li><a href="#ch3">第3章 算法实验室</a>
+      <ul>
+        <li><a href="#s3-1">3.1 支持的算法</a></li>
+        <li><a href="#s3-2">3.2 训练模型</a></li>
+        <li><a href="#s3-3">3.3 参数配置详解</a></li>
+      </ul>
+    </li>
+    <li><a href="#ch4">第4章 模型评估</a>
+      <ul>
+        <li><a href="#s4-1">4.1 评估指标</a></li>
+        <li><a href="#s4-2">4.2 可视化图表</a></li>
+        <li><a href="#s4-3">4.3 结果解读</a></li>
+      </ul>
+    </li>
+    <li><a href="#ch5">第5章 AI 助教</a>
+      <ul>
+        <li><a href="#s5-1">5.1 功能简介</a></li>
+        <li><a href="#s5-2">5.2 预设问题</a></li>
+        <li><a href="#s5-3">5.3 自由提问</a></li>
+      </ul>
+    </li>
+    <li><a href="#ch6">第6章 常见问题与技巧</a>
+      <ul>
+        <li><a href="#s6-1">6.1 常见问题</a></li>
+        <li><a href="#s6-2">6.2 使用技巧</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<div class="page-break"></div>
+
+<!-- 第1章 -->
+<h2 id="ch1">第1章 平台概述</h2>
+
+<h3 id="s1-1">1.1 平台简介</h3>
+<p>ML-Lab 是一个基于 Python 的<strong>机器学习可视化实验平台</strong>，集成了数据预处理、算法训练、模型评估和 AI 辅助教学四大核心功能。平台采用 <strong>Gradio</strong> 构建 Web 交互界面，后端基于 <strong>Scikit-learn</strong> 实现六大经典机器学习算法，并接入了<strong>通义千问大语言模型</strong>提供智能问答辅导。</p>
+
+<p>本平台面向机器学习初学者和教学场景设计，具有以下特点：</p>
+<ul>
+  <li><strong>全流程可视化</strong>：从数据加载、预处理、模型训练到结果评估，每一步均配有交互式图表</li>
+  <li><strong>低门槛操作</strong>：无需编写代码，通过界面选择即可完成机器学习全流程实验</li>
+  <li><strong>六大经典算法</strong>：覆盖线性回归、逻辑回归、KNN、决策树、SVM、神经网络</li>
+  <li><strong>AI 助教</strong>：集成通义千问大模型，支持多轮对话式学习辅导</li>
+  <li><strong>Docker 部署</strong>：支持容器化一键部署，便于教学环境快速搭建</li>
+</ul>
+
+<h3 id="s1-2">1.2 功能架构</h3>
+<p>平台采用模块化架构，由以下核心模块组成：</p>
+
+<table>
+  <tr><th>模块</th><th>文件</th><th>功能说明</th></tr>
+  <tr><td>主界面</td><td><code>app.py</code></td><td>Gradio Web 界面，页面路由与交互逻辑</td></tr>
+  <tr><td>算法引擎</td><td><code>ml_lab/algorithms.py</code></td><td>6 大算法封装、统一注册表与工厂函数</td></tr>
+  <tr><td>数据处理</td><td><code>ml_lab/preprocessing.py</code></td><td>数据集加载、缺失值处理、特征缩放、数据集划分</td></tr>
+  <tr><td>模型评估</td><td><code>ml_lab/evaluation.py</code></td><td>分类与回归评估指标计算与报告生成</td></tr>
+  <tr><td>可视化</td><td><code>ml_lab/visualization.py</code></td><td>10+ 种可视化图表生成函数</td></tr>
+  <tr><td>AI 助教</td><td><code>ml_lab/llm_assistant.py</code></td><td>通义千问 API 集成、多轮对话管理</td></tr>
+</table>
+
+<h3 id="s1-3">1.3 界面布局</h3>
+<p>启动平台后，浏览器自动打开主界面。界面采用<strong>蓝白主题</strong>设计，包含以下区域：</p>
+
+<ul>
+  <li><strong>顶部标题栏</strong>：显示平台名称 "ML-Lab 机器学习可视化实验平台"</li>
+  <li><strong>页面导航栏</strong>：4 个功能页面标签 — 数据工作台、算法实验室、模型评估、AI助教</li>
+  <li><strong>内容区域</strong>：当前页面的交互表单、按钮和结果展示区</li>
+</ul>
+
+<div class="tip">
+  <p class="tip-title">提示</p>
+  <p>页面导航采用纯 CSS 实现的标签切换机制，点击导航栏按钮即可在不同功能页面间切换，无需页面刷新。</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- 第2章 -->
+<h2 id="ch2">第2章 数据工作台</h2>
+
+<p>数据工作台是机器学习实验的起点，提供数据集选择、数据探索、预处理和数据集划分等完整的数据准备功能。</p>
+
+<h3 id="s2-1">2.1 内置数据集</h3>
+<p>平台预置了 6 个经典机器学习数据集，涵盖分类与回归任务：</p>
+
+<h4>分类数据集</h4>
+<table>
+  <tr><th>数据集名称</th><th>样本数</th><th>特征数</th><th>类别数</th><th>简要说明</th></tr>
+  <tr><td>鸢尾花 (Iris)</td><td>150</td><td>4</td><td>3</td><td>基于花萼/花瓣长度宽度分类三种鸢尾花</td></tr>
+  <tr><td>葡萄酒 (Wine)</td><td>178</td><td>13</td><td>3</td><td>基于化学成分分类三种葡萄酒产地</td></tr>
+  <tr><td>乳腺癌 (Breast Cancer)</td><td>569</td><td>30</td><td>2</td><td>基于细胞特征进行良/恶性分类</td></tr>
+  <tr><td>手写数字 (Digits)</td><td>1,797</td><td>64</td><td>10</td><td>8x8 灰度图像的 0-9 数字识别</td></tr>
+</table>
+
+<h4>回归数据集</h4>
+<table>
+  <tr><th>数据集名称</th><th>样本数</th><th>特征数</th><th>简要说明</th></tr>
+  <tr><td>合成分类 (Moons)</td><td>300</td><td>2</td><td>两个月牙形状的二分类数据，适合展示决策边界</td></tr>
+  <tr><td>合成回归 (Regression)</td><td>200</td><td>1</td><td>带噪声的线性回归数据，适合展示回归拟合效果</td></tr>
+</table>
+
+<h3 id="s2-2">2.2 数据预览与统计</h3>
+<p>选择数据集后，平台自动展示以下信息：</p>
+<ul>
+  <li><strong>数据预览</strong>：以表格形式展示前若干条样本数据</li>
+  <li><strong>统计摘要</strong>：各特征的均值、标准差、最小值、最大值、四分位数</li>
+  <li><strong>数据分布图</strong>：特征分布可视化，帮助快速了解数据特征</li>
+</ul>
+
+<h3 id="s2-3">2.3 缺失值处理</h3>
+<p>平台支持模拟缺失值并对其进行处理，用于教学演示缺失值处理策略：</p>
+
+<h4>操作步骤</h4>
+<ol>
+  <li>在"缺失值比例"输入框中设置缺失值注入比例（0~1 之间）</li>
+  <li>选择缺失值处理策略：
+    <ul>
+      <li><strong>删除</strong> (drop)：直接移除包含缺失值的行</li>
+      <li><strong>均值填充</strong> (mean)：用该列均值填充缺失值</li>
+      <li><strong>中位数填充</strong> (median)：用该列中位数填充缺失值</li>
+      <li><strong>众数填充</strong> (mode)：用该列众数填充缺失值</li>
+    </ul>
+  </li>
+  <li>点击"处理缺失值"按钮，查看处理前后的对比结果</li>
+</ol>
+
+<div class="info">
+  <p class="info-title">说明</p>
+  <p>缺失值处理功能会在原始数据副本上操作，不会影响原始数据集。处理前后会展示对比可视化图表。</p>
+</div>
+
+<h3 id="s2-4">2.4 特征缩放</h3>
+<p>特征缩放可将不同量纲的特征归一化，提高模型训练效果：</p>
+
+<table>
+  <tr><th>缩放方法</th><th>原理</th><th>适用场景</th></tr>
+  <tr><td>标准化 (StandardScaler)</td><td>将特征转换为均值 0、标准差 1 的分布</td><td>大多数算法的默认选择</td></tr>
+  <tr><td>归一化 (MinMaxScaler)</td><td>将特征缩放到 [0, 1] 区间</td><td>对数据分布无假设时使用</td></tr>
+  <tr><td>最大绝对值缩放 (MaxAbsScaler)</td><td>按最大绝对值缩放至 [-1, 1]</td><td>保留稀疏性时使用</td></tr>
+  <tr><td>鲁棒缩放 (RobustScaler)</td><td>基于中位数和四分位距缩放</td><td>数据含有异常值时使用</td></tr>
+</table>
+
+<h3 id="s2-5">2.5 数据集划分</h3>
+<p>在训练模型前，需将数据集划分为训练集和测试集：</p>
+<ul>
+  <li><strong>训练集比例</strong>：默认 80%，可调节（推荐 60%~90%）</li>
+  <li><strong>随机种子</strong>：默认 42，设置固定值可保证实验可复现</li>
+  <li>划分完成后显示训练集和测试集的样本数量</li>
+</ul>
+
+<div class="tip">
+  <p class="tip-title">提示</p>
+  <p>固定随机种子可以确保每次划分结果一致，便于对比不同算法在同一数据上的表现。完成数据集划分后，即可切换到"算法实验室"页面进行模型训练。</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- 第3章 -->
+<h2 id="ch3">第3章 算法实验室</h2>
+
+<p>算法实验室是平台的核心功能，提供 6 种经典机器学习算法的可视化训练与调参功能。</p>
+
+<h3 id="s3-1">3.1 支持的算法</h3>
+
+<table>
+  <tr><th>算法名称</th><th>类型</th><th>实现类</th><th>简介</th></tr>
+  <tr><td>线性回归</td><td>回归</td><td><code>LinearRegressionModel</code></td><td>使用最小二乘法拟合线性关系</td></tr>
+  <tr><td>逻辑回归</td><td>分类</td><td><code>LogisticRegressionModel</code></td><td>线性分类模型，输出概率预测</td></tr>
+  <tr><td>K 近邻 (KNN)</td><td>分类/回归</td><td><code>KNNModel</code></td><td>基于最近邻投票进行预测</td></tr>
+  <tr><td>决策树</td><td>分类/回归</td><td><code>DecisionTreeModel</code></td><td>基于特征分裂构建树形决策结构</td></tr>
+  <tr><td>支持向量机 (SVM)</td><td>分类/回归</td><td><code>SVMModel</code></td><td>寻找最大间隔超平面进行分类</td></tr>
+  <tr><td>神经网络</td><td>分类/回归</td><td><code>NeuralNetworkModel</code></td><td>多层感知机 (MLP) 深度学习模型</td></tr>
+</table>
+
+<h3 id="s3-2">3.2 训练模型</h3>
+
+<h4>操作步骤</h4>
+<ol>
+  <li>确保已在"数据工作台"完成数据集加载和划分</li>
+  <li>切换到"算法实验室"页面</li>
+  <li>在下拉菜单中选择目标算法</li>
+  <li>根据需要调整算法超参数（见 3.3 节）</li>
+  <li>点击"开始训练"按钮</li>
+  <li>等待训练完成，查看训练结果和可视化图表</li>
+</ol>
+
+<div class="info">
+  <p class="info-title">说明</p>
+  <p>平台内部通过 <code>ALGORITHM_REGISTRY</code> 注册表和 <code>create_algorithm()</code> 工厂函数统一管理所有算法实例。每个算法类均实现了标准接口：<code>train()</code>、<code>predict()</code>、<code>get_params()</code>，确保操作流程一致。</p>
+</div>
+
+<h3 id="s3-3">3.3 参数配置详解</h3>
+
+<h4>3.3.1 线性回归 (LinearRegression)</h4>
+<table>
+  <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+  <tr><td>fit_intercept</td><td>True</td><td>是否计算截距项</td></tr>
+  <tr><td>positive</td><td>False</td><td>是否强制系数为正</td></tr>
+</table>
+
+<h4>3.3.2 逻辑回归 (LogisticRegression)</h4>
+<table>
+  <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+  <tr><td>C (正则化强度)</td><td>1.0</td><td>值越小正则化越强</td></tr>
+  <tr><td>max_iter (最大迭代)</td><td>100</td><td>优化算法最大迭代次数</td></tr>
+  <tr><td>solver (求解器)</td><td>lbfgs</td><td>优化算法：liblinear/lbfgs/newton-cg/sag/saga</td></tr>
+</table>
+
+<h4>3.3.3 K 近邻 (KNN)</h4>
+<table>
+  <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+  <tr><td>n_neighbors (K 值)</td><td>5</td><td>最近邻数量</td></tr>
+  <tr><td>weights (权重)</td><td>uniform</td><td>uniform(等权)/distance(距离加权)</td></tr>
+  <tr><td>metric (距离度量)</td><td>minkowski</td><td>距离计算方式</td></tr>
+</table>
+
+<h4>3.3.4 决策树 (DecisionTree)</h4>
+<table>
+  <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+  <tr><td>max_depth (最大深度)</td><td>None</td><td>树的最大深度，None 表示不限制</td></tr>
+  <tr><td>min_samples_split (最小分裂样本)</td><td>2</td><td>节点分裂所需的最小样本数</td></tr>
+  <tr><td>min_samples_leaf (叶节点最小样本)</td><td>1</td><td>叶节点的最小样本数</td></tr>
+  <tr><td>criterion (分裂准则)</td><td>gini</td><td>gini(基尼系数)/entropy(信息增益)</td></tr>
+</table>
+
+<h4>3.3.5 支持向量机 (SVM)</h4>
+<table>
+  <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+  <tr><td>C (正则化参数)</td><td>1.0</td><td>惩罚系数，值越大对误分类惩罚越重</td></tr>
+  <tr><td>kernel (核函数)</td><td>rbf</td><td>linear(线性)/rbf(径向基)/poly(多项式)/sigmoid</td></tr>
+  <tr><td>gamma</td><td>scale</td><td>核函数系数：scale/auto</td></tr>
+</table>
+
+<h4>3.3.6 神经网络 (NeuralNetwork / MLP)</h4>
+<table>
+  <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+  <tr><td>hidden_layer_sizes (隐藏层)</td><td>(100,)</td><td>各隐藏层神经元数量，如 (128, 64)</td></tr>
+  <tr><td>activation (激活函数)</td><td>relu</td><td>relu/sigmoid/tanh/identity</td></tr>
+  <tr><td>max_iter (最大迭代)</td><td>200</td><td>最大训练轮次</td></tr>
+  <tr><td>learning_rate (学习率)</td><td>constant</td><td>constant/invscaling/adaptive</td></tr>
+  <tr><td>alpha (L2 正则化)</td><td>0.0001</td><td>正则化系数</td></tr>
+</table>
+
+<div class="warn">
+  <p class="warn-title">注意</p>
+  <p>神经网络训练可能需要较长时间，尤其是增加隐藏层数量或最大迭代次数时。如遇到训练超时，可尝试减小网络规模或降低迭代次数。</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- 第4章 -->
+<h2 id="ch4">第4章 模型评估</h2>
+
+<p>模型评估页面提供全面的模型性能分析工具，包括评估指标计算和多维度可视化图表。</p>
+
+<h3 id="s4-1">4.1 评估指标</h3>
+
+<h4>分类任务指标</h4>
+<table>
+  <tr><th>指标</th><th>含义</th><th>取值范围</th></tr>
+  <tr><td>准确率 (Accuracy)</td><td>预测正确的样本占总样本的比例</td><td>[0, 1]</td></tr>
+  <tr><td>精确率 (Precision)</td><td>正类预测中真正为正的比例</td><td>[0, 1]</td></tr>
+  <tr><td>召回率 (Recall)</td><td>真正为正的样本中被正确预测的比例</td><td>[0, 1]</td></tr>
+  <tr><td>F1 分数 (F1-Score)</td><td>精确率与召回率的调和平均值</td><td>[0, 1]</td></tr>
+</table>
+
+<p>平台还生成完整的<strong>分类报告</strong>，包含每个类别的精确率、召回率、F1 分数和支持数。</p>
+
+<h4>回归任务指标</h4>
+<table>
+  <tr><th>指标</th><th>含义</th><th>理想值</th></tr>
+  <tr><td>均方误差 (MSE)</td><td>预测值与真实值之差的平方的均值</td><td>越小越好</td></tr>
+  <tr><td>均方根误差 (RMSE)</td><td>MSE 的平方根，与原始数据同量纲</td><td>越小越好</td></tr>
+  <tr><td>平均绝对误差 (MAE)</td><td>预测值与真实值之差的绝对值的均值</td><td>越小越好</td></tr>
+  <tr><td>决定系数 (R²)</td><td>模型解释的方差占总方差的比例</td><td>越接近 1 越好</td></tr>
+</table>
+
+<h3 id="s4-2">4.2 可视化图表</h3>
+<p>平台针对不同任务类型提供丰富的可视化图表：</p>
+
+<h4>分类任务可视化</h4>
+<table>
+  <tr><th>图表</th><th>说明</th></tr>
+  <tr><td>混淆矩阵热力图</td><td>直观展示各类别的正确/错误分类情况</td></tr>
+  <tr><td>ROC 曲线</td><td>展示不同阈值下真正例率与假正例率的关系，含 AUC 值</td></tr>
+  <tr><td>决策边界图</td><td>在二维特征空间中展示模型的分类决策区域（仅限低维数据）</td></tr>
+  <tr><td>特征重要性图</td><td>展示各特征对模型预测的贡献度排序</td></tr>
+</table>
+
+<h4>回归任务可视化</h4>
+<table>
+  <tr><th>图表</th><th>说明</th></tr>
+  <tr><td>回归拟合图</td><td>展示真实值与预测值的散点对比</td></tr>
+  <tr><td>残差分布图</td><td>展示预测残差的分布情况</td></tr>
+</table>
+
+<h4>训练过程可视化</h4>
+<table>
+  <tr><th>图表</th><th>说明</th></tr>
+  <tr><td>训练历史曲线</td><td>展示训练过程中的损失/准确率变化趋势</td></tr>
+  <tr><td>梯度下降可视化</td><td>2D 可视化展示梯度下降优化过程（仅限合成数据）</td></tr>
+</table>
+
+<h3 id="s4-3">4.3 结果解读</h3>
+
+<h4>如何判断模型性能</h4>
+<ul>
+  <li><strong>分类任务</strong>：准确率 > 0.9 通常表示优秀的分类效果；关注 F1 分数可平衡精确率和召回率
+  <li><strong>回归任务</strong>：R² > 0.8 表示模型拟合效果良好；RMSE 与数据量纲一致，便于直观理解误差大小
+</ul>
+
+<h4>如何优化模型</h4>
+<ol>
+  <li><strong>调整超参数</strong>：返回算法实验室，修改算法参数后重新训练</li>
+  <li><strong>更换算法</strong>：不同算法对不同数据类型的适应性不同，可尝试多种算法进行对比</li>
+  <li><strong>数据预处理</strong>：返回数据工作台，尝试不同的特征缩放方法或缺失值处理策略</li>
+  <li><strong>调整数据划分</strong>：修改训练集/测试集比例，确保数据量充足</li>
+</ol>
+
+<div class="page-break"></div>
+
+<!-- 第5章 -->
+<h2 id="ch5">第5章 AI 助教</h2>
+
+<h3 id="s5-1">5.1 功能简介</h3>
+<p>AI 助教模块集成了<strong>通义千问大语言模型</strong>，为用户提供机器学习知识的智能问答服务。该模块具备以下特点：</p>
+<ul>
+  <li><strong>多轮对话</strong>：支持连续提问，AI 助教能理解上下文语境</li>
+  <li><strong>内置知识库</strong>：预置 6 个机器学习核心概念的专业知识</li>
+  <li><strong>预设问题</strong>：提供 8 个常见问题快速入口</li>
+  <li><strong>自由提问</strong>：支持任意机器学习相关问题输入</li>
+</ul>
+
+<div class="warn">
+  <p class="warn-title">前提条件</p>
+  <p>使用 AI 助教需要配置通义千问 API Key。如未配置，AI 助教功能将不可用。请参考《安装手册》完成 API Key 配置。</p>
+</div>
+
+<h3 id="s5-2">5.2 预设问题</h3>
+<p>平台提供以下 8 个预设问题，点击即可快速获取回答：</p>
+
+<table>
+  <tr><th>编号</th><th>预设问题</th><th>涉及知识点</th></tr>
+  <tr><td>1</td><td>什么是过拟合？如何解决？</td><td>模型泛化能力</td></tr>
+  <tr><td>2</td><td>如何选择合适的机器学习算法？</td><td>算法选型策略</td></tr>
+  <tr><td>3</td><td>什么是交叉验证？</td><td>模型验证方法</td></tr>
+  <tr><td>4</td><td>特征工程有哪些常用方法？</td><td>特征选择与构造</td></tr>
+  <tr><td>5</td><td>什么是偏差-方差权衡？</td><td>模型复杂度分析</td></tr>
+  <tr><td>6</td><td>如何处理不平衡数据集？</td><td>数据采样策略</td></tr>
+  <tr><td>7</td><td>正则化是什么？有哪些类型？</td><td>L1/L2 正则化</td></tr>
+  <tr><td>8</td><td>什么是梯度下降？有哪些变体？</td><td>优化算法</td></tr>
+</table>
+
+<h3 id="s5-3">5.3 自由提问</h3>
+
+<h4>操作步骤</h4>
+<ol>
+  <li>切换到"AI助教"页面</li>
+  <li>在输入框中输入机器学习相关问题（支持中文）</li>
+  <li>点击"发送"按钮或按回车键</li>
+  <li>AI 助教将基于通义千问模型和内置知识库生成回答</li>
+  <li>可继续输入问题进行多轮对话</li>
+</ol>
+
+<h4>内置知识库覆盖范围</h4>
+<p>AI 助教的系统提示词内置了以下 6 个核心知识领域的专业定义：</p>
+<ol>
+  <li>机器学习基本概念（监督学习、无监督学习、强化学习）</li>
+  <li>常见机器学习算法（线性回归、决策树、SVM、神经网络等）</li>
+  <li>模型评估与选择（交叉验证、偏差-方差权衡、评估指标）</li>
+  <li>特征工程（特征选择、特征提取、特征缩放）</li>
+  <li>过拟合与正则化（L1/L2 正则化、Dropout、早停）</li>
+  <li>模型调优（超参数调优、学习率调整、集成方法）</li>
+</ol>
+
+<div class="tip">
+  <p class="tip-title">提示</p>
+  <p>AI 助教基于通义千问模型生成回答，适用于学习和理解机器学习概念。对于精确的数学推导或最新的研究进展，建议结合教材和论文进行深入学习。</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- 第6章 -->
+<h2 id="ch6">第6章 常见问题与技巧</h2>
+
+<h3 id="s6-1">6.1 常见问题</h3>
+
+<h4>Q1：平台启动后无法在浏览器中打开？</h4>
+<p>检查端口 7860 是否被占用。可通过以下方式指定其他端口启动：</p>
+<pre>python app.py --port 7861</pre>
+
+<h4>Q2：训练模型时报错"数据未准备"？</h4>
+<p>请先在"数据工作台"中完成数据集加载和数据集划分操作，再切换到"算法实验室"进行训练。</p>
+
+<h4>Q3：AI 助教返回错误信息？</h4>
+<p>常见原因及解决方案：</p>
+<ul>
+  <li>API Key 未配置或已过期 → 参考安装手册重新配置</li>
+  <li>网络连接问题 → 检查网络是否能访问通义千问 API 服务</li>
+  <li>请求频率过高 → 等待片刻后重试</li>
+</ul>
+
+<h4>Q4：不同算法在同一数据集上表现差异很大？</h4>
+<p>这是正常现象。不同算法对数据分布的假设不同，适合的数据类型也不同。建议：</p>
+<ul>
+  <li>对比多个算法的评估指标，选择最优方案</li>
+  <li>通过数据可视化了解数据分布特征</li>
+  <li>调整超参数进行调优</li>
+</ul>
+
+<h4>Q5：Docker 部署后无法访问？</h4>
+<p>确保容器端口映射正确，默认映射为宿主机 7860 → 容器 7860。检查防火墙设置是否允许该端口通信。</p>
+
+<h3 id="s6-2">6.2 使用技巧</h3>
+
+<table>
+  <tr><th>场景</th><th>建议操作</th></tr>
+  <tr><td>初学者入门</td><td>选择"鸢尾花"数据集 + "决策树"算法，直观理解分类过程</td></tr>
+  <tr><td>理解过拟合</td><td>使用合成分类数据集，降低决策树 max_depth 观察决策边界变化</td></tr>
+  <tr><td>对比算法</td><td>在同一数据集上依次训练不同算法，比较评估指标</td></tr>
+  <tr><td>学习调参</td><td>固定数据集，逐一调整单个参数，观察性能变化</td></tr>
+  <tr><td>理解预处理效果</td><td>对比不同缩放方法对 SVM/KNN 等距离敏感算法的影响</td></tr>
+  <tr><td>概念学习</td><td>结合 AI 助教的预设问题，边做实验边学习理论</td></tr>
+</table>
+
+<div class="info">
+  <p class="info-title">技术支持</p>
+  <p>如遇到本手册未涵盖的问题，请联系开发团队或提交 Issue 反馈。</p>
+</div>
+
+</body>
+>>>>>>> Stashed changes
 </html>
