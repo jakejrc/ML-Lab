@@ -1005,19 +1005,21 @@ def on_fe_scaling(method):
         </style>"""
         rows = ""
         for s in stats:
-            rows += (f'<tr><td>{s["\u7279\u5f81"]}</td>'
-                     f'<td>{s["\u7f29\u653e\u524d_\u5747\u503c"]:.4f}</td>'
-                     f'<td>{s["\u7f29\u653e\u540e_\u5747\u503c"]:.4f}</td>'
-                     f'<td>{s["\u7f29\u653e\u524d_\u6807\u51c6\u5dee"]:.4f}</td>'
-                     f'<td>{s["\u7f29\u653e\u540e_\u6807\u51c6\u5dee"]:.4f}</td></tr>\n')
-        html = (f'<div class="scale-meta">'
-                f'<span>\u7f29\u653e\u65b9\u6cd5: <b>{method}</b></span>'
-                f'<span>\u7279\u5f81\u6570: <b>{X_tr.shape[1]}</b></span>'
-                f'<span>\u6837\u672c\u6570: <b>{X_tr.shape[0]}</b></span></div>'
-                f'<table class="scale-table"><thead><tr>'
-                f'<th>\u7279\u5f81</th><th>\u7f29\u653e\u524d\u5747\u503c</th><th>\u7f29\u653e\u540e\u5747\u503c</th>'
-                f'<th>\u7f29\u653e\u524d\u6807\u51c6\u5dee</th><th>\u7f29\u653e\u540e\u6807\u51c6\u5dee</th>'
-                f'</tr></thead><tbody>{rows}</tbody></table>{scale_style}')
+            for s in stats:
+                feat = s["特征"]
+                bef_mean = s["缩放前_均值"]
+                aft_mean = s["缩放后_均值"]
+                bef_std = s["缩放前_标准差"]
+                aft_std = s["缩放后_标准差"]
+                rows += "<tr><td>" + feat + "</td><td>" + f"{bef_mean:.4f}" + "</td><td>" + f"{aft_mean:.4f}" + "</td><td>" + f"{bef_std:.4f}" + "</td><td>" + f"{aft_std:.4f}" + "</td></tr>\n"
+        html = ('<div class="scale-meta">'
+                '<span>' + "缩放方法" + ': <b>' + method + '</b></span>'
+                '<span>' + "特征数" + ': <b>' + str(X_tr.shape[1]) + '</b></span>'
+                '<span>' + "样本数" + ': <b>' + str(X_tr.shape[0]) + '</b></span></div>'
+                '<table class="scale-table"><thead><tr>'
+                '<th>' + "特征" + '</th><th>' + "缩放前均值" + '</th><th>' + "缩放后均值" + '</th>'
+                '<th>' + "缩放前标准差" + '</th><th>' + "缩放后标准差" + '</th>'
+                '</tr></thead><tbody>' + rows + '</tbody></table>' + scale_style)
         return img1, img2, html
         # 保存特征工程结果用于报告
         _g["fe_results"]["scaling"] = {"method": method, "n_features": X_tr.shape[1], "n_samples": X_tr.shape[0], "image1": img1, "image2": img2, "info": "\n".join(lines)}
