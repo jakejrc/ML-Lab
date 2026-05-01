@@ -21,26 +21,48 @@ except ImportError:
 
 import platform, os, matplotlib.font_manager as fm
 
+def _register_cjk_font():
+    """在 Linux/Docker 中注册 CJK 中文字体。
+    
+    fonts-noto-cjk 安装的是 TTC 合集文件，matplotlib 3.10+ 只能从中
+    提取 JP 变体，SC（简体中文）被忽略。Dockerfile 已通过 fontTools
+    将 SC 子字体提取为独立 OTF 文件，此处直接注册该文件。
+    """
+    _cjk_font_path = '/usr/share/fonts/opentype/noto/NotoSansCJKSC-Regular.otf'
+    if os.path.isfile(_cjk_font_path):
+        try:
+            fm.fontManager.addfont(_cjk_font_path)
+            return 'Noto Sans CJK SC'
+        except Exception:
+            pass
+    return None
+
+
 def _setup_chinese_font():
-    """跨平台中文字体配置"""
+    """跨平台中文字体配置（兼容 Docker 中 TTC 字体注册不全的问题）"""
     _system = platform.system()
     if _system == 'Windows':
         _fonts = ['SimHei', 'Microsoft YaHei', 'KaiTi']
     elif _system == 'Darwin':
         _fonts = ['PingFang SC', 'Heiti SC', 'STHeiti', 'Arial Unicode MS']
     else:
-        # Linux / Docker — 优先查找已安装的 CJK 字体
-        _fonts = []
-        _candidates = [
-            'Noto Sans CJK SC', 'Noto Sans SC', 'WenQuanYi Micro Hei',
-            'WenQuanYi Zen Hei', 'Droid Sans Fallback', 'DejaVu Sans',
-        ]
-        _available = {f.name for f in fm.fontManager.ttflist}
-        for _c in _candidates:
-            if _c in _available:
-                _fonts.append(_c)
-        if not _fonts:
-            _fonts = ['DejaVu Sans']
+        # Linux / Docker — 注册预提取的 CJK OTF 字体
+        _registered = _register_cjk_font()
+        if _registered:
+            _fonts = [_registered, 'DejaVu Sans']
+        else:
+            # Fallback: 查找 fontManager 中已有的 CJK 字体
+            _fonts = []
+            _candidates = [
+                'Noto Sans CJK SC', 'Noto Sans SC', 'WenQuanYi Micro Hei',
+                'WenQuanYi Zen Hei', 'Droid Sans Fallback',
+            ]
+            _available = {f.name for f in fm.fontManager.ttflist}
+            for _c in _candidates:
+                if _c in _available:
+                    _fonts.append(_c)
+            if not _fonts:
+                _fonts = ['DejaVu Sans']
     plt.rcParams['font.sans-serif'] = _fonts
     plt.rcParams['axes.unicode_minus'] = False
 
