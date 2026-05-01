@@ -23,15 +23,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # 从 TTC 提取 SC 子字体为独立 OTF（matplotlib 3.10+ 无法直接从 TTC 加载 SC 变体）
-RUN pip install --no-cache-dir fonttools && \
-    python3 -c " \
-from fontTools.ttLib import TTCollection; \
-ttc = TTCollection('/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'); \
+RUN pip install --no-cache-dir fonttools \
+    && python3 -c "from fontTools.ttLib import TTCollection; \
+ttc=TTCollection('/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'); \
 ttc.fonts[2].save('/usr/share/fonts/opentype/noto/NotoSansCJKSC-Regular.otf'); \
-ttc2 = TTCollection('/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc'); \
+ttc2=TTCollection('/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc'); \
 ttc2.fonts[2].save('/usr/share/fonts/opentype/noto/NotoSansCJKSC-Bold.otf')" \
-    && pip uninstall -y fonttools && \
-    fc-cache -fv
+    && pip uninstall -y fonttools \
+    && fc-cache -fv
 
 # 从 builder 复制已安装的 Python 包
 COPY --from=builder /install /usr/local
