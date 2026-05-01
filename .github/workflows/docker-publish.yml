@@ -29,7 +29,7 @@ jobs:
           images: ${{ secrets.DOCKER_USERNAME }}/ml-lab
           tags: |
             type=raw,value=latest
-            type=raw,value=v3.3
+            type=raw,value=v3.4
             type=sha,prefix=
 
       - name: Build and push
@@ -49,5 +49,5 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: ${{ secrets.DOCKER_USERNAME }}/ml-lab
-          short-description: "ML-Lab - Interactive Machine Learning Visualization Platform for Education"
+          short-description: "ML-Lab v3.4 - Interactive ML Visualization Platform | 15 algorithms, 9 datasets, tabular evaluation, AI tutor"
           readme: README.md

@@ -133,6 +133,154 @@ def evaluate_clustering(X, labels, y_true=None):
 # 格式化输出
 # ═══════════════════════════════════════════════════════════════
 
+
+
+def format_evaluation_table(results, task_type="classification"):
+    """将评估结果格式化为 HTML 表格（供 Gradio HTML 组件显示）"""
+    style = """
+    <style>
+        .eval-table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
+        .eval-table th {
+            background: transparent;
+            color: white; padding: 10px 14px; text-align: left; font-weight: 600; border: none;
+        }
+        .eval-table td { padding: 8px 14px; border-bottom: 1px solid #e2e8f0; }
+        .eval-table tr:hover td { background: #f7fafc; }
+        .eval-table .metric-name { font-weight: 500; color: #2d3748; }
+        .eval-table .metric-value { font-family: 'Courier New', monospace; font-weight: 600; color: #4a5568; text-align: center; }
+        .eval-table .metric-desc { color: #718096; font-size: 12px; }
+        .eval-table .section-header td {
+            background: #edf2f7; font-weight: 700; color: #4a5568;
+            padding: 8px 14px; border-bottom: 2px solid #cbd5e0;
+        }
+        .eval-badge {
+            display: inline-block; padding: 2px 8px; border-radius: 10px;
+            font-size: 11px; font-weight: 600; margin-left: 6px;
+        }
+        .eval-badge-good { background: #c6f6d5; color: #276749; }
+        .eval-badge-info { background: #bee3f8; color: #2a4365; }
+        .eval-badge-warn { background: #fefcbf; color: #744210; }
+        .eval-container { padding: 4px 0; }
+        .eval-title { font-size: 14px; font-weight: 700; color: #2d3748; margin-bottom: 6px; }
+    </style>
+    """
+    rows_html = ""
+
+    if task_type == "classification":
+        metrics = [
+            ("\u51c6\u786e\u7387 (Accuracy)", "\u603b\u4f53\u9884\u6d4b\u6b63\u786e\u7387"),
+            ("\u7cbe\u786e\u7387 (Precision, macro)", "\u5404\u7c7b\u522b\u7cbe\u786e\u7387\u7684\u7b97\u672f\u5e73\u5747"),
+            ("\u53ec\u56de\u7387 (Recall, macro)", "\u5404\u7c7b\u522b\u53ec\u56de\u7387\u7684\u7b97\u672f\u5e73\u5747"),
+            ("F1\u5206\u6570 (F1, macro)", "\u7cbe\u786e\u7387\u4e0e\u53ec\u56de\u7387\u7684\u8c03\u548c\u5747\u503c(macro)"),
+            ("F1\u5206\u6570 (F1, weighted)", "\u7cbe\u786e\u7387\u4e0e\u53ec\u56de\u7387\u7684\u8c03\u548c\u5747\u503c(weighted)"),
+        ]
+        rows_html += '<tr class="section-header"><td colspan="3">\u603b\u4f53\u6307\u6807</td></tr>\n'
+        for key, desc in metrics:
+            val = results.get(key)
+            if val is not None:
+                badge_class = "eval-badge-good" if val >= 0.8 else "eval-badge-info" if val >= 0.6 else "eval-badge-warn"
+                badge_text = "\u4f18\u79c0" if val >= 0.8 else "\u826f\u597d" if val >= 0.6 else "\u5f85\u6539\u8fdb"
+                rows_html += (
+                    '<tr><td class="metric-name">' + key +
+                    '<span class="eval-badge ' + badge_class + '">' + badge_text + '</span></td>'
+                    '<td class="metric-value">' + '{:.4f}'.format(val) + '</td>'
+                    '<td class="metric-desc">' + desc + '</td></tr>\n'
+                )
+        per_class = results.get("\u5404\u7c7b\u522b\u6307\u6807", {})
+        if per_class:
+            rows_html += '<tr class="section-header"><td colspan="3">\u5404\u7c7b\u522b\u6307\u6807</td></tr>\n'
+            rows_html += (
+                '<tr><td class="metric-name">\u7c7b\u522b</td>'
+                '<td class="metric-value">\u7cbe\u786e\u7387</td><td class="metric-value">\u53ec\u56de\u7387</td></tr>\n'
+            )
+            for cn, m in per_class.items():
+                rows_html += (
+                    '<tr><td class="metric-name">' + str(cn) + '</td>'
+                    '<td class="metric-value">' + '{:.4f}'.format(m["precision"]) + '</td>'
+                    '<td class="metric-value">' + '{:.4f}'.format(m["recall"]) + '</td></tr>\n'
+                )
+
+    elif task_type == "regression":
+        desc_map = {
+            "\u5747\u65b9\u8bef\u5dee (MSE)": "\u8d8a\u5c0f\u8d8a\u597d\uff0c\u5bf9\u5f02\u5e38\u503c\u654f\u611f",
+            "\u5747\u65b9\u6839\u8bef\u5dee (RMSE)": "\u8d8a\u5c0f\u8d8a\u597d\uff0c\u4e0e\u76ee\u6807\u503c\u540c\u91cf\u7eb2",
+            "\u5e73\u5747\u7edd\u5bf9\u8bef\u5dee (MAE)": "\u8d8a\u5c0f\u8d8a\u597d\uff0c\u9c81\u68d2\u6027\u8f83\u5f3a",
+            "R\u00b2\u5206\u6570": "\u8d8a\u63a5\u8fd11\u8d8a\u597d\uff0c1\u4e3a\u5b8c\u7f8e\u62df\u5408",
+            "\u89e3\u91ca\u65b9\u5dee\u5206": "\u8d8a\u63a5\u8fd11\u8d8a\u597d",
+        }
+        rows_html += '<tr class="section-header"><td colspan="3">\u56de\u5f52\u6307\u6807</td></tr>\n'
+        for key, desc in desc_map.items():
+            val = results.get(key)
+            if val is not None:
+                if "R\u00b2" in key or "\u89e3\u91ca" in key:
+                    badge_class = "eval-badge-good" if val >= 0.8 else "eval-badge-info" if val >= 0.5 else "eval-badge-warn"
+                    badge_text = "\u4f18\u79c0" if val >= 0.8 else "\u826f\u597d" if val >= 0.5 else "\u5f85\u6539\u8fdb"
+                else:
+                    badge_class = "eval-badge-info"
+                    badge_text = key.split("(")[0].strip() if "(" in key else key[:6]
+                rows_html += (
+                    '<tr><td class="metric-name">' + key +
+                    '<span class="eval-badge ' + badge_class + '">' + badge_text + '</span></td>'
+                    '<td class="metric-value">' + '{:.4f}'.format(val) + '</td>'
+                    '<td class="metric-desc">' + desc + '</td></tr>\n'
+                )
+
+    elif task_type == "unsupervised":
+        rows_html += '<tr class="section-header"><td colspan="3">\u805a\u7c7b\u6982\u51b5</td></tr>\n'
+        for label in ["\u805a\u7c7b\u6570", "\u566a\u58f0\u70b9\u6570", "\u6837\u672c\u603b\u6570"]:
+            val = results.get(label)
+            if val is not None:
+                rows_html += (
+                    '<tr><td class="metric-name">' + label + '</td>'
+                    '<td class="metric-value">' + str(val) + '</td>'
+                    '<td class="metric-desc"></td></tr>\n'
+                )
+        rows_html += '<tr class="section-header"><td colspan="3">\u5185\u90e8\u8bc4\u4f30\u6307\u6807\uff08\u65e0\u9700\u771f\u5b9e\u6807\u7b7e\uff09</td></tr>\n'
+        internal_metrics = [
+            ("\u8f6e\u5ed3\u7cfb\u6570 (Silhouette)", "\u8d8a\u63a5\u8fd11\u8d8a\u597d"),
+            ("CH \u6307\u6570 (Calinski-Harabasz)", "\u8d8a\u5927\u8d8a\u597d"),
+            ("DB \u6307\u6570 (Davies-Bouldin)", "\u8d8a\u5c0f\u8d8a\u597d"),
+        ]
+        for key, desc in internal_metrics:
+            val = results.get(key)
+            if val is not None:
+                rows_html += (
+                    '<tr><td class="metric-name">' + key + '</td>'
+                    '<td class="metric-value">' + '{:.4f}'.format(val) + '</td>'
+                    '<td class="metric-desc">' + desc + '</td></tr>\n'
+                )
+            else:
+                rows_html += (
+                    '<tr><td class="metric-name">' + key + '</td>'
+                    '<td class="metric-value" style="color:#a0aec0;">N/A</td>'
+                    '<td class="metric-desc">\u65e0\u6cd5\u8ba1\u7b97</td></tr>\n'
+                )
+        if "\u540c\u8d28\u5316\u5206\u6570 (Homogeneity)" in results:
+            rows_html += '<tr class="section-header"><td colspan="3">\u5916\u90e8\u8bc4\u4f30\u6307\u6807\uff08\u5bf9\u6bd4\u771f\u5b9e\u6807\u7b7e\uff09</td></tr>\n'
+            ext_metrics = [
+                ("\u540c\u8d28\u5316\u5206\u6570 (Homogeneity)", "[0,1] \u8d8a\u5927\u8d8a\u597d"),
+                ("\u5b8c\u6574\u6027\u5206\u6570 (Completeness)", "[0,1] \u8d8a\u5927\u8d8a\u597d"),
+                ("V-measure", "\u540c\u8d28\u5316\u4e0e\u5b8c\u6574\u6027\u7684\u8c03\u548c\u5747\u503c"),
+            ]
+            for key, desc in ext_metrics:
+                val = results.get(key)
+                if val is not None:
+                    rows_html += (
+                        '<tr><td class="metric-name">' + key + '</td>'
+                        '<td class="metric-value">' + '{:.4f}'.format(val) + '</td>'
+                        '<td class="metric-desc">' + desc + '</td></tr>\n'
+                    )
+
+    html = (
+        '<div class="eval-container">'
+        '<div class="eval-title">\u6a21\u578b\u8bc4\u4f30\u62a5\u544a</div>'
+        '<table class="eval-table">'
+        '<thead><tr><th>\u6307\u6807</th><th>\u6570\u503c</th><th>\u8bf4\u660e</th></tr></thead>'
+        '<tbody>' + rows_html + '</tbody>'
+        '</table></div>' + style
+    )
+    return html
+
 def format_evaluation_report(results, task_type="classification"):
     """格式化评估报告为可读文本"""
     lines = []

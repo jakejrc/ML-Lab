@@ -2,9 +2,9 @@ FROM python:3.11-slim
 
 LABEL maintainer="jake_jrc@qq.com"
 LABEL org.opencontainers.image.title="ML-Lab"
-LABEL org.opencontainers.image.description="Interactive Machine Learning Visualization Platform for Education - 15 algorithms, 9 datasets, AI tutor, code sandbox"
+LABEL org.opencontainers.image.description="ML-Lab v3.4 - Interactive ML Visualization Platform | 15 algorithms, 9 datasets, tabular evaluation, AI tutor, code sandbox"
 LABEL org.opencontainers.image.source="https://github.com/jakejrc/ML-Lab"
-LABEL org.opencontainers.image.version="3.3"
+LABEL org.opencontainers.image.version="3.4"
 
 WORKDIR /app
 
