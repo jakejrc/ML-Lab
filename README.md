@@ -218,6 +218,6 @@ ML-Lab/
 
 **姜荣昌** · 江苏工程职业技术学院
 
-南通市人工智能新质技术重点实验室 · 学术委员会主任
+南通市人工智能新质技术重点实验室
 
 <a href="mailto:jake_jrc@qq.com">jake_jrc@qq.com</a>
