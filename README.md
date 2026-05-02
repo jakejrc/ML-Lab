@@ -13,7 +13,7 @@
 
 18 种算法 · 9 个数据集 · 9 大功能模块 · AI 助教 · Docker 一键部署
 
-<img src="screenshots_v34/home.png" alt="ML-Lab 首页" width="800">
+<img src="https://raw.githubusercontent.com/jakejrc/ML-Lab/main/screenshots_v34/home.png" alt="ML-Lab 首页" width="800">
 
 </div>
 
@@ -50,51 +50,51 @@ ML-Lab 是一款面向高职教育的**机器学习可视化实验平台**，旨
 
 引导式实验流程设计，从数据探索到报告撰写，覆盖机器学习完整学习路线。
 
-<img src="screenshots_v34/home.png" alt="学习路径" width="800">
+<img src="https://raw.githubusercontent.com/jakejrc/ML-Lab/main/screenshots_v34/home.png" alt="学习路径" width="800">
 
 ### 数据工作台
 
 内置 9 个公开学术数据集，支持数据分布可视化与预处理操作。
 
-<img src="screenshots_v34/data_workbench.png" alt="数据工作台" width="800">
+<img src="https://raw.githubusercontent.com/jakejrc/ML-Lab/main/screenshots_v34/data_workbench.png" alt="数据工作台" width="800">
 
 ### 特征工程
 
 6 大子模块覆盖特征缩放、特征选择、PCA 降维、特征构造、分箱离散化与相关性分析，结果以结构化表格实时展示。
 
-<img src="screenshots_v34/feature_eng.png" alt="特征工程" width="800">
+<img src="https://raw.githubusercontent.com/jakejrc/ML-Lab/main/screenshots_v34/feature_eng.png" alt="特征工程" width="800">
 
 ### 分类实验
 
 8 种分类算法，支持参数调节、模型训练与多维度评估（混淆矩阵、ROC 曲线、学习曲线）。
 
-<img src="screenshots_v34/classify.png" alt="分类实验" width="800">
+<img src="https://raw.githubusercontent.com/jakejrc/ML-Lab/main/screenshots_v34/classify.png" alt="分类实验" width="800">
 
 ### 回归实验
 
 6 种回归算法，含残差分析、正则化对比与多项式回归实验。
 
-<img src="screenshots_v34/regression.png" alt="回归实验" width="800">
+<img src="https://raw.githubusercontent.com/jakejrc/ML-Lab/main/screenshots_v34/regression.png" alt="回归实验" width="800">
 
 ### 聚类实验
 
 4 种聚类算法，含 PCA 降维散点图、轮廓系数评估与肘部法则分析。
 
-<img src="screenshots_v34/cluster.png" alt="聚类实验" width="800">
+<img src="https://raw.githubusercontent.com/jakejrc/ML-Lab/main/screenshots_v34/cluster.png" alt="聚类实验" width="800">
 
-<img src="screenshots_v34/cluster_results.png" alt="聚类结果" width="800">
+<img src="https://raw.githubusercontent.com/jakejrc/ML-Lab/main/screenshots_v34/cluster_results.png" alt="聚类结果" width="800">
 
 ### 代码沙箱
 
 在线 Python 编程环境，预导入机器学习核心库，支持代码编辑、执行与模板加载。
 
-<img src="screenshots_v34/code_sandbox.png" alt="代码沙箱" width="800">
+<img src="https://raw.githubusercontent.com/jakejrc/ML-Lab/main/screenshots_v34/code_sandbox.png" alt="代码沙箱" width="800">
 
 ### AI 助教
 
 基于通义千问大语言模型，提供 7×24 小时智能问答、代码解释与实验指导服务。
 
-<img src="screenshots_v34/ai_tutor.png" alt="AI助教" width="800">
+<img src="https://raw.githubusercontent.com/jakejrc/ML-Lab/main/screenshots_v34/ai_tutor.png" alt="AI助教" width="800">
 
 ---
 
