@@ -9,7 +9,6 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import matplotlib.patheffects as pe
 import numpy as np
 import os, json, tempfile
 
@@ -277,63 +276,48 @@ def search_concepts(G, keyword):
     return results
 
 
-def plot_knowledge_graph(G, figsize=(28, 20), layout_seed=42):
-    """渲染知识图谱静态图 — 白字+深色描边，任何颜色节点上清晰可读"""
-    fig, ax = plt.subplots(1, 1, figsize=figsize, dpi=200)
+def plot_knowledge_graph(G, figsize=(16, 12), layout_seed=42):
+    fig, ax = plt.subplots(1, 1, figsize=figsize)
     fig.patch.set_facecolor('#FAFAFA')
     ax.set_facecolor('#FAFAFA')
-
-    pos = nx.spring_layout(G, k=5.5, iterations=200, seed=layout_seed)
-
+    pos = nx.kamada_kawai_layout(G, scale=2.5)
     categories = {}
     for node_id, data in G.nodes(data=True):
         cat = data.get("category", "其他")
-        categories.setdefault(cat, []).append(node_id)
-
-    # 边
-    edge_colors, edge_widths = [], []
+        if cat not in categories:
+            categories[cat] = []
+        categories[cat].append(node_id)
+    edge_colors = []
+    edge_widths = []
     for u, v, data in G.edges(data=True):
         rel = data.get("relation", "相关")
         edge_colors.append(RELATION_COLORS.get(rel, "#CBD5E1"))
-        edge_widths.append(0.6 if rel == "相关" else 1.0)
-    nx.draw_networkx_edges(G, pos, ax=ax, edge_color=edge_colors,
-                           width=edge_widths, alpha=0.25, style='solid')
-
-    # 节点 — 大尺寸
+        edge_widths.append(1.0 if rel == "相关" else 1.5)
+    nx.draw_networkx_edges(G, pos, ax=ax, edge_color=edge_colors, width=edge_widths, alpha=0.4, style='solid')
     for cat, nodes in categories.items():
         color = COLOR_MAP.get(cat, "#94A3B8")
         nodelist = [n for n in nodes if n in G]
-        sizes = [3000 + 500 * len(list(G.neighbors(n))) for n in nodelist]
-        nx.draw_networkx_nodes(G, pos, ax=ax, nodelist=nodelist,
-                               node_color=color, node_size=sizes, alpha=0.92,
-                               edgecolors='white', linewidths=2.5)
-
-    # 标签 — 白色文字 + 深色描边（path_effects），任何颜色节点上都清晰
+        sizes = [800 + 200 * (len(list(G.neighbors(n)))) for n in nodelist]
+        nx.draw_networkx_nodes(G, pos, ax=ax, nodelist=nodelist, node_color=color, node_size=sizes, alpha=0.85, edgecolors='white', linewidths=1.5)
+    labels = {n: G.nodes[n].get("label", n) for n in G.nodes()}
     for node_id, (x, y) in pos.items():
-        label = G.nodes[node_id].get("label", node_id)
-        deg = len(list(G.neighbors(node_id)))
-        fs = 10 + deg * 0.6  # 字号随连接数增大
-        ax.text(x, y, label, fontsize=fs, ha='center', va='center',
-                fontweight='bold', color='white',
-                path_effects=[pe.withStroke(linewidth=3.5, foreground='#1e293b')])
-
-    # 图例
+        label = labels.get(node_id, "")
+        ax.text(x, y, label, fontsize=7, ha='center', va='center', fontweight='bold', color='white',
+                bbox=dict(boxstyle='round,pad=0.2', facecolor='#1e293b', edgecolor='none', alpha=0.6))
     legend_patches = []
     for cat, color in COLOR_MAP.items():
         if cat in categories:
             legend_patches.append(mpatches.Patch(color=color, label=f"{cat} ({len(categories[cat])})"))
-    legend1 = ax.legend(handles=legend_patches, title="概念类别", loc='upper left',
-                        fontsize=10, title_fontsize=11, framealpha=0.9, edgecolor='#e2e8f0')
+    legend1 = ax.legend(handles=legend_patches, title="概念类别", loc='upper left', fontsize=8, title_fontsize=9, framealpha=0.9, edgecolor='#e2e8f0')
     ax.add_artist(legend1)
-
-    rel_patches = [mpatches.Patch(color=c, label=r) for r, c in RELATION_COLORS.items()]
-    legend2 = ax.legend(handles=rel_patches, title="关系类型", loc='upper right',
-                        fontsize=10, title_fontsize=11, framealpha=0.9, edgecolor='#e2e8f0')
+    rel_patches = []
+    for rel, color in RELATION_COLORS.items():
+        rel_patches.append(mpatches.Patch(color=color, label=rel))
+    legend2 = ax.legend(handles=rel_patches, title="关系类型", loc='upper right', fontsize=8, title_fontsize=9, framealpha=0.9, edgecolor='#e2e8f0')
     ax.add_artist(legend2)
-
-    ax.set_title("ML-Lab 机器学习知识图谱", fontsize=20, fontweight='bold', pad=24, color='#1e293b')
+    ax.set_title("ML-Lab 机器学习知识图谱", fontsize=16, fontweight='bold', pad=16, color='#1e293b')
     ax.axis('off')
-    plt.tight_layout(pad=1.5)
+    plt.tight_layout()
     return fig
 
 
@@ -447,15 +431,14 @@ const link = g.append('g').selectAll('line').data(edgesData).join('line')
     .attr('stroke', d => {{ const rc = {rel_colors_json}; return rc[d.relation] || '#CBD5E1'; }})
     .attr('stroke-width', d => d.relation === '相关' ? 0.8 : 1.5).attr('stroke-opacity', 0.4);
 const node = g.append('g').selectAll('circle').data(nodesData).join('circle')
-    .attr('r', d => 15 + Math.random() * 12).attr('fill', d => colorMap[d.category] || '#94A3B8')
+    .attr('r', d => 8 + Math.random() * 10).attr('fill', d => colorMap[d.category] || '#94A3B8')
     .attr('stroke', '#fff').attr('stroke-width', 1.5).attr('cursor', 'pointer')
     .call(d3.drag().on('start', (event, d) => {{ if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; }})
         .on('drag', (event, d) => {{ d.fx = event.x; d.fy = event.y; }})
         .on('end', (event, d) => {{ if (!event.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }}));
 const label = g.append('g').selectAll('text').data(nodesData).join('text')
-    .text(d => d.label).attr('font-size', '12px').attr('font-weight', 'bold')
-    .attr('fill', '#fff').attr('stroke', '#1e293b').attr('stroke-width', '3.5px').attr('paint-order', 'stroke')
-    .attr('text-anchor', 'middle').attr('dy', '0.35em').attr('pointer-events', 'none');
+    .text(d => d.label).attr('font-size', '7px').attr('font-weight', 'bold')
+    .attr('fill', '#fff').attr('text-anchor', 'middle').attr('dy', '0.35em').attr('pointer-events', 'none');
 const tooltip = document.getElementById('tooltip');
 node.on('mouseover', (event, d) => {{ tooltip.style.display = 'block'; tooltip.innerHTML = '<b>' + d.label + '</b><br><span class=\"cat\">' + d.category + '</span><div class=\"desc\">' + (d.description || '') + '</div>'; }})
     .on('mousemove', (event) => {{ tooltip.style.left = (event.offsetX + 12) + 'px'; tooltip.style.top = (event.offsetY - 10) + 'px'; }})

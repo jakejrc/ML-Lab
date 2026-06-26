@@ -87,10 +87,10 @@ const Graph = ForceGraph3D()(document.getElementById('graph'))
     const size = Math.max(4, node.val * 0.35);
     const sprite = new SpriteText(node.label);
     sprite.color = '#1e293b';
-    sprite.textHeight = size;
-    sprite.backgroundColor = node.color + '22';
-    sprite.padding = 1.5;
-    sprite.borderRadius = 2;
+    sprite.textHeight = Math.max(5, size * 1.15);
+    sprite.backgroundColor = node.color + '66';
+    sprite.padding = 3;
+    sprite.borderRadius = 4;
     sprite.borderWidth = 0;
     sprite.fontWeight = 'bold';
     return sprite;
