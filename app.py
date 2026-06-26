@@ -33,14 +33,14 @@ import matplotlib as mpl
 import matplotlib.font_manager as fm
 
 # ── 中文字体配置 ──
-# 优先使用文泉驿微米黑（WenQuanYi Micro Hei），回退到 DejaVu Sans
-for _fp in ['/usr/share/fonts/truetype/wqy/wqy-microhei.ttc',
-            '/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc']:
+# 优先使用 Noto Sans CJK SC，回退到 DejaVu Sans
+for _fp in ['/usr/share/fonts/opentype/noto/NotoSansCJKSC-Regular.otf',
+            '/usr/share/fonts/opentype/noto/NotoSansCJKSC-Bold.otf']:
     if os.path.exists(_fp):
         try: fm.fontManager.addfont(_fp)
         except: pass
 
-mpl.rcParams['font.sans-serif'] = ['WenQuanYi Micro Hei', 'WenQuanYi Zen Hei', 'DejaVu Sans']
+mpl.rcParams['font.sans-serif'] = ['Noto Sans CJK SC', 'DejaVu Sans']
 mpl.rcParams['axes.unicode_minus'] = False  # 负号显示
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -364,7 +364,7 @@ def on_load_data(dataset_name, test_ratio):
 
 
 
-        _mpl.rcParams['font.sans-serif'] = ['WenQuanYi Micro Hei', 'DejaVu Sans']
+        _mpl.rcParams['font.sans-serif'] = ['Noto Sans CJK SC', 'DejaVu Sans']
 
 
 
@@ -376,7 +376,7 @@ def on_load_data(dataset_name, test_ratio):
 
 
 
-        _fm.fontManager.addfont('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc')
+        _fm.fontManager.addfont('/usr/share/fonts/opentype/noto/NotoSansCJKSC-Regular.otf')
 
 
 
