@@ -302,8 +302,8 @@ def plot_knowledge_graph(G, figsize=(16, 12), layout_seed=42):
     labels = {n: G.nodes[n].get("label", n) for n in G.nodes()}
     for node_id, (x, y) in pos.items():
         label = labels.get(node_id, "")
-        ax.text(x, y, label, fontsize=7, ha='center', va='center', fontweight='bold', color='white',
-                bbox=dict(boxstyle='round,pad=0.2', facecolor='#1e293b', edgecolor='none', alpha=0.6))
+        ax.text(x, y, label, fontsize=9, ha='center', va='center', fontweight='bold', color='white',
+                bbox=dict(boxstyle='round,pad=0.3', facecolor='#1e293b', edgecolor='none', alpha=0.85))
     legend_patches = []
     for cat, color in COLOR_MAP.items():
         if cat in categories:
@@ -437,8 +437,9 @@ const node = g.append('g').selectAll('circle').data(nodesData).join('circle')
         .on('drag', (event, d) => {{ d.fx = event.x; d.fy = event.y; }})
         .on('end', (event, d) => {{ if (!event.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }}));
 const label = g.append('g').selectAll('text').data(nodesData).join('text')
-    .text(d => d.label).attr('font-size', '7px').attr('font-weight', 'bold')
-    .attr('fill', '#fff').attr('text-anchor', 'middle').attr('dy', '0.35em').attr('pointer-events', 'none');
+    .text(d => d.label).attr('font-size', '10px').attr('font-weight', 'bold')
+    .attr('fill', '#fff').attr('stroke', '#1e293b').attr('stroke-width', '2px').attr('paint-order', 'stroke')
+    .attr('text-anchor', 'middle').attr('dy', '0.35em').attr('pointer-events', 'none');
 const tooltip = document.getElementById('tooltip');
 node.on('mouseover', (event, d) => {{ tooltip.style.display = 'block'; tooltip.innerHTML = '<b>' + d.label + '</b><br><span class=\"cat\">' + d.category + '</span><div class=\"desc\">' + (d.description || '') + '</div>'; }})
     .on('mousemove', (event) => {{ tooltip.style.left = (event.offsetX + 12) + 'px'; tooltip.style.top = (event.offsetY - 10) + 'px'; }})
