@@ -1,0 +1,49 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.venv
+venv
+env
+
+# 环境变量与密钥
+.env
+
+# 备份文件
+backup_*/
+*.bak*
+app.py.bak*
+app.py.v*
+*.v30_backup
+
+# IDE
+.vscode
+.idea
+
+# 不需要打包的目录
+docs/
+ppt/
+screenshots/
+
+# 日志与临时文件
+startup*.log
+layout_patch.py
+Thumbs.db
+.DS_Store
+run_ml_lab.bat
+_start_*.py
+start_*.bat
+start_v32.bat
+.github/
+
+# 测试和调试文件
+app_test*.py
+float_chat.js
+test_launch.py
+fix_verify_report.png
+report_error_debug.png

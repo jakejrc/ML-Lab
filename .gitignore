@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# 环境与密钥
+.env
+*.log
+
+# 归档目录
+_archive*/
+
+# 备份文件
+*.bak*
+backup_*/
+*.v30_backup
+app.py.v*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# 调试/测试文件
+app_test*.py
+app_broken_backup.py
+test_launch.py
+_start_*.py
+_start_*.bat
+start_*.bat
+run_ml_lab.bat
+layout_patch.py
+float_chat.js
+p0_callbacks.py
+
+# 调试截图
+screenshot*.png
+test_banner_fix.png
+verify_learning_path.png
+fix_verify_report.png
+report_error_debug.png
+
+# 导出的实验报告
+reports/

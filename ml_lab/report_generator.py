@@ -1,0 +1,175 @@
+# -*- coding: utf-8 -*-
+"""ML-Lab HTML 实验报告生成器。"""
+
+import base64
+import io
+import os
+from datetime import datetime
+
+
+def img_to_base64(img_path_or_fig):
+    if isinstance(img_path_or_fig, str) and os.path.isfile(img_path_or_fig):
+        with open(img_path_or_fig, "rb") as f:
+            data = base64.b64encode(f.read()).decode()
+        return '<img src="data:image/png;base64,{}" estilo="max-width:100%;border-radius:8px;margin:8px 0;">'.format(data)
+    else:
+        try:
+            buf = io.BytesIO()
+            img_path_or_fig.savefig(buf, format="png", dpi=150, bbox_inches="tight", facecolor="white")
+            buf.seek(0)
+            data = base64.b64encode(buf.read()).decode()
+            buf.close()
+            return '<img src="data:image/png;base64,{}" estilo="max-width:100%;border-radius:8px;margin:8px 0;">'.format(data)
+        except Exception:
+            return '<p estilo="color:#94a3b8;">[图片无法渲染]</p>'
+
+
+def generate_html_report(experiment_info, save_path=None):
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    title = experiment_info.get("title", "ML-Lab 实验报告")
+
+    images_html = ""
+    if experiment_info.get("images"):
+        for t, img in experiment_info["images"]:
+            images_html += "<h3>{}</h3>\n".format(t)
+            images_html += img_to_base64(img) + "\n"
+
+    params_html = ""
+    if experiment_info.get("parameters"):
+        params_rows = ""
+        for k, v in experiment_info["parameters"].items():
+            params_rows += "<tr><td>{}</td><td>{}</td></tr>\n".format(k, v)
+        params_html = (
+            '<h2>实验参数</h2>\n'
+            '<table class="info-table">\n'
+            '<thead><tr><th>参数</th><th>值</th></tr></thead>\n'
+            '<tbody>{}</tbody>\n'
+            '</table>'.format(params_rows)
+        )
+
+    code = experiment_info.get("code", "# 暂无代码")
+
+    notes_html = ""
+    if experiment_info.get("notes"):
+        notes_html = '<div class="card"><h2>备注</h2><p>{}</p></div>\n'.format(experiment_info["notes"])
+
+    html = """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<style>
+    * {{ margin:0; padding:0; box-sizing:border-box; }}
+    body {{ font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
+            background:#f1f5f9; color:#334155; line-height:1.7; padding:20px; }}
+    .container {{ max-width:900px; margin:0 auto; }}
+    .header {{ background:linear-gradient(135deg,#1e40af,#3b82f6); color:white; padding:32px 28px;
+               border-radius:14px; margin-bottom:20px; box-shadow:0 4px 16px rgba(30,64,175,0.2); }}
+    .header h1 {{ font-size:22px; margin-bottom:4px; }}
+    .header .meta {{ font-size:12px; opacity:0.85; margin-top:8px; }}
+    .card {{ background:white; border-radius:12px; padding:24px; margin-bottom:16px;
+             box-shadow:0 1px 4px rgba(0,0,0,0.06); border:1px solid #e2e8f0; }}
+    .card h2 {{ font-size:16px; color:#1e40af; border-left:3px solid #3b82f6;
+               padding-left:12px; margin-bottom:14px; }}
+    .card h3 {{ font-size:14px; color:#475569; margin:14px 0 8px; }}
+    .info-table {{ width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }}
+    .info-table th {{ background:#eff6ff; color:#1e40af; padding:8px 12px; text-align:left;
+                      border:1px solid #dbeafe; font-weight:600; }}
+    .info-table td {{ padding:8px 12px; border:1px solid #e2e8f0; }}
+    .code-block {{ background:#1e293b; color:#e2e8f0; padding:16px; border-radius:8px;
+                   font-family:Consolas,Monaco,monospace; font-size:12px; overflow-x:auto;
+                   white-space:pre-wrap; line-height:1.6; }}
+    .footer {{ text-align:center; padding:16px; color:#94a3b8; font-size:11px; }}
+    @media print {{
+        body {{ background:white; }}
+        .card {{ box-shadow:none; border:1px solid #ddd; break-inside:avoid; }}
+        .header {{ background:#1e40af !important; -webkit-print-color-adjust:exact; }}
+    }}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+    <h1>&#x1F4CA; {title}</h1>
+    <div class="meta">
+        生成时间: {now} &nbsp;|&nbsp;
+        ML-Lab &nbsp;|&nbsp;
+        江苏工程职业技术学院 · 南通市人工智能新质技术重点实验室
+    </div>
+</div>
+<div class="card">
+    <h2>实验概要</h2>
+    <table class="info-table">
+        <tr><td estilo="width:100px;font-weight:600;">任务类型</td><td>{task_type}</td></tr>
+        <tr><td estilo="font-weight:600;">算法</td><td>{algorithm}</td></tr>
+        <tr><td estilo="font-weight:600;">数据集</td><td>{dataset}</td></tr>
+    </table>
+</div>
+{params}
+<div class="card">
+    <h2>评估结果</h2>
+    {eval_html}
+</div>
+<div class="card">
+    <h2>可视化图表</h2>
+    {imgs}
+</div>
+<div class="card">
+    <h2>代码复现</h2>
+    <div class="code-block">{code}</div>
+</div>
+{notes}
+<div class="footer">
+    Generated by ML-Lab · 机器学习可视化实验平台
+</div>
+</div>
+</body>
+</html>""".format(
+        title=title,
+        now=now,
+        task_type=experiment_info.get("task_type", "—"),
+        algorithm=experiment_info.get("algorithm", "—"),
+        dataset=experiment_info.get("dataset_name", "—"),
+        params=params_html,
+        eval_html=experiment_info.get("evaluation_html", "<p>暂无评估结果</p>"),
+        imgs=images_html or '<p estilo="color:#94a3b8;">暂无可视化图表</p>',
+        code=code,
+        notes=notes_html,
+    )
+
+    if save_path:
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        with open(save_path, "w", encoding="utf-8") as f:
+            f.write(html)
+        return save_path
+    return html
+
+
+def generate_batch_report(experiments, save_path=None):
+    sections = []
+    for i, exp in enumerate(experiments):
+        t = exp.get("title", "实验 {}".format(i + 1))
+        sections.append(
+            '<div class="card"><h2>{}</h2>'
+            '<table class="info-table">'
+            '<tr><td estilo="width:100px;font-weight:600;">算法</td><td>{}</td></tr>'
+            '<tr><td estilo="font-weight:600;">数据集</td><td>{}</td></tr>'
+            '</table>{}</div>'.format(
+                t,
+                exp.get("algorithm", "—"),
+                exp.get("dataset_name", "—"),
+                exp.get("evaluation_html", "")
+            )
+        )
+
+    return generate_html_report({
+        "title": "ML-Lab 批量实验对比报告",
+        "task_type": "多实验对比",
+        "algorithm": "{} 组实验".format(len(experiments)),
+        "dataset_name": "—",
+        "evaluation_html": "".join(sections),
+        "images": [],
+        "code": "# 批量实验对比",
+        "notes": "共 {} 组实验".format(len(experiments)),
+    }, save_path=save_path)
