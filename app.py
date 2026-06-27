@@ -6110,7 +6110,9 @@ def create_app():
 
             inputs=[algo_dd_cls, lr_c, ni_c, C_c, md_c, mi_c, hid_c, al_c],
 
-            outputs=[code_display_cls])
+            outputs=[code_display_cls],
+
+            _js="(code) => { if(code && code.trim()) { navigator.clipboard.writeText(code).then(() => { let btn = document.activeElement; if(btn) { let orig = btn.textContent; btn.textContent = '✅ 已复制'; setTimeout(() => { btn.textContent = orig; }, 1500); } }).catch(() => {}); } return code; }" )
 
 
 
@@ -6120,7 +6122,9 @@ def create_app():
 
             inputs=[algo_dd_reg, lr_r, ni_r, C_r, md_r, mi_r, hid_r, al_r, deg_r, eps_r, kern_r, crit_r],
 
-            outputs=[code_display_reg])
+            outputs=[code_display_reg],
+
+            _js="(code) => { if(code && code.trim()) { navigator.clipboard.writeText(code).then(() => { let btn = document.activeElement; if(btn) { let orig = btn.textContent; btn.textContent = '✅ 已复制'; setTimeout(() => { btn.textContent = orig; }, 1500); } }).catch(() => {}); } return code; }" )
 
 
 
@@ -6130,7 +6134,9 @@ def create_app():
 
             inputs=[algo_dd_uns, n_cl, max_iter_cl, eps_sl, ms_sl, linkage_dd, affinity_dd, init_dd],
 
-            outputs=[code_display_uns])
+            outputs=[code_display_uns],
+
+            _js="(code) => { if(code && code.trim()) { navigator.clipboard.writeText(code).then(() => { let btn = document.activeElement; if(btn) { let orig = btn.textContent; btn.textContent = '✅ 已复制'; setTimeout(() => { btn.textContent = orig; }, 1500); } }).catch(() => {}); } return code; }" )
 
 
 
@@ -6142,7 +6148,9 @@ def create_app():
 
                     assoc_max_len, assoc_disc_method, assoc_n_bins],
 
-            outputs=[assoc_code_display])
+            outputs=[assoc_code_display],
+
+            _js="(code) => { if(code && code.trim()) { navigator.clipboard.writeText(code).then(() => { let btn = document.activeElement; if(btn) { let orig = btn.textContent; btn.textContent = '✅ 已复制'; setTimeout(() => { btn.textContent = orig; }, 1500); } }).catch(() => {}); } return code; }" )
 
 
 
