@@ -25,7 +25,7 @@ def _register_cjk_font():
     """在 Linux/Docker 中注册 CJK 中文字体。
 
     优先使用项目自带的 SimHei 字体（fonts/SimHei.ttf），
-    其次尝试系统安装的 Noto Sans CJK SC（Dockerfile 预提取的 OTF），
+    其次尝试系统安装的 WenQuanYi Micro Hei（Dockerfile 预提取的 OTF），
     最后回退到 fontManager 中已有的 CJK 字体。
     """
     import inspect
@@ -34,10 +34,10 @@ def _register_cjk_font():
     if os.path.isfile(_simhei_path):
         fm.fontManager.addfont(_simhei_path)
         return 'SimHei'
-    _cjk_font_path = '/usr/share/fonts/opentype/noto/NotoSansCJKSC-Regular.otf'
+    _cjk_font_path = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
     if os.path.isfile(_cjk_font_path):
         fm.fontManager.addfont(_cjk_font_path)
-        return 'Noto Sans CJK SC'
+        return 'WenQuanYi Micro Hei'
     # Linux 系统：尝试 WenQuanYi 文泉驿字体（树莓派/Debian 默认字体）
     for _wqy in ['/usr/share/fonts/truetype/wqy/wqy-microhei.ttc',
                  '/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc']:
@@ -66,7 +66,7 @@ def _setup_chinese_font():
             # Fallback: 查找 fontManager 中已有的 CJK 字体
             _fonts = []
             _candidates = [
-                'Noto Sans CJK SC', 'Noto Sans SC', 'WenQuanYi Micro Hei',
+                'WenQuanYi Micro Hei', 'WenQuanYi Micro Hei', 'WenQuanYi Micro Hei',
                 'WenQuanYi Zen Hei', 'Droid Sans Fallback',
             ]
             _available = {f.name for f in fm.fontManager.ttflist}

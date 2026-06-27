@@ -21,7 +21,7 @@ from collections import defaultdict
 def _setup_chinese_font():
     """配置中文字体（跨平台：Windows / Linux Docker）
     优先使用项目自带 SimHei 字体（fonts/SimHei.ttf），
-    其次尝试 Docker 预提取的 Noto Sans CJK SC OTF，
+    其次尝试 Docker 预提取的 WenQuanYi Micro Hei，
     最后回退到 fontManager 中已安装的中文字体。
     """
     import inspect
@@ -35,18 +35,18 @@ def _setup_chinese_font():
             _font_name = 'SimHei'
         except Exception:
             pass
-    # 2. Docker/Linux 环境下的 Noto Sans CJK SC OTF
+    # 2. Docker/Linux 环境下的 WenQuanYi Micro Hei
     if not _font_name:
-        _cjk_otf = '/usr/share/fonts/opentype/noto/NotoSansCJKSC-Regular.otf'
+        _cjk_otf = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
         if os.path.isfile(_cjk_otf):
             try:
                 fm.fontManager.addfont(_cjk_otf)
-                _font_name = 'Noto Sans CJK SC'
+                _font_name = 'WenQuanYi Micro Hei'
             except Exception:
                 pass
     # 3. 回退：通过 fontManager 搜索已安装的中文字体
     if not _font_name:
-        for _candidate in ['Noto Sans CJK SC', 'WenQuanYi Micro Hei',
+        for _candidate in ['WenQuanYi Micro Hei', 'WenQuanYi Micro Hei',
                            'SimHei', 'Microsoft YaHei']:
             _matches = [f.name for f in fm.fontManager.ttflist if f.name == _candidate]
             if _matches:
