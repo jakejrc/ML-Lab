@@ -12,7 +12,7 @@ LABEL maintainer="jake_jrc@qq.com"
 LABEL org.opencontainers.image.title="ML-Lab"
 LABEL org.opencontainers.image.description="ML-Lab v3.8.1 - Interactive ML Visualization Platform | 18 algorithms, 9 datasets, custom upload, code sandbox with plot output, AI tutor, association rules"
 LABEL org.opencontainers.image.source="https://github.com/jakejrc/ML-Lab"
-LABEL org.opencontainers.image.version="3.8.1"
+LABEL org.opencontainers.image.version="3.8.2"
 
 WORKDIR /app
 
@@ -22,9 +22,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-noto-cjk \
     && rm -rf /var/lib/apt/lists/*
 
-# 从 TTC 提取 SC 子字体为独立 OTF（matplotlib 3.10+ 无法直接从 TTC 加载 SC 变体）
-RUN pip install --no-cache-dir fonttools && \
-    python3 -c "from fontTools.ttLib import TTCollection; ttc=TTCollection('/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'); ttc.fonts[2].save('/usr/share/fonts/opentype/noto/NotoSansCJKSC-Regular.otf'); ttc2=TTCollection('/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc'); ttc2.fonts[2].save('/usr/share/fonts/opentype/noto/NotoSansCJKSC-Bold.otf')" && \
+# 安装 Noto Sans CJK 字体并提取 SC 子字体为独立 OTF
+# matplotlib 3.10+ 无法直接从 TTC 加载 SC 变体，需提取为独立 OTF
+RUN apt-get install -y --no-install-recommends fonts-noto-cjk && \
+    pip install --no-cache-dir fonttools && \
+    python3 -c "from fontTools.ttLib import TTCollection; \
+import os; \
+for ttc_path, otf_name in [\
+    ('/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc', 'NotoSansCJKSC-Regular.otf'),\
+    ('/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc', 'NotoSansCJKSC-Bold.otf'),\
+]:\
+    if os.path.isfile(ttc_path):\
+        ttc=TTCollection(ttc_path);\
+        ttc.fonts[2].save('/usr/share/fonts/opentype/noto/'+otf_name);\
+        print(f'Extracted {otf_name}')" && \
     pip uninstall -y fonttools && \
     fc-cache -fv
 

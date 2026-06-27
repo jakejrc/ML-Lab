@@ -81,6 +81,7 @@ def on_load_data(dataset_name, test_ratio):
         _mpl.rcParams['axes.unicode_minus'] = False
         import matplotlib.font_manager as _fm
         _font_registered = False
+        # 1. 项目自带 SimHei
         _simhei = '/home/pi/ML-Lab/fonts/SimHei.ttf'
         if _os.path.isfile(_simhei):
             try:
@@ -89,6 +90,18 @@ def on_load_data(dataset_name, test_ratio):
                 _font_registered = True
             except Exception:
                 pass
+        # 2. Docker Noto CJK SC
+        if not _font_registered:
+            for _noto in ['/usr/share/fonts/opentype/noto/NotoSansCJKSC-Regular.otf', '/usr/share/fonts/opentype/noto/NotoSansCJKSC-Bold.otf']:
+                if _os.path.isfile(_noto):
+                    try:
+                        _fm.fontManager.addfont(_noto)
+                        _mpl.rcParams['font.sans-serif'] = ['Noto Sans CJK SC', 'DejaVu Sans']
+                        _font_registered = True
+                        break
+                    except Exception:
+                        pass
+        # 3. WenQuanYi（树莓派）
         if not _font_registered:
             _wqy = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
             if _os.path.isfile(_wqy):
@@ -98,6 +111,7 @@ def on_load_data(dataset_name, test_ratio):
                     _font_registered = True
                 except Exception:
                     pass
+        # 4. 兜底
         if not _font_registered:
             _mpl.rcParams['font.sans-serif'] = ['DejaVu Sans']
 

@@ -13,13 +13,22 @@ import matplotlib.font_manager as fm
 import gradio as gr
 
 # ── 中文字体配置 ──
-for _fp in ['/usr/share/fonts/truetype/wqy/wqy-microhei.ttc',
+# Docker Noto CJK SC（Dockerfile 预提取的 OTF）
+for _fp in ['/usr/share/fonts/opentype/noto/NotoSansCJKSC-Regular.otf',
+            '/usr/share/fonts/opentype/noto/NotoSansCJKSC-Bold.otf',
+            '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc',
             '/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc']:
     if os.path.exists(_fp):
         try: fm.fontManager.addfont(_fp)
         except: pass
 
-mpl.rcParams['font.sans-serif'] = ['WenQuanYi Micro Hei', 'WenQuanYi Zen Hei', 'DejaVu Sans']
+# 项目自带的 SimHei
+_simhei_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fonts', 'SimHei.ttf')
+if os.path.exists(_simhei_path):
+    try: fm.fontManager.addfont(_simhei_path)
+    except: pass
+
+mpl.rcParams['font.sans-serif'] = ['SimHei', 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', 'WenQuanYi Zen Hei', 'DejaVu Sans']
 mpl.rcParams['axes.unicode_minus'] = False
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 

@@ -24,21 +24,32 @@ import platform, os, matplotlib.font_manager as fm
 def _register_cjk_font():
     """在 Linux/Docker 中注册 CJK 中文字体。
 
-    优先使用项目自带的 SimHei 字体（fonts/SimHei.ttf），
-    其次尝试系统安装的 WenQuanYi Micro Hei（Dockerfile 预提取的 OTF），
-    最后回退到 fontManager 中已有的 CJK 字体。
+    优先级：
+    1. 项目自带的 SimHei.ttf（fonts/SimHei.ttf）
+    2. Docker 预提取的 NotoSansCJKSC OTF（/usr/share/fonts/opentype/noto/）
+    3. 系统安装的 WenQuanYi Micro Hei（树莓派/Debian）
+    4. fontManager 中已有的 CJK 字体
     """
     import inspect
     _project_root = os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
+    # 1. 项目自带的 SimHei.ttf
     _simhei_path = os.path.join(_project_root, 'fonts', 'SimHei.ttf')
     if os.path.isfile(_simhei_path):
-        fm.fontManager.addfont(_simhei_path)
-        return 'SimHei'
-    _cjk_font_path = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
-    if os.path.isfile(_cjk_font_path):
-        fm.fontManager.addfont(_cjk_font_path)
-        return 'WenQuanYi Micro Hei'
-    # Linux 系统：尝试 WenQuanYi 文泉驿字体（树莓派/Debian 默认字体）
+        try:
+            fm.fontManager.addfont(_simhei_path)
+            return 'SimHei'
+        except Exception:
+            pass
+    # 2. Docker 预提取的 NotoSansCJKSC OTF
+    for _noto in ['/usr/share/fonts/opentype/noto/NotoSansCJKSC-Regular.otf',
+                  '/usr/share/fonts/opentype/noto/NotoSansCJKSC-Bold.otf']:
+        if os.path.isfile(_noto):
+            try:
+                fm.fontManager.addfont(_noto)
+                return 'Noto Sans CJK SC'
+            except Exception:
+                pass
+    # 3. WenQuanYi 文泉驿（树莓派/Debian）
     for _wqy in ['/usr/share/fonts/truetype/wqy/wqy-microhei.ttc',
                  '/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc']:
         if os.path.isfile(_wqy):
@@ -66,8 +77,9 @@ def _setup_chinese_font():
             # Fallback: 查找 fontManager 中已有的 CJK 字体
             _fonts = []
             _candidates = [
-                'WenQuanYi Micro Hei', 'WenQuanYi Micro Hei', 'WenQuanYi Micro Hei',
-                'WenQuanYi Zen Hei', 'Droid Sans Fallback',
+                'Noto Sans CJK SC', 'Noto Sans CJK', 'Noto Sans SC',
+                'WenQuanYi Micro Hei', 'WenQuanYi Zen Hei',
+                'Droid Sans Fallback',
             ]
             _available = {f.name for f in fm.fontManager.ttflist}
             for _c in _candidates:

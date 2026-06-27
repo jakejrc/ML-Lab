@@ -59,7 +59,10 @@
 #### 测试情况
 
 - **树莓派 5B**（100.66.1.15）：全部功能测试通过，页面切换、导航按钮、数据集加载均正常
-- **Docker 镜像**（GitHub Actions 自动构建）：部署后存在未知问题，待排查
+- **Docker 镜像**（GitHub Actions 自动构建）：已修复中文乱码问题
+  - 根因：Docker 使用 Noto Sans CJK SC 字体，但 `visualization.py` 和 `callbacks.py` 的字体注册逻辑未包含该字体路径
+  - 修复：三步回退策略增加 Noto Sans CJK SC OTF（Dockerfile 预提取）支持
+  - 字体优先级：SimHei.ttf → NotoSansCJKSC.otf → wqy-microhei.ttc → DejaVu Sans
 
 平台采用 Gradio SPA 架构，页面面板通过 JS 控制显隐。此前使用 `style.setProperty` 设置内联样式，但 Gradio 在服务端事件后会重渲染组件、清除内联样式，导致切换页面时短暂显示错误面板。
 
