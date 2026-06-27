@@ -5795,7 +5795,7 @@ def create_app():
 
 
 
-        gr.HTML('<div class="footer-bar">ML-Lab v3.8.1 · Python · Scikit-learn · Gradio · 南通市人工智能新质技术重点实验室 · 江苏工程职业技术学院 · MIT License</div>')
+        gr.HTML('<div class="footer-bar">ML-Lab v3.8.1 · Python · Scikit-learn · Gradio · 江苏工程职业技术学院 南通市人工智能新质技术重点实验室 · MIT License</div>')
 
 
 
