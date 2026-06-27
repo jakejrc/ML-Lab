@@ -4730,6 +4730,17 @@ def create_app():
 
 
 
+
+                gr.HTML('<div style="padding:14px 0 4px;"><div class="sidebar-title" style="margin:0 11px 8px;">当前状态</div></div>')
+
+
+
+                status_ds = gr.HTML('<div class="status-card"><div style="display:flex;justify-content:space-between;align-items:center;"><span class="status-label">数据集</span><span class="status-value" id="sv-ds">未加载</span></div></div>')
+
+
+
+                status_md = gr.HTML('<div class="status-card" style="margin-top:6px;"><div style="display:flex;justify-content:space-between;align-items:center;"><span class="status-label">模型</span><span class="status-value" id="sv-md">未训练</span></div></div>')
+
                 nav = gr.Radio(
 
                     choices=[
