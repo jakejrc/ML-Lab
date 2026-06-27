@@ -24,8 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # 安装 Noto Sans CJK 字体并提取 SC 子字体为独立 OTF
 # matplotlib 3.10+ 无法直接从 TTC 加载 SC 变体，需提取为独立 OTF
-RUN apt-get install -y --no-install-recommends fonts-noto-cjk && \
-    pip install --no-cache-dir fonttools && \
+RUN pip install --no-cache-dir fonttools && \
     python3 -c "from fontTools.ttLib import TTCollection; \
 import os; \
 for ttc_path, otf_name in [\
