@@ -81,8 +81,9 @@ def on_load_data(dataset_name, test_ratio):
         _mpl.rcParams['axes.unicode_minus'] = False
         import matplotlib.font_manager as _fm
         _font_registered = False
-        # 1. 项目自带 SimHei
-        _simhei = '/home/pi/ML-Lab/fonts/SimHei.ttf'
+        # 1. 项目自带 SimHei（动态获取项目根目录，兼容 Docker 和树莓派）
+        _project_root = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+        _simhei = _os.path.join(_project_root, 'fonts', 'SimHei.ttf')
         if _os.path.isfile(_simhei):
             try:
                 _fm.fontManager.addfont(_simhei)
