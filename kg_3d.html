@@ -79,18 +79,18 @@ const colorMap = {"基础": "#4F46E5", "数据": "#10B981", "预处理": "#05966
 const Graph = ForceGraph3D()(document.getElementById('graph'))
   .graphData({ nodes: nodesData, links: linksData })
   .backgroundColor('#ffffff')
-  .nodeVal('val')
+  .nodeVal(n => n.val * 0.25)
   .nodeColor('color')
   .nodeResolution(16)
-  .nodeOpacity(0.9)
+  .nodeOpacity(0.45)
   .nodeThreeObject(node => {
     const size = Math.max(4, node.val * 0.35);
     const sprite = new SpriteText(node.label);
     sprite.color = '#1e293b';
-    sprite.textHeight = Math.max(5, size * 1.15);
-    sprite.backgroundColor = node.color + '66';
-    sprite.padding = 3;
-    sprite.borderRadius = 4;
+    sprite.textHeight = Math.max(6, size * 1.25);
+    sprite.backgroundColor = node.color + 'CC';
+    sprite.padding = 4;
+    sprite.borderRadius = 6;
     sprite.borderWidth = 0;
     sprite.fontWeight = 'bold';
     return sprite;
