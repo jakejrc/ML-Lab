@@ -57,9 +57,9 @@ body { background: #f1f5f9 !important; font-family: -apple-system,BlinkMacSystem
 
 .status-value { font-size:12px; color:#fff; font-weight:500; }
 
-.page-panel { background:#f1f5f9!important; padding:20px 24px!important; min-height:calc(100vh - 62px); border-radius:0!important; }
+.page-panel { display:none!important; background:#f1f5f9!important; padding:20px 24px!important; min-height:calc(100vh - 62px); border-radius:0!important; }
 
-.page-panel[data-init-hidden] { display:none!important; }
+.page-panel.ml-visible { display:flex!important; }
 
 .content-card { background:#fff; border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,0.04); border:1px solid #e2e8f0; overflow:hidden; margin-bottom:14px; }
 
