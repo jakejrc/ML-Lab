@@ -22,22 +22,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-noto-cjk \
     && rm -rf /var/lib/apt/lists/*
 
-# 安装 Noto Sans CJK 字体并提取 SC 子字体为独立 OTF
-# matplotlib 3.10+ 无法直接从 TTC 加载 SC 变体，需提取为独立 OTF
+# 安装 Noto Sans CJK SC 字体（三步策略：下载OTF → TTC提取 → wqy兜底）
+COPY setup_fonts.py /app/setup_fonts.py
 RUN pip install --no-cache-dir fonttools && \
-    python3 -c "from fontTools.ttLib import TTCollection; \
-import os; \
-for ttc_path, otf_name in [\
-    ('/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc', 'NotoSansCJKSC-Regular.otf'),\
-    ('/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc', 'NotoSansCJKSC-Bold.otf'),\
-]:\
-    if os.path.isfile(ttc_path):\
-        ttc=TTCollection(ttc_path);\
-        ttc.fonts[2].save('/usr/share/fonts/opentype/noto/'+otf_name);\
-        print(f'Extracted {otf_name}')" && \
+    python3 /app/setup_fonts.py && \
     pip uninstall -y fonttools && \
     fc-cache -fv
-
 # 从 builder 复制已安装的 Python 包
 COPY --from=builder /install /usr/local
 
