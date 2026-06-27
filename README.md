@@ -31,6 +31,43 @@
 | 组件 | 旧方案（导致闪现） | 新方案（无闪现） |
 |------|--------------------|------------------|
 | CSS | `.page-panel` 默认 `display:flex` | `.page-panel` 默认 `display:none!important` |
+| 显隐控制 | JS `style.setProperty` 设置 inline style | JS `classList.add/remove('ml-visible')` + `style.setProperty` 双保险 |
+| 显示规则 | 无 | `.page-panel.ml-visible { display:flex!important }` |
+
+> 即使 Gradio 重渲染移除所有 inline style，CSS 层级的 `display:none` 始终生效，不会出现面板短暂显示的情况。
+
+#### 修复：导航按钮失效
+
+**根因**：事件监听器直接绑定在 `<label>` 元素上，Gradio 重渲染时替换 DOM 节点导致监听器丢失。
+
+**解决方案**：改用 `document.body` 事件委托，通过 `event.target.closest('.sidebar-nav label')` 捕获点击，body 永不被 Gradio 替换。
+
+#### 修复：数据集加载字体注册失败
+
+**根因**：`callbacks.py` 中 `matplotlib.font_manager.addfont()` 处理 `.ttc` 字体文件时无异常保护，抛出 `FileNotFoundError` 导致整个加载流程中断。
+
+**解决方案**：三步回退策略，每步均有 try/except：
+1. 优先使用项目自带的 `fonts/SimHei.ttf`（单文件 `.ttf`，兼容性最好）
+2. 回退到系统 `wqy-microhei.ttc`
+3. 最后兜底用 `DejaVu Sans`
+
+#### 工程改进
+
+- **代码重构**：`app.py` 从 6396 行精简至约 190 行，页面 UI 和事件逻辑拆分为独立模块
+- **版本号升级**：v3.8.1 → **v3.8.2**
+
+#### 测试情况
+
+- **树莓派 5B**（100.66.1.15）：全部功能测试通过，页面切换、导航按钮、数据集加载均正常
+- **Docker 镜像**（GitHub Actions 自动构建）：部署后存在未知问题，待排查
+
+平台采用 Gradio SPA 架构，页面面板通过 JS 控制显隐。此前使用 `style.setProperty` 设置内联样式，但 Gradio 在服务端事件后会重渲染组件、清除内联样式，导致切换页面时短暂显示错误面板。
+
+**解决方案**：改用 CSS 类名控制显隐，CSS 规则始终生效、不受 Gradio 重渲染影响：
+
+| 组件 | 旧方案（导致闪现） | 新方案（无闪现） |
+|------|--------------------|------------------|
+| CSS | `.page-panel` 默认 `display:flex` | `.page-panel` 默认 `display:none!important` |
 | 显隐控制 | JS `style.setProperty` 设置 inline style | JS `classList.add/remove('ml-visible')` |
 | 显示规则 | 无 | `.page-panel.ml-visible { display:flex!important }` |
 
