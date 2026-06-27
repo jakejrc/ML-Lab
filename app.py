@@ -115,16 +115,20 @@ if __name__ == "__main__":
   function bindNav() {
     var labels = document.querySelectorAll('.sidebar-nav label');
     if (labels.length === 0) return false;
-    if (window.__mlLabNavInited) return true;
+    if (window.__mlLabNavInited && window.__mlLabNavBound) return true;
     window.__mlLabNavInited = true;
 
-    labels.forEach(function(label) {
-      label.addEventListener('click', function() {
+    // 使用事件委托：监听 document.body（永不被 Gradio 重渲染替换）
+    if (!window.__mlLabNavBound) {
+      document.body.addEventListener('click', function(e) {
+        var label = e.target.closest('.sidebar-nav label');
+        if (!label) return;
         var text = label.textContent.trim();
         var targetId = PAGE_MAP[text];
         if (targetId) switchPage(targetId);
       });
-    });
+      window.__mlLabNavBound = true;
+    }
 
     switchPage('page-kg');
     return true;
