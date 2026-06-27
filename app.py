@@ -4722,7 +4722,7 @@ def create_app():
 
 
 
-                        with gr.Column(scale=0, min_width=230, elem_classes="sidebar-panel"):
+            with gr.Column(scale=0, min_width=230, elem_classes="sidebar-panel"):
 
                 gr.HTML('<div style="padding:14px 0 4px;"><div class="sidebar-title" style="margin:0 11px 8px;">当前状态</div></div>')
 
