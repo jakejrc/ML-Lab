@@ -76,26 +76,30 @@ def on_load_data(dataset_name, test_ratio):
 
 
         # 强制重新设置中文字体（线程/上下文安全）
-
-
-
         import matplotlib as _mpl
-
-
-
-        _mpl.rcParams['font.sans-serif'] = ['WenQuanYi Micro Hei', 'WenQuanYi Zen Hei', 'DejaVu Sans']
-
-
-
+        import os as _os
         _mpl.rcParams['axes.unicode_minus'] = False
-
-
-
         import matplotlib.font_manager as _fm
-
-
-
-        _fm.fontManager.addfont('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc')
+        _font_registered = False
+        _simhei = '/home/pi/ML-Lab/fonts/SimHei.ttf'
+        if _os.path.isfile(_simhei):
+            try:
+                _fm.fontManager.addfont(_simhei)
+                _mpl.rcParams['font.sans-serif'] = ['SimHei', 'DejaVu Sans']
+                _font_registered = True
+            except Exception:
+                pass
+        if not _font_registered:
+            _wqy = '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'
+            if _os.path.isfile(_wqy):
+                try:
+                    _fm.fontManager.addfont(_wqy)
+                    _mpl.rcParams['font.sans-serif'] = ['WenQuanYi Micro Hei', 'DejaVu Sans']
+                    _font_registered = True
+                except Exception:
+                    pass
+        if not _font_registered:
+            _mpl.rcParams['font.sans-serif'] = ['DejaVu Sans']
 
 
 
