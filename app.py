@@ -175,6 +175,35 @@ if __name__ == "__main__":
       } else {
         el.classList.remove('ml-visible');
         el.style.setProperty('display', 'none', 'important');
-      }\n      }\n    }\n  }\n  var navTimer = setInterval(function() {\n    if (setupClientNav()) clearInterval(navTimer);\n  }, 300);\n  setTimeout(function() { clearInterval(navTimer); }, 10000);\n})();  // ===== 自动下载: 监控gr.File文件链接并自动触发浏览器下载 =====\n  (function() {\n    var fileContainer = null;\n    var lastHref = '';\n    var observer = new MutationObserver(function(mutations) {\n      mutations.forEach(function(m) {\n        var added = m.addedNodes;\n        for (var i = 0; i < added.length; i++) {\n          if (added[i].nodeType === 1) {\n            var link = added[i].querySelector && added[i].querySelector('a[href*=\"file\"]');\n            if (!link && added[i].tagName === 'A' && added[i].href && added[i].href.indexOf('file') >= 0) {\n              link = added[i];\n            }\n            if (link && link.href !== lastHref) {\n              lastHref = link.href;\n              setTimeout(function() { link.click(); }, 200);\n            }\n          }\n        }\n      });\n    });\n    var containerTimer = setInterval(function() {\n      // 找到gr.File组件的容器（包含\"下载文件\"标签的父div）\n      var allDivs = document.querySelectorAll('.block');\n      for (var i = 0; i < allDivs.length; i++) {\n        if (allDivs[i].textContent.indexOf('下载文件') >= 0 && allDivs[i].querySelector('a[href*=\"file\"]')) {\n          fileContainer = allDivs[i];\n          clearInterval(containerTimer);\n          observer.observe(fileContainer, {childList: true, subtree: true});\n          // 如果当前已有链接，先记录\n          var existing = fileContainer.querySelector('a[href*=\"file\"]');\n          if (existing) lastHref = existing.href;\n          break;\n        }\n      }\n    }, 500);\n    setTimeout(function() { clearInterval(containerTimer); }, 15000);\n  })();""",
+      }\n      }\n    }\n  }\n  var navTimer = setInterval(function() {\n    if (setupClientNav()) clearInterval(navTimer);\n  }, 300);\n  setTimeout(function() { clearInterval(navTimer); }, 10000);\n})();  // ===== 自动下载: 监控gr.File文件链接并自动触发浏览器下载 =====\n  (function() {\n    var fileContainer = null;\n    var lastHref = '';\n    var observer = new MutationObserver(function(mutations) {\n      mutations.forEach(function(m) {\n        var added = m.addedNodes;\n        for (var i = 0; i < added.length; i++) {\n          if (added[i].nodeType === 1) {\n            var link = added[i].querySelector && added[i].querySelector('a[href*=\"file\"]');\n            if (!link && added[i].tagName === 'A' && added[i].href && added[i].href.indexOf('file') >= 0) {\n              link = added[i];\n            }\n            if (link && link.href !== lastHref) {\n              lastHref = link.href;\n              setTimeout(function() { link.click(); }, 200);\n            }\n          }\n        }\n      });\n    });\n    var containerTimer = setInterval(function() {\n      // 找到gr.File组件的容器（包含\"下载文件\"标签的父div）\n      var allDivs = document.querySelectorAll('.block');\n      for (var i = 0; i < allDivs.length; i++) {\n        if (allDivs[i].textContent.indexOf('下载文件') >= 0 && allDivs[i].querySelector('a[href*=\"file\"]')) {\n          fileContainer = allDivs[i];\n          clearInterval(containerTimer);\n          observer.observe(fileContainer, {childList: true, subtree: true});\n          // 如果当前已有链接，先记录\n          var existing = fileContainer.querySelector('a[href*=\"file\"]');\n          if (existing) lastHref = existing.href;\n          break;\n        }\n      }\n    }, 500);\n    setTimeout(function() { clearInterval(containerTimer); }, 15000);\n  })();
+  // ===== Clipboard auto-copy: poll hidden Textbox (execCommand fallback for HTTP) =====
+  (function() {
+    var lastVal = '';
+    setInterval(function() {
+      var ta = document.querySelector('#cls-code-clipboard textarea');
+      if (!ta) return;
+      var v = ta.value;
+      if (v && v !== lastVal && (v.indexOf('import') >= 0 || v.indexOf('sklearn') >= 0 || v.indexOf('from sklearn') >= 0)) {
+        lastVal = v;
+        // 使用 execCommand('copy') 兼容 HTTP 页面（navigator.clipboard 仅支持 HTTPS/localhost）
+        var tmp = document.createElement('textarea');
+        tmp.value = v;
+        tmp.style.position = 'fixed';
+        tmp.style.left = '-9999px';
+        tmp.style.top = '0';
+        document.body.appendChild(tmp);
+        tmp.select();
+        tmp.setSelectionRange(0, 99999);
+        try {
+          var ok = document.execCommand('copy');
+          console.log('[ML-Lab] execCommand copy: ' + (ok ? 'OK' : 'FAIL') + ' (' + v.length + ' chars)');
+        } catch(e) {
+          console.warn('[ML-Lab] execCommand copy error:', e);
+        }
+        document.body.removeChild(tmp);
+      }
+    }, 300);
+  })();
+""",
     )
 

@@ -313,6 +313,7 @@ def build_pages():
                 copy_code_btn_cls = gr.Button("📋 生成并复制代码", variant="secondary")
 
             code_display_cls = gr.Code(label="Python 代码 (可直接复制运行)", language="python", lines=28, interactive=True)
+            cls_code_clipboard = gr.Textbox(visible=True, elem_id="cls-code-clipboard", label="", show_label=False)
 
 
 

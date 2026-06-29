@@ -235,6 +235,9 @@ button.primary { background:linear-gradient(135deg,#2563eb,#1d4ed8)!important; b
 #float-chat-input{flex:1;padding:8px 12px;border:1px solid #d1d5db;border-radius:20px;font-size:13px;outline:none}
 #float-chat-input:focus{border-color:#7c3aed}
 #float-chat-send{padding:8px 16px;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;border:none;border-radius:20px;font-size:13px;cursor:pointer;white-space:nowrap}
+# 隐藏剪贴板桥接Textbox（DOM中存在但不可见，用于JS轮询复制）
+#cls-code-clipboard { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; overflow: hidden !important; pointer-events: none !important; }
+#cls-code-clipboard label { display: none !important; }
 #float-chat-send:hover{opacity:.9}
 """
 

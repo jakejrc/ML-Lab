@@ -41,7 +41,6 @@ def bind_events(comps):
     pp_btn.click(fn=on_preprocess, inputs=[method_dd, feat_sl], outputs=[pp_img, pp_info])
 
 
-
     # 特征工程工作台
 
     fe_scale_btn.click(fn=on_fe_scaling, inputs=[fe_scale_method],
@@ -69,7 +68,6 @@ def bind_events(comps):
         outputs=[fe_corr_img, fe_corr_info])
 
 
-
     # 分类实验
 
     train_btn_cls.click(fn=on_train_classification,
@@ -79,13 +77,11 @@ def bind_events(comps):
         outputs=[train_img_cls, db_img_cls, result_txt_cls, cm_img_cls, roc_img_cls, lc_img_cls, cv_img_cls, status_md])
 
 
-
     # 模型对比按钮
 
     # 导出报告
 
     export_btn_cls.click(fn=on_export_report, inputs=[result_txt_cls], outputs=[export_file_cls])
-
 
 
     compare_btn.click(fn=on_compare_models,
@@ -95,11 +91,9 @@ def bind_events(comps):
         outputs=[compare_img, compare_result])
 
 
-
     # 回归实验
 
     export_btn_reg.click(fn=on_export_report, inputs=[result_txt_reg], outputs=[export_file_reg])
-
 
 
     train_btn_reg.click(fn=on_train_regression,
@@ -107,7 +101,6 @@ def bind_events(comps):
         inputs=[algo_dd_reg, lr_r, ni_r, C_r, md_r, mi_r, hid_r, al_r, deg_r, eps_r, kern_r, crit_r],
 
         outputs=[gd_img, rg_img, reg_cmp_img, poly_cmp_img, model_cmp_img, result_txt_reg, status_md])
-
 
 
     # 聚类实验 - 算法切换时动态显示参数
@@ -219,7 +212,6 @@ def bind_events(comps):
             ]
 
 
-
     algo_dd_uns.change(
 
         fn=on_cluster_algo_change,
@@ -231,11 +223,9 @@ def bind_events(comps):
     )
 
 
-
     # 聚类实验
 
     export_btn_uns.click(fn=on_export_report, inputs=[result_txt_uns], outputs=[export_file_uns])
-
 
 
     train_btn_uns.click(fn=on_train_clustering,
@@ -243,7 +233,6 @@ def bind_events(comps):
         inputs=[algo_dd_uns, n_cl, max_iter_cl, eps_sl, ms_sl, linkage_dd, affinity_dd, init_dd],
 
         outputs=[cluster_img1, cluster_img2, cluster_img3, result_txt_uns, status_md])
-
 
 
     # 关联规则算法切换回调
@@ -273,7 +262,6 @@ def bind_events(comps):
             ]
 
 
-
     # 关联规则算法切换
 
     assoc_algo_dd.change(
@@ -287,11 +275,9 @@ def bind_events(comps):
     )
 
 
-
     # 关联规则挖掘
 
     export_btn_assoc.click(fn=on_export_report, inputs=[assoc_result], outputs=[export_file_assoc])
-
 
 
     assoc_run_btn.click(fn=on_run_association,
@@ -301,7 +287,6 @@ def bind_events(comps):
                 assoc_max_len, assoc_disc_method, assoc_n_bins, assoc_top_k],
 
         outputs=[assoc_img1, assoc_img2, assoc_img3, assoc_img4, assoc_result, status_md])
-
 
 
     # 知识图谱渲染
@@ -320,7 +305,6 @@ def bind_events(comps):
     download_code_btn.click(fn=on_download_code, inputs=[code_editor], outputs=[code_download])
 
 
-
     # AI助教
 
     msg_in.submit(fn=on_chat, inputs=[msg_in, chatbot], outputs=[msg_in, chatbot])
@@ -333,31 +317,30 @@ def bind_events(comps):
 
         pb.click(fn=on_preset, inputs=[pb], outputs=[msg_in, chatbot])
 
-
-
     # 一键复制代码 - 分类实验
 
     copy_code_btn_cls.click(fn=on_copy_classification_code,
 
         inputs=[algo_dd_cls, lr_c, ni_c, C_c, md_c, mi_c, hid_c, al_c],
 
-        outputs=[code_display_cls],
-
-        js="(code) => { if(code && code.trim()) { navigator.clipboard.writeText(code).then(() => { let btn = document.activeElement; if(btn) { let orig = btn.textContent; btn.textContent = '✅ 已复制'; setTimeout(() => { btn.textContent = orig; }, 1500); } }).catch(() => {}); } return code; }" )
-
+        outputs=[code_display_cls, copy_code_btn_cls, cls_code_clipboard],
+    )
 
 
-    # 一键复制代码 - 回归实验
+
+
+
+
+
+
+
 
     copy_code_btn_reg.click(fn=on_copy_regression_code,
 
         inputs=[algo_dd_reg, lr_r, ni_r, C_r, md_r, mi_r, hid_r, al_r, deg_r, eps_r, kern_r, crit_r],
 
         outputs=[code_display_reg],
-
-        js="(code) => { if(code && code.trim()) { navigator.clipboard.writeText(code).then(() => { let btn = document.activeElement; if(btn) { let orig = btn.textContent; btn.textContent = '✅ 已复制'; setTimeout(() => { btn.textContent = orig; }, 1500); } }).catch(() => {}); } return code; }" )
-
-
+    )
 
     # 一键复制代码 - 聚类实验
 
@@ -366,10 +349,7 @@ def bind_events(comps):
         inputs=[algo_dd_uns, n_cl, max_iter_cl, eps_sl, ms_sl, linkage_dd, affinity_dd, init_dd],
 
         outputs=[code_display_uns],
-
-        js="(code) => { if(code && code.trim()) { navigator.clipboard.writeText(code).then(() => { let btn = document.activeElement; if(btn) { let orig = btn.textContent; btn.textContent = '✅ 已复制'; setTimeout(() => { btn.textContent = orig; }, 1500); } }).catch(() => {}); } return code; }" )
-
-
+    )
 
     # 一键复制代码 - 关联规则挖掘
 
@@ -380,10 +360,7 @@ def bind_events(comps):
                 assoc_max_len, assoc_disc_method, assoc_n_bins],
 
         outputs=[assoc_code_display],
-
-        js="(code) => { if(code && code.trim()) { navigator.clipboard.writeText(code).then(() => { let btn = document.activeElement; if(btn) { let orig = btn.textContent; btn.textContent = '✅ 已复制'; setTimeout(() => { btn.textContent = orig; }, 1500); } }).catch(() => {}); } return code; }" )
-
-
+    )
 
     # ── Float AI Chat: Callbacks ──
 
