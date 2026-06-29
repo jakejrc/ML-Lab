@@ -37,6 +37,13 @@
 - 使用 `execCommand('copy')` 兼容 HTTP 页面（`navigator.clipboard` 仅支持 HTTPS/localhost）
 - 前端轮询 + 隐藏 Textbox 方案，不破坏 Gradio 6 Svelte 事件链
 
+#### 修复：四类实验"📄 导出 HTML 报告"功能
+
+修复分类、回归、聚类、关联规则实验的 HTML 报告导出问题：
+
+- **根因**：`fig_to_image()` 返回 numpy ndarray，`on_export_report` 中 `os.path.isfile()` 和 `if img_path` 对数组的真值测试抛出 `ValueError`
+- **修复**：`report_generator.img_to_base64()` 增加 numpy ndarray 分支（PIL.Image.fromarray → base64），`data.py` 图片循环改为 `if img_path is not None`
+
 ---
 
 ### v3.8.2 (2026-06-27)
