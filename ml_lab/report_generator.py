@@ -12,7 +12,8 @@ def img_to_base64(img_path_or_fig):
         with open(img_path_or_fig, "rb") as f:
             data = base64.b64encode(f.read()).decode()
         return '<img src="data:image/png;base64,{}" estilo="max-width:100%;border-radius:8px;margin:8px 0;">'.format(data)
-    else:
+    elif hasattr(img_path_or_fig, 'savefig'):
+        # matplotlib Figure 对象
         try:
             buf = io.BytesIO()
             img_path_or_fig.savefig(buf, format="png", dpi=150, bbox_inches="tight", facecolor="white")
@@ -22,6 +23,20 @@ def img_to_base64(img_path_or_fig):
             return '<img src="data:image/png;base64,{}" estilo="max-width:100%;border-radius:8px;margin:8px 0;">'.format(data)
         except Exception:
             return '<p estilo="color:#94a3b8;">[图片无法渲染]</p>'
+    elif hasattr(img_path_or_fig, 'shape') or hasattr(img_path_or_fig, 'tobytes'):
+        # numpy ndarray RGB 数组
+        try:
+            from PIL import Image as _PILImage
+            buf = io.BytesIO()
+            _PILImage.fromarray(img_path_or_fig).save(buf, format='png')
+            buf.seek(0)
+            data = base64.b64encode(buf.read()).decode()
+            buf.close()
+            return '<img src="data:image/png;base64,{}" estilo="max-width:100%;border-radius:8px;margin:8px 0;">'.format(data)
+        except Exception:
+            return '<p estilo="color:#94a3b8;">[图片无法渲染]</p>'
+    else:
+        return '<p estilo="color:#94a3b8;">[图片无法渲染]</p>'
 
 
 def generate_html_report(experiment_info, save_path=None):

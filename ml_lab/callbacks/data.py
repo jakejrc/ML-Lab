@@ -288,6 +288,8 @@ def on_export_report(eval_html=None):
 
     import os, traceback
 
+
+
     try:
 
         if isinstance(eval_html, dict):
@@ -322,7 +324,7 @@ def on_export_report(eval_html=None):
 
         for key, img_path in _g.get("report_images", {}).items():
 
-            if img_path and os.path.isfile(img_path):
+            if img_path is not None:
 
                 images.append((key, img_path))
 
@@ -359,7 +361,6 @@ def on_export_report(eval_html=None):
         return generate_html_report(info, save_path=report_path)
 
     except Exception:
-
         return None
 
 def on_load_custom_data(file_obj, file_path_text, target_col, task_type, test_ratio):
