@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-ML-Lab v3.8.2 — 关联规则回调函数
+ML-Lab v3.8.3 — 关联规则回调函数
 从 callbacks.py 拆分而来
 """
 import sys, traceback

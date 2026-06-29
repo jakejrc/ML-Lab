@@ -6,7 +6,7 @@
 
 **Interactive Machine Learning Visualization Platform for Education**
 
-[![Version](https://img.shields.io/badge/version-3.8.2-blue?style=flat-square)](https://github.com/jakejrc/ML-Lab)
+[![Version](https://img.shields.io/badge/version-3.8.3-blue?style=flat-square)](https://github.com/jakejrc/ML-Lab)
 [![Docker Pulls](https://img.shields.io/docker/pulls/jakejrc/ml-lab?style=flat-square&logo=docker&label=Docker%20Pulls)](https://hub.docker.com/r/jakejrc/ml-lab)
 [![Docker Image Size](https://img.shields.io/docker/image-size/jakejrc/ml-lab/latest?style=flat-square&logo=docker&label=Image%20Size)](https://hub.docker.com/r/jakejrc/ml-lab)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python)](https://www.python.org/)
@@ -19,6 +19,25 @@
 ---
 
 ## 更新日志
+
+### v3.8.3 (2026-06-29)
+
+#### 新增：四类实验"📋 生成并复制代码"按钮
+
+为分类、回归、聚类、关联规则四类实验实现一键复制 Python 代码功能：
+
+- **分类实验**：`cls-code-clipboard` 隐藏 Textbox 桥接 + `execCommand('copy')` 自动复制
+- **回归实验**：`reg-code-clipboard` 桥接 + `execCommand('copy')` 自动复制
+- **聚类实验**：`uns-code-clipboard` 桥接 + `execCommand('copy')` 自动复制
+- **关联规则**：`assoc-code-clipboard` 桥接 + `execCommand('copy')` 自动复制
+
+**统一行为**：
+- 点击"📋 生成并复制代码" → 按钮变为"✅ 已复制剪贴板"（3 秒后自动恢复）
+- 未训练时提示"⚠️ 请先训练模型，再复制代码"
+- 使用 `execCommand('copy')` 兼容 HTTP 页面（`navigator.clipboard` 仅支持 HTTPS/localhost）
+- 前端轮询 + 隐藏 Textbox 方案，不破坏 Gradio 6 Svelte 事件链
+
+---
 
 ### v3.8.2 (2026-06-27)
 
