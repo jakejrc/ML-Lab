@@ -486,6 +486,7 @@ def build_pages():
                 copy_code_btn_reg = gr.Button("📋 生成并复制代码", variant="secondary")
 
             code_display_reg = gr.Code(label="Python 代码 (可直接复制运行)", language="python", lines=28, interactive=True)
+            reg_code_clipboard = gr.Textbox(visible=True, elem_id="reg-code-clipboard", label="", show_label=False)
 
 
 
@@ -734,6 +735,7 @@ def build_pages():
                 copy_code_btn_uns = gr.Button("📋 生成并复制代码", variant="secondary")
 
             code_display_uns = gr.Code(label="Python 代码 (可直接复制运行)", language="python", lines=28, interactive=True)
+            uns_code_clipboard = gr.Textbox(visible=True, elem_id="uns-code-clipboard", label="", show_label=False)
 
 
 
@@ -896,6 +898,7 @@ def build_pages():
                 assoc_copy_btn = gr.Button("📋 生成并复制代码", variant="secondary")
 
             assoc_code_display = gr.Code(label="Python 代码", language="python", lines=28, interactive=True)
+            assoc_code_clipboard = gr.Textbox(visible=True, elem_id="assoc-code-clipboard", label="", show_label=False)
 
 
 

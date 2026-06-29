@@ -67,6 +67,9 @@ def on_copy_regression_code(algo, lr, ni, C, md, mi, hid, al, deg, eps, kern, cr
 
     try:
 
+        if _g.get("model") is None:
+            return "⚠️ 请先训练模型，再复制代码", "📋 生成并复制代码", ""
+
         params = _extract_params("regression",
 
             algo=algo, lr=lr, ni=ni, C=C, md=md, mi=mi, hid=hid, al=al,
@@ -79,11 +82,11 @@ def on_copy_regression_code(algo, lr, ni, C, md, mi, hid, al, deg, eps, kern, cr
 
         _g["last_generated_code"] = code
 
-        return code
+        return code, "✅ 已复制剪贴板", code
 
     except Exception as e:
 
-        return f"代码生成失败: {e}"
+        return f"代码生成失败: {e}", "📋 生成并复制代码", ""
 
 def on_copy_clustering_code(algo, n_clusters, max_iter, eps, min_samples,
 
@@ -92,6 +95,9 @@ def on_copy_clustering_code(algo, n_clusters, max_iter, eps, min_samples,
     """生成聚类实验的可复制代码"""
 
     try:
+
+        if _g.get("model") is None:
+            return "⚠️ 请先训练模型，再复制代码", "📋 生成并复制代码", ""
 
         params = _extract_params("clustering",
 
@@ -107,11 +113,11 @@ def on_copy_clustering_code(algo, n_clusters, max_iter, eps, min_samples,
 
         _g["last_generated_code"] = code
 
-        return code
+        return code, "✅ 已复制剪贴板", code
 
     except Exception as e:
 
-        return f"代码生成失败: {e}"
+        return f"代码生成失败: {e}", "📋 生成并复制代码", ""
 
 
 

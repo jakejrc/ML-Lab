@@ -303,9 +303,9 @@ def on_copy_association_code(algo_name, min_support, min_confidence, min_lift,
 
     """生成关联规则实验的可复制代码"""
 
-    if _g["X"] is None:
+    if _g.get("last_assoc_model") is None:
 
-        return "请先加载数据集"
+        return "⚠️ 请先执行关联规则挖掘，再复制代码", "📋 生成并复制代码", ""
 
 
 
@@ -407,4 +407,4 @@ for i, r in enumerate(model.rules[:10]):
 
     _g["last_generated_code"] = code
 
-    return code
+    return code, "✅ 已复制剪贴板", code

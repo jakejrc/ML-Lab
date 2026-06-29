@@ -238,6 +238,12 @@ button.primary { background:linear-gradient(135deg,#2563eb,#1d4ed8)!important; b
 # 隐藏剪贴板桥接Textbox（DOM中存在但不可见，用于JS轮询复制）
 #cls-code-clipboard { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; overflow: hidden !important; pointer-events: none !important; }
 #cls-code-clipboard label { display: none !important; }
+#reg-code-clipboard { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; overflow: hidden !important; pointer-events: none !important; }
+#reg-code-clipboard label { display: none !important; }
+#uns-code-clipboard { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; overflow: hidden !important; pointer-events: none !important; }
+#uns-code-clipboard label { display: none !important; }
+#assoc-code-clipboard { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; overflow: hidden !important; pointer-events: none !important; }
+#assoc-code-clipboard label { display: none !important; }
 #float-chat-send:hover{opacity:.9}
 """
 

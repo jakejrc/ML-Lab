@@ -339,7 +339,7 @@ def bind_events(comps):
 
         inputs=[algo_dd_reg, lr_r, ni_r, C_r, md_r, mi_r, hid_r, al_r, deg_r, eps_r, kern_r, crit_r],
 
-        outputs=[code_display_reg],
+        outputs=[code_display_reg, copy_code_btn_reg, reg_code_clipboard],
     )
 
     # 一键复制代码 - 聚类实验
@@ -348,7 +348,7 @@ def bind_events(comps):
 
         inputs=[algo_dd_uns, n_cl, max_iter_cl, eps_sl, ms_sl, linkage_dd, affinity_dd, init_dd],
 
-        outputs=[code_display_uns],
+        outputs=[code_display_uns, copy_code_btn_uns, uns_code_clipboard],
     )
 
     # 一键复制代码 - 关联规则挖掘
@@ -359,7 +359,7 @@ def bind_events(comps):
 
                 assoc_max_len, assoc_disc_method, assoc_n_bins],
 
-        outputs=[assoc_code_display],
+        outputs=[assoc_code_display, assoc_copy_btn, assoc_code_clipboard],
     )
 
     # ── Float AI Chat: Callbacks ──
