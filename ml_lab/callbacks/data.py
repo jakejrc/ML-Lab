@@ -330,7 +330,7 @@ def on_export_report(eval_html=None):
 
         algo = _g.get("last_algo_name") or "实验"
 
-        report_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "reports")
+        report_dir = "/tmp/gradio"
 
         os.makedirs(report_dir, exist_ok=True)
 
