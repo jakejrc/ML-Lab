@@ -37,10 +37,26 @@ logger.info(f'[FONT] font.sans-serif={plt.rcParams["font.sans-serif"]}')
 
 from ml_lab.sandbox_templates import SANDBOX_TEMPLATES
 SANDBOX_TEMPLATE = SANDBOX_TEMPLATES["默认（查看数据）"]
+from ml_lab.html_templates import TOP_HTML, LEARNING_PATH_HTML
+from ml_lab.pages import build_pages
+from ml_lab.events import bind_events
 from ml_lab.version import VERSION, FULL_NAME
 
 from ml_lab.ui_styles import APP_CSS, ETHICS
-from ml_lab.app_builder import create_app
+
+def create_app():
+
+    with gr.Blocks(title=f"ML-Lab {FULL_NAME}") as app:
+
+        gr.HTML(TOP_HTML)
+
+        # 构建所有页面 UI 组件
+        comps = build_pages()
+
+        # 绑定所有事件
+        bind_events(comps)
+
+    return app
 
 
 

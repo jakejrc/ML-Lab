@@ -1722,7 +1722,7 @@ def create_app():
 
                         err_detail = f"{err_body['error'].get('code','')}: {err_body['error'].get('message','')}"
 
-                except Exception:
+                except:
 
                     pass
 
