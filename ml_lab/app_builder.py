@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-ML-Lab v3.8.3 — 应用构建器
+ML-Lab v3.8.4 — 应用构建器
 """
 import gradio as gr
 import os
@@ -1347,7 +1347,7 @@ def create_app():
 
 
 
-        gr.HTML('<div class="footer-bar">ML-Lab v3.8.3 · Python · Scikit-learn · Gradio · 江苏工程职业技术学院 · MIT License</div>')
+        gr.HTML('<div class="footer-bar">ML-Lab v3.8.4 · Python · Scikit-learn · Gradio · 江苏工程职业技术学院 · MIT License</div>')
 
 
 

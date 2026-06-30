@@ -6,7 +6,7 @@
 
 **Interactive Machine Learning Visualization Platform for Education**
 
-[![Version](https://img.shields.io/badge/version-3.8.3-blue?style=flat-square)](https://github.com/jakejrc/ML-Lab)
+[![Version](https://img.shields.io/badge/version-3.8.4-blue?style=flat-square)](https://github.com/jakejrc/ML-Lab)
 [![Docker Pulls](https://img.shields.io/docker/pulls/jakejrc/ml-lab?style=flat-square&logo=docker&label=Docker%20Pulls)](https://hub.docker.com/r/jakejrc/ml-lab)
 [![Docker Image Size](https://img.shields.io/docker/image-size/jakejrc/ml-lab/latest?style=flat-square&logo=docker&label=Image%20Size)](https://hub.docker.com/r/jakejrc/ml-lab)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python)](https://www.python.org/)
@@ -19,6 +19,16 @@
 ---
 
 ## 更新日志
+
+### v3.8.4 (2026-06-30)
+
+#### 修复：数据工作台加载数据集错误 & 导出HTML报告URL跳转
+
+- **数据工作台**：修复 `on_load_data` 函数中残留的调试代码导致 `NameError: name 'eval_html' is not defined`，恢复"加载数据集"功能
+- **导出HTML报告**：修复 Gradio 6 文件服务路径限制（`/tmp/gradio` vs `reports/`），修复 `events.py` 中 outputs 指向 `export_btn_cls` 而非 `export_file_cls` 的事件链断裂问题
+- **剪贴板自动复制**：回归/聚类/关联规则三实验同步实现 `execCommand('copy')` 方案
+
+---
 
 ### v3.8.3 (2026-06-29)
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-ML-Lab v3.8.3 — 回调函数包
+ML-Lab v3.8.4 — 回调函数包
 从 callbacks.py 拆分而来，保持向后兼容
 """
 
