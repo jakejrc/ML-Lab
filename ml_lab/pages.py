@@ -1,4 +1,5 @@
 """ML-Lab 页面 UI 构建模块
+from ml_lab.logger import logger
 在活跃 Gradio Blocks 上下文中创建所有 UI 组件
 """
 import gradio as gr
@@ -1099,7 +1100,7 @@ def build_pages():
 
     def on_nav(page_name):
         target_id, _ = PAGE_MAP.get(page_name, ("page-kg", 0))
-        print(f"[NAV] click='{page_name}' -> target='{target_id}'")
+        logger.debug(f"[NAV] click='{page_name}' -> target='{target_id}'")
         # 切页完全交给客户端 JS，on_nav 仅作为 Radio 事件占位（避免 Radio 被 disabled）
         return [gr.skip() for _ in PAGE_ORDER]
 

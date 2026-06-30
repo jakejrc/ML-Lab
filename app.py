@@ -32,7 +32,8 @@ mpl.rcParams['font.sans-serif'] = ['SimHei', 'Noto Sans CJK SC', 'WenQuanYi Micr
 mpl.rcParams['axes.unicode_minus'] = False
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-print(f'[FONT] font.sans-serif={plt.rcParams["font.sans-serif"]}')
+from ml_lab.logger import logger
+logger.info(f'[FONT] font.sans-serif={plt.rcParams["font.sans-serif"]}')
 
 from ml_lab.sandbox_templates import SANDBOX_TEMPLATES
 SANDBOX_TEMPLATE = SANDBOX_TEMPLATES["默认（查看数据）"]
@@ -40,8 +41,8 @@ from ml_lab.html_templates import TOP_HTML, LEARNING_PATH_HTML
 from ml_lab.pages import build_pages
 from ml_lab.events import bind_events
 from ml_lab.version import VERSION, FULL_NAME
-from ml_lab.ui_styles import APP_CSS, ETHICS
 
+from ml_lab.ui_styles import APP_CSS, ETHICS
 
 def create_app():
 
@@ -66,11 +67,11 @@ if __name__ == "__main__":
 
     import os as _os
 
-    print("=" * 55)
-    print(f"  ML-Lab {FULL_NAME}: 机器学习可视化实验平台")
-    print("  监督学习 + 无监督学习 + 代码沙箱")
-    print("  地址: http://0.0.0.0:7860")
-    print("=" * 55)
+    logger.info("=" * 55)
+    logger.info(f"  ML-Lab {FULL_NAME}: 机器学习可视化实验平台")
+    logger.info("  监督学习 + 无监督学习 + 代码沙箱")
+    logger.info("  地址: http://0.0.0.0:7860")
+    logger.info("=" * 55)
 
     # ── 自动检测 root_path（反向代理兼容）──
     # 优先级：环境变量 > GRADIO_ROOT_PATH > 默认空
@@ -80,9 +81,9 @@ if __name__ == "__main__":
     )
     if _root_path:
         _root_path = _root_path.rstrip("/")  # 去掉末尾斜杠
-        print(f"  [INFO] root_path = '{_root_path}' (反向代理模式)")
+        logger.info(f"root_path = '{_root_path}' (反向代理模式)")
     else:
-        print("  [INFO] root_path 未设置 (直连模式)")
+        logger.info("root_path 未设置 (直连模式)")
 
     app = create_app()
     app.queue(max_size=20).launch(

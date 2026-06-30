@@ -23,6 +23,7 @@ from ml_lab.events import bind_events
 from ml_lab.ui_styles import APP_CSS, _card, ETHICS
 from ml_lab.html_templates import TOP_HTML, LEARNING_PATH_HTML
 from ml_lab.state import _g, _sync
+from ml_lab.logger import logger
 from ml_lab.version import VERSION, FULL_NAME
 from ml_lab.app_js import LAUNCH_JS
 
@@ -1770,11 +1771,11 @@ def create_app():
 
 def main():
     """启动 ML-Lab 应用"""
-    print("=" * 55)
-    print(f"  ML-Lab {FULL_NAME}: 机器学习可视化实验平台")
-    print("  监督学习 + 无监督学习 + 代码沙箱")
-    print("  地址: http://0.0.0.0:7860")
-    print("=" * 55)
+    logger.info("=" * 55)
+    logger.info(f"  ML-Lab {FULL_NAME}: 机器学习可视化实验平台")
+    logger.info("  监督学习 + 无监督学习 + 代码沙箱")
+    logger.info("  地址: http://0.0.0.0:7860")
+    logger.info("=" * 55)
 
     app = create_app()
 
@@ -1785,9 +1786,9 @@ def main():
 
     if _root_path:
         _root_path = _root_path.rstrip("/")
-        print(f"  [INFO] root_path = '{_root_path}' (反向代理模式)")
+        logger.info(f"root_path = '{_root_path}' (反向代理模式)")
     else:
-        print("  [INFO] root_path 未设置 (直连模式)")
+        logger.info("root_path 未设置 (直连模式)")
 
     app.queue(max_size=20).launch(
         css=APP_CSS,
