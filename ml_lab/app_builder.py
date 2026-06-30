@@ -25,10 +25,6 @@ from ml_lab.html_templates import TOP_HTML, LEARNING_PATH_HTML
 from ml_lab.state import _g, _sync
 from ml_lab.logger import logger
 from ml_lab.version import VERSION, FULL_NAME
-from ml_lab.preprocessing import get_builtin_datasets
-from ml_lab.algorithms import get_algorithm_list, create_algorithm, get_algorithm_params, get_algorithm_type
-from ml_lab.sandbox_templates import SANDBOX_TEMPLATES
-from ml_lab.llm_assistant import PRESET_QUESTIONS
 from ml_lab.app_js import LAUNCH_JS
 
 def _make_supervised_param_components():
@@ -1162,7 +1158,7 @@ def create_app():
 
 
 
-                                       value=list(SANDBOX_TEMPLATES.values())[0], elem_classes="code-editor",
+                                       value=SANDBOX_TEMPLATE, elem_classes="code-editor",
 
 
 
