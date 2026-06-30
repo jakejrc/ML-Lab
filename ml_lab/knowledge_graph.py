@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from ml_lab.logger import logger
 """
 ML-Lab 知识图谱模块
 定义机器学习核心概念及其关联关系，支持交互式可视化。
@@ -482,8 +481,8 @@ KG = build_graph()
 
 if __name__ == "__main__":
     G = build_graph()
-    logger.info(f"知识图谱: {G.number_of_nodes()} 个节点, {G.number_of_edges()} 条边")
+    print(f"知识图谱: {G.number_of_nodes()} 个节点, {G.number_of_edges()} 条边")
     for cat, count in sorted(get_category_stats(G).items()):
-        logger.info(f"  {cat}: {count}")
+        print(f"  {cat}: {count}")
     html_path = save_interactive_html(G)
-    logger.info(f"交互式 HTML 已保存: {html_path}")
+    print(f"交互式 HTML 已保存: {html_path}")
