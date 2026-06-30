@@ -1,3 +1,70 @@
+# ML-Lab v3.8.4 更新日志
+
+发布日期：2026-06-30
+
+## 修复
+
+### 数据工作台加载数据集错误
+- **根因**：`data.py` 中 `on_load_data` 函数残留调试代码 `import sys; sys.stderr.write(f"[EXPORT] eval_html=...")`，`eval_html` 变量未定义导致 `NameError`
+- **修复**：部署正确的 `data.py`，清除所有调试残留
+
+### 导出 HTML 报告 URL 跳转 127.0.0.1
+- **根因 1**：Gradio 6 文件服务仅允许 `/tmp/gradio/` 路径，`reports/` 目录返回 HTTP 403
+- **根因 2**：`events.py` 中 `outputs` 误指向 `export_btn_cls`（DownloadButton 残留），事件链断裂
+- **修复**：`report_dir` 改为 `/tmp/gradio`，`outputs` 改回 `export_file_*` 组件
+
+### 关联规则报告无图表
+- **根因**：`on_run_association` 生成图表但未存储到 `_g["report_images"]`，导出 HTML 报告时无图表
+- **修复**：在 `on_run_association` 中增加 `_g["report_images"].update()`，对齐分类/回归/聚类行为
+
+---
+
+# ML-Lab v3.8.3 更新日志
+
+发布日期：2026-06-29
+
+## 新增功能
+
+### 四类实验"📋 生成并复制代码"按钮
+
+为分类、回归、聚类、关联规则四类实验实现一键复制 Python 代码功能：
+
+- 使用 `execCommand('copy')` 兼容 HTTP 页面（`navigator.clipboard` 仅支持 HTTPS/localhost）
+- 隐藏 Textbox 桥接方案，前端轮询 + 按钮文字自动变化，不破坏 Gradio 6 Svelte 事件链
+- 未训练时提示"⚠️ 请先训练模型，再复制代码"
+
+## 修复
+
+### 导出 HTML 报告图片渲染异常
+- **根因**：`fig_to_image()` 返回 numpy ndarray，`on_export_report` 中 `os.path.isfile()` 和 `if img_path` 对数组的真值测试抛出 `ValueError`
+- **修复**：`report_generator.img_to_base64()` 增加 numpy ndarray 分支（PIL.Image.fromarray → base64），`data.py` 图片循环改为 `if img_path is not None`
+
+---
+
+# ML-Lab v3.8.2 更新日志
+
+发布日期：2026-06-27
+
+## 修复
+
+### 页面切换闪现问题
+- **根因**：Gradio 服务端事件后重渲染组件清除内联样式，导致切换页面时短暂显示错误面板
+- **修复**：改用 CSS 类名 `ml-visible` 控制显隐，CSS 规则始终生效不受 Gradio 重渲染影响
+
+### 导航按钮失效
+- **根因**：事件监听器直接绑定在 `<label>` 元素上，Gradio 重渲染替换 DOM 节点导致监听器丢失
+- **修复**：改用 `document.body` 事件委托，通过 `event.target.closest()` 捕获点击
+
+### 数据集加载字体注册失败
+- **根因**：`matplotlib.font_manager.addfont()` 处理 `.ttc` 字体文件时无异常保护
+- **修复**：三步回退策略（SimHei.ttf → wqy-microhei.ttc → DejaVu Sans）
+
+## 工程改进
+- **代码重构**：`app.py` 从 6396 行精简至约 190 行，页面 UI 和事件逻辑拆分为独立模块
+- **Docker 镜像**：GitHub Actions 自动构建，修复中文乱码问题
+
+---
+
 # ML-Lab v3.7.0 更新日志
 
 发布日期：2026-05-24

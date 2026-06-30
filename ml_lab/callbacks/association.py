@@ -139,6 +139,13 @@ def on_run_association(algo_name, min_support, min_confidence, min_lift,
 
         # 状态更新
 
+        # 存储图表到报告
+        _g["report_images"] = {
+            "frequent_items": img1,
+            "rules_scatter": img2,
+            "item_length_dist": img3,
+            "rules_heatmap": img4,
+        }
         md_html = (f'<div class="status-card" style="margin-top:6px;"><div style="display:flex;'
 
                    f'justify-content:space-between;align-items:center;"><span class="status-label">模型</span>'
