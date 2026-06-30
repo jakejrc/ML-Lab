@@ -19,7 +19,8 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.model_selection import cross_val_score, learning_curve, validation_curve
 from sklearn.metrics import (
-    accuracy_score, mean_squared_error, r2_score, silhouette_score
+    accuracy_score, mean_squared_error, r2_score, silhouette_score,
+    pairwise_distances_argmin
 )
 
 
@@ -302,6 +303,7 @@ class KMeansModel:
         self._task_type = "unsupervised"
 
     def fit(self, X, y=None):
+        # 先执行一次完整训练获取最终结果
         self.model = KMeans(
             n_clusters=self.n_clusters, max_iter=self.max_iter,
             init=self.init, random_state=42, n_init=10
@@ -310,6 +312,40 @@ class KMeansModel:
         self.labels_ = self.model.labels_
         self.history["inertia"] = [self.model.inertia_ * (1 - i * 0.1) for i in range(5)]
         self.history["n_clusters"] = list(range(2, min(11, len(X))))
+
+        # 手动 K-Means 迭代过程捕获（用于教学可视化）
+        # sklearn 1.9.0 已移除 warm_start，改用纯 numpy 实现
+        centroids_path = []
+        try:
+            rng = np.random.RandomState(42)
+            n_samples, _ = X.shape
+
+            # k-means++ 初始化
+            centroids = []
+            centroids.append(X[rng.randint(n_samples)])
+            for _ in range(1, self.n_clusters):
+                dists = np.min([np.sum((X - c) ** 2, axis=1) for c in centroids], axis=0)
+                probs = dists / (dists.sum() + 1e-10)
+                centroids.append(X[rng.choice(n_samples, p=probs)])
+            centroids = np.array(centroids)
+            centroids_path.append(centroids.copy())
+
+            # 逐轮迭代（最多 20 轮）
+            max_iters = min(self.max_iter, 20)
+            for _ in range(max_iters):
+                labels = pairwise_distances_argmin(X, centroids)
+                new_centroids = np.array([
+                    X[labels == k].mean(axis=0) for k in range(self.n_clusters)
+                ])
+                centroids_path.append(new_centroids.copy())
+                if np.allclose(centroids, new_centroids):
+                    break
+                centroids = new_centroids
+
+        except Exception:
+            centroids_path = [self.model.cluster_centers_.copy()]
+
+        self.history["centroids_path"] = centroids_path
         return self
 
     def predict(self, X):
