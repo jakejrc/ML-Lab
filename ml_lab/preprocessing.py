@@ -10,7 +10,7 @@ import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import (
-    StandardScaler, MinMaxScaler, RobustScaler, LabelEncoder
+    StandardScaler, MinMaxScaler, RobustScaler, MaxAbsScaler, LabelEncoder
 )
 from sklearn.impute import SimpleImputer
 
@@ -254,6 +254,7 @@ def scale_features(X_train, X_test=None, method="standard"):
     scalers = {
         "standard": StandardScaler,
         "minmax": MinMaxScaler,
+        "maxabs": MaxAbsScaler,
         "robust": RobustScaler,
     }
     scaler = scalers[method]()

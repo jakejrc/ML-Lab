@@ -193,7 +193,7 @@ def on_train_classification(algo, lr, ni, C, md, mi, hid, al):
 
 
 
-            except: pass
+            except Exception: pass
 
 
 
@@ -225,7 +225,7 @@ def on_train_classification(algo, lr, ni, C, md, mi, hid, al):
 
 
 
-        except: db = None
+        except Exception: db = None
 
 
 
@@ -781,7 +781,7 @@ def on_train_regression(algo, lr, ni, C, md, mi, hid, al, deg, eps, kern, crit):
 
 
 
-                    except: pass
+                    except Exception: pass
 
 
 

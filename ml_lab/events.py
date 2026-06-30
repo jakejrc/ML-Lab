@@ -418,7 +418,7 @@ def bind_events(comps):
 
                     err_detail = f"{err_body['error'].get('code','')}: {err_body['error'].get('message','')}"
 
-            except:
+            except Exception:
 
                 pass
 

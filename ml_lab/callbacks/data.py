@@ -242,45 +242,32 @@ def on_load_data(dataset_name, test_ratio):
 
 def on_preprocess(method, feat_idx):
 
-
-
     if _g["X_train"] is None: return None, "请先加载数据集"
 
-
-
-    idx = min(int(feat_idx), _g["X_train"].shape[1]-1)
-
-
+    # 支持 feat_idx 为单个索引或列表
+    if isinstance(feat_idx, (list, tuple)):
+        idx = int(feat_idx[0]) if feat_idx else 0
+    else:
+        idx = int(feat_idx)
+    idx = min(idx, _g["X_train"].shape[1] - 1)
 
     Xm = inject_missing(_g["X_train"], 0.1) if not np.isnan(_g["X_train"]).any() else _g["X_train"].copy()
 
+    # 固定使用均值策略填充缺失值（预处理演示目的）
+    Xc = handle_missing(Xm, strategy="mean")
 
+    # 将显示名称映射为缩放方法参数
+    _scale_map = {
+        "标准化 (StandardScaler)": "standard",
+        "归一化 (MinMaxScaler)": "minmax",
+        "最大绝对值缩放 (MaxAbsScaler)": "maxabs",
+        "鲁棒缩放 (RobustScaler)": "robust",
+    }
+    _scale_method = _scale_map.get(method, "standard")
+    Xs, _, _ = scale_features(Xc, method=_scale_method)
 
-    Xc = handle_missing(Xm, strategy=method)
+    fig = plot_preprocessing_comparison(Xm, Xs, f"缩放方法: {method}", feature_idx=idx)
 
-
-
-    Xs, _, _ = scale_features(Xc, method="standard")
-
-
-
-    fig = plot_preprocessing_comparison(Xm, Xs, f"缺失值填充({method})+标准化", feature_idx=idx)
-
-
-
-    pp_html = ('<table class="info-table"><tbody>'
-
-                f'<tr><td class="info-label">原始缺失值</td><td>{int(np.isnan(Xm).sum())}</td></tr>'
-
-                f'<tr><td class="info-label">处理后缺失值</td><td>{int(np.isnan(Xs).sum())}</td></tr>'
-
-                f'<tr><td class="info-label">特征{idx} 均值</td><td>{np.nanmean(Xs[:,idx]):.3f}</td></tr>'
-
-                f'<tr><td class="info-label">特征{idx} 标准差</td><td>{np.nanstd(Xs[:,idx]):.3f}</td></tr>'
-
-                '</tbody></table>')
-
-    return fig_to_image(fig), pp_html
 
 def on_export_report(eval_html=None):
 
