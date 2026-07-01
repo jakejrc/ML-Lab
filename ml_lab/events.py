@@ -305,7 +305,7 @@ def bind_events(comps):
 
     # 代码沙箱
 
-    sandbox_load_btn.click(fn=on_sandbox_load_data, inputs=[sandbox_upload], outputs=[code_output, code_plot])
+    sandbox_load_btn.click(fn=on_sandbox_load_data, inputs=[sandbox_upload], outputs=[code_output, code_plot, snippet_ctx])
 
     run_btn.click(fn=on_run_code, inputs=[code_editor], outputs=[code_output, code_plot])
 
@@ -314,6 +314,30 @@ def bind_events(comps):
     clear_code_btn.click(fn=lambda: ("",), outputs=[code_editor])
 
     download_code_btn.click(fn=on_download_code, inputs=[code_editor], outputs=[code_download])
+
+    # ── 代码片段按钮（插入代码到编辑器末尾）──
+    _SNIPPET_MAP = {
+        snip_01: "📋 数据概览",
+        snip_02: "📊 训练分类模型",
+        snip_03: "📈 相关性热力图",
+        snip_04: "🧪 PCA 降维",
+        snip_05: "📊 散点图矩阵",
+        snip_06: "📈 相关性热力图",
+        snip_07: "🧪 PCA 降维可视化",
+        snip_08: "📈 预测效果图",
+        snip_09: "📊 训练分类模型",
+        snip_10: "📈 训练回归模型",
+        snip_11: "K-Means 聚类",
+        snip_12: "📊 混淆矩阵",
+        snip_13: "📊 数据预处理",
+        snip_14: "🔍 特征重要性",
+        snip_15: "📝 自定义分析",
+        snip_16: "🔍 特征重要性分析",
+    }
+    for _btn, _key in _SNIPPET_MAP.items():
+        _btn.click(fn=on_insert_snippet, inputs=[code_editor, gr.State(_key)],
+                   outputs=[code_editor])
+
 
 
     # AI助教

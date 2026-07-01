@@ -974,15 +974,36 @@ def build_pages():
 
 
 
-            gr.HTML('''<div id="code-hint-bar" style="display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 10px;align-items:center;">
+                        # 上下文感知代码片段面板
+            snippet_ctx = gr.HTML(label="数据上下文",
+                value='<div style="font-size:11px;color:#94a3b8;padding:4px 0;">💡 上传数据后获取智能代码推荐</div>')
 
-
-
-<span style="font-size:11px;color:#64748b;font-weight:600;margin-right:2px;">常用代码片段：</span>
-
-
-
-</div>''')
+            with gr.Accordion("🧩 代码片段（点击即插入代码末尾）", open=True):
+                with gr.Tabs():
+                    with gr.Tab("📋 推荐"):
+                        with gr.Row():
+                            snip_01 = gr.Button("📋 数据概览", size="sm", min_width=100)
+                            snip_02 = gr.Button("📊 训练分类模型", size="sm", min_width=120)
+                            snip_03 = gr.Button("📈 相关性热力图", size="sm", min_width=120)
+                            snip_04 = gr.Button("🧪 PCA 降维", size="sm", min_width=100)
+                    with gr.Tab("📊 可视化"):
+                        with gr.Row():
+                            snip_05 = gr.Button("📊 散点图矩阵", size="sm", min_width=100)
+                            snip_06 = gr.Button("📈 相关性热力图", size="sm", min_width=120)
+                            snip_07 = gr.Button("🧪 PCA 降维", size="sm", min_width=120)
+                            snip_08 = gr.Button("📈 预测效果图", size="sm", min_width=100)
+                    with gr.Tab("🤖 机器学习"):
+                        with gr.Row():
+                            snip_09 = gr.Button("📊 训练分类模型", size="sm", min_width=120)
+                            snip_10 = gr.Button("📈 训练回归模型", size="sm", min_width=120)
+                            snip_11 = gr.Button("K-Means 聚类", size="sm", min_width=120)
+                            snip_12 = gr.Button("📊 混淆矩阵", size="sm", min_width=100)
+                    with gr.Tab("📝 数据处理"):
+                        with gr.Row():
+                            snip_13 = gr.Button("📊 数据预处理", size="sm", min_width=100)
+                            snip_14 = gr.Button("🔍 特征重要性", size="sm", min_width=100)
+                            snip_15 = gr.Button("📝 自定义分析", size="sm", min_width=100)
+                            snip_16 = gr.Button("🔍 特征重要性分析", size="sm", min_width=120)
 
 
 
@@ -1003,6 +1024,11 @@ def build_pages():
 
 
                 template_dd = gr.Dropdown(choices=list(SANDBOX_TEMPLATES.keys()),
+            gr.HTML('''<div style="display:flex;align-items:center;gap:12px;font-size:11px;color:#64748b;padding:4px 8px;">
+<span>⌨ <kbd style="background:#1e293b;padding:1px 6px;border-radius:3px;border:1px solid #475569;">Ctrl+Enter</kbd> 运行</span>
+<span>⏎ <kbd style="background:#1e293b;padding:1px 6px;border-radius:3px;border:1px solid #475569;">Ctrl+A</kbd> 全选</span>
+<span>📋 点击下方片段按钮即插入代码</span>
+</div>''')
 
                                          value=list(SANDBOX_TEMPLATES.keys())[0],
 

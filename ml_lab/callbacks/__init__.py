@@ -22,6 +22,9 @@ from ml_lab.callbacks.association import (
 from ml_lab.callbacks.sandbox import (
     on_download_code, on_sandbox_load_data, on_run_code,
 )
+from ml_lab.callbacks.sandbox_code_snippets import (
+    on_insert_snippet, on_get_context_snippets,
+)
 from ml_lab.callbacks.feature import (
     on_fe_scaling, on_fe_feature_selection,
     on_fe_pca, on_fe_construct, on_fe_discretize, on_fe_correlation,
