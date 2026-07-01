@@ -196,6 +196,10 @@ def build_pages():
 
 
 
+            algo_rec = gr.HTML()
+
+
+
             gr.HTML('<div class="step-title">步骤 2 · 数据预处理</div>')
 
 

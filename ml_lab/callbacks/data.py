@@ -230,11 +230,17 @@ def on_load_data(dataset_name, test_ratio):
 
 
 
-        return img, info, summary, ds_html
-
-
+        # 生成算法推荐
+        try:
+            from ml_lab.algorithm_recommender import recommend_algorithms, format_recommendation_html
+            _recs, _ctx = recommend_algorithms(X, y, dtype, dataset_name, fn)
+            rec_html = format_recommendation_html(_recs, _ctx)
+        except Exception:
+            rec_html = ""
+        return img, info, summary, ds_html, rec_html
 
     except Exception as e:
+        return None, f"加载失败: {e}", None, gr.HTML('<div class="status-card"><span class="status-value">加载失败</span></div>'), ""
 
 
 
@@ -381,7 +387,7 @@ def on_load_custom_data(file_obj, file_path_text, target_col, task_type, test_ra
 
     if _fp is None:
 
-        return None, "请先选择 CSV 或 Excel 文件，或输入本地文件路径", None, gr.HTML('<div class="status-card"><span class="status-value">未加载</span></div>')
+        return None, "请先选择 CSV 或 Excel 文件，或输入本地文件路径", None, gr.HTML('<div class="status-card"><span class="status-value">未加载</span></div>'), ""
 
 
 
@@ -477,11 +483,17 @@ def on_load_custom_data(file_obj, file_path_text, target_col, task_type, test_ra
 
 
 
-        return img, info, summary, ds_html
-
-
+        # 生成算法推荐
+        try:
+            from ml_lab.algorithm_recommender import recommend_algorithms, format_recommendation_html
+            _recs, _ctx = recommend_algorithms(X, y, dtype, ds_name, feature_names)
+            rec_html = format_recommendation_html(_recs, _ctx)
+        except Exception:
+            rec_html = ""
+        return img, info, summary, ds_html, rec_html
 
     except Exception as e:
+        return None, f"加载失败: {e}", None, gr.HTML('<div class="status-card"><span class="status-value">加载失败</span></div>'), ""
 
         import traceback as _tb
 
