@@ -6,7 +6,7 @@
 
 **Interactive Machine Learning Visualization Platform for Education**
 
-[![Version](https://img.shields.io/badge/version-3.8.4-blue?style=flat-square)](https://github.com/jakejrc/ML-Lab)
+[![Version](https://img.shields.io/badge/version-3.8.5-blue?style=flat-square)](https://github.com/jakejrc/ML-Lab)
 [![Docker Pulls](https://img.shields.io/docker/pulls/jakejrc/ml-lab?style=flat-square&logo=docker&label=Docker%20Pulls)](https://hub.docker.com/r/jakejrc/ml-lab)
 [![Docker Image Size](https://img.shields.io/docker/image-size/jakejrc/ml-lab/latest?style=flat-square&logo=docker&label=Image%20Size)](https://hub.docker.com/r/jakejrc/ml-lab)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python)](https://www.python.org/)
@@ -19,6 +19,25 @@
 ---
 
 ## 更新日志
+
+### v3.8.5 (2026-07-01)
+
+#### 新增：P2 级功能 — 算法推荐向导 & 学习路径联动
+
+- **算法推荐向导**：加载数据集后自动分析数据特征（样本数/特征维度/类别数/缺失值/稀疏度等），智能推荐最适合的机器学习算法。支持分类（8种算法）、回归（6种）、聚类（3种）三大任务类型，含评分、推荐等级、难度星级和参数建议
+- **学习路径联动**：训练完成后自动记录学习进度到 SQLite 数据库，学习路径页面实时显示进度条和7阶段完成状态。分类/回归/聚类训练后自动调用 `auto_record_stage()` 记录实验次数
+- **实验报告模板增强**：导出 HTML 报告支持嵌入训练图表（混淆矩阵/ROC曲线/学习曲线等）
+
+#### 修复
+
+- **ROC曲线不显示**：KNN 模型包装类缺少 `predict_proba` 方法，导致 `hasattr` 返回 `False`，ROC 曲线始终不生成。为 `KNNModel` 添加 `predict_proba` 透传方法
+- **损失曲线形状扭曲**：决策树 loss 从 `max_depth` 个点改为 30 点平滑指数衰减曲线；无权重模型自动切换为单宽面板布局，隐藏空的权重变化图
+- **模型对比无图**：`on_compare_models` 中 `multi_metric_img` 变量未定义导致 `NameError`；新增 `plot_multi_metric_comparison` 分组柱状图函数
+- **交叉验证得分图**：仅 GBDT 有内置 `cross_val_scores` 数据，其他 7 个分类模型无此数据。添加 `cross_val_score` fallback 机制
+- **聚类实验第二张图**：K-Means 肘部法则因 key 名不匹配（`n_clusters` vs `k_range`）不显示；DBSCAN eps 分析从未计算 `eps_range` 数据
+- **数据工作台布局优化**：数据分布图与数据信息表改为并排显示，表格文字统一左对齐
+
+---
 
 ### v3.8.4 (2026-06-30)
 
