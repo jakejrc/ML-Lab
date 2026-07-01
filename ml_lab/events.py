@@ -13,6 +13,8 @@ from ml_lab.callbacks import (
     on_fe_construct, on_fe_discretize, on_fe_correlation,
     on_kg_render, on_chat, on_preset,
     on_learning_path_click,
+    on_ai_analyze_data, on_ai_explain_model,
+    on_ai_test_connection, on_ai_save_config, on_ai_context_chat,
 )
 
 
@@ -307,11 +309,21 @@ def bind_events(comps):
 
     # AI助教
 
-    msg_in.submit(fn=on_chat, inputs=[msg_in, chatbot], outputs=[msg_in, chatbot])
+    msg_in.submit(fn=on_ai_context_chat, inputs=[msg_in, chatbot], outputs=[msg_in, chatbot])
 
-    send_b.click(fn=on_chat, inputs=[msg_in, chatbot], outputs=[msg_in, chatbot])
+    send_b.click(fn=on_ai_context_chat, inputs=[msg_in, chatbot], outputs=[msg_in, chatbot])
 
     clear_b.click(fn=lambda: ("", []), outputs=[msg_in, chatbot])
+
+    ai_analyze_btn.click(fn=on_ai_analyze_data, inputs=[chatbot], outputs=[msg_in, chatbot])
+
+    ai_explain_btn.click(fn=on_ai_explain_model, inputs=[chatbot], outputs=[msg_in, chatbot])
+
+    ai_test_btn.click(fn=on_ai_test_connection, outputs=[ai_status])
+
+    ai_save_btn.click(fn=on_ai_save_config,
+        inputs=[ai_base_url, ai_model, ai_api_key],
+        outputs=[ai_status])
 
     for pb in preset_btns:
 

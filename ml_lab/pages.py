@@ -1038,47 +1038,81 @@ def build_pages():
 
 
 
-            gr.HTML(_card("🤖","AI助教","基于大模型API，随时解答机器学习疑问",
-
-
+            gr.HTML(_card("🤖","AI助教","基于大模型API，随时解答机器学习疑问，自动感知当前实验上下文",
 
                 '<span class="tab-badge tab-badge-tool">AI 辅助</span>'
 
-
-
-                '<p style="color:#64748b;font-size:13px;">模型配置请编辑项目根目录 .env 文件</p>'))
-
-
-
-            chatbot = gr.Chatbot(label="对话区域", height=380)
+                '<span style="color:#64748b;font-size:12px;">支持 OpenAI 兼容接口 · 通义千问 · DeepSeek · Ollama · GLM</span>'))
 
 
 
-            with gr.Row():
+            with gr.Row(equal_height=True):
 
+                # ── 左侧：上下文信息 + 设置 ──
+                with gr.Column(scale=1, min_width=260):
+                    # 上下文状态
+                    ai_ctx_ds = gr.HTML(
+                        '<div style="background:#f8fafc;border-radius:8px;padding:10px;border:1px solid #e2e8f0;font-size:12px;">'
+                        '<div style="font-weight:600;color:#1e293b;margin-bottom:6px;">📊 实验上下文</div>'
+                        '<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:#64748b;">数据集</span><span style="color:#1e293b;font-weight:500;" id="ai-ctx-ds">未加载</span></div>'
+                        '<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:#64748b;">模型</span><span style="color:#1e293b;font-weight:500;" id="ai-ctx-md">未训练</span></div>'
+                        '<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:#64748b;">任务</span><span style="color:#1e293b;font-weight:500;" id="ai-ctx-task">—</span></div>'
+                        '</div>')
 
+                    # 快速操作
+                    with gr.Row():
+                        ai_analyze_btn = gr.Button("🔍 分析当前数据", size="sm", scale=1)
+                        ai_explain_btn = gr.Button("📝 解释当前模型", size="sm", scale=1)
 
-                msg_in  = gr.Textbox(label="输入问题", placeholder="例如：K-Means 的原理是什么？", scale=5)
+                    # LLM 设置（可折叠）
+                    with gr.Accordion("⚙️ 模型设置", open=False):
+                        ai_base_url = gr.Textbox(
+                            label="API Base URL",
+                            placeholder="https://dashscope.aliyuncs.com/compatible-mode/v1",
+                            value=os.environ.get("LLM_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1"))
+                        ai_model = gr.Textbox(
+                            label="模型名称",
+                            placeholder="qwen-turbo",
+                            value=os.environ.get("LLM_MODEL", "qwen-turbo"))
+                        ai_api_key = gr.Textbox(
+                            label="API Key",
+                            placeholder="sk-...",
+                            type="password",
+                            value=os.environ.get("LLM_API_KEY", ""))
+                        with gr.Row():
+                            ai_test_btn = gr.Button("✅ 测试连接", size="sm", scale=1)
+                            ai_save_btn = gr.Button("💾 保存配置", size="sm", scale=1)
+                        ai_status = gr.HTML('<div style="font-size:11px;color:#94a3b8;">✅ 配置已保存至 .env 文件</div>')
 
+                # ── 右侧：对话区域 ──
+                with gr.Column(scale=3):
+                    chatbot = gr.Chatbot(label="对话区域", height=420, bubble_full_width=False,
+                                         avatar_images=(None, None))
+                    with gr.Row():
+                        msg_in = gr.Textbox(label="输入问题",
+                            placeholder="例如：K-Means 的原理是什么？或问我关于当前数据和模型的问题",
+                            scale=5, container=False)
+                        send_b = gr.Button("🚀 发送", variant="primary", scale=1)
+                        clear_b = gr.Button("🗑", scale=0, min_width=40)
 
-
-                send_b  = gr.Button("发送", variant="primary", scale=1)
-
-
-
-                clear_b = gr.Button("清空", scale=0)
-
-
-
-            gr.HTML('<div class="step-title">常见问题</div>')
-
-
-
-            with gr.Row():
-
-
-
-                preset_btns = [gr.Button(q, size="sm") for q in PRESET_QUESTIONS[:6]]
+            gr.HTML('<div class="step-title">💬 常见问题（点击即问）</div>')
+            # 分类预设问题
+            with gr.Tabs():
+                with gr.Tab("📖 基础概念"):
+                    p1 = [gr.Button(q, size="sm") for q in PRESET_QUESTIONS[:4]]
+                with gr.Tab("🔭 算法原理"):
+                    p2 = [gr.Button(q, size="sm") for q in PRESET_QUESTIONS[4:8]]
+                with gr.Tab("📊 模型评估"):
+                    p3 = [gr.Button("📊 如何解读混淆矩阵？", size="sm"),
+                          gr.Button("📈 如何分析 ROC 曲线和 AUC？", size="sm"),
+                          gr.Button("🔢 什么是交叉验证？为什么需要它？", size="sm"),
+                          gr.Button("🎯 精确率和召回率有什么区别？", size="sm")]
+                with gr.Tab("💡 实战技巧"):
+                    p4 = [gr.Button("💡 特征工程有哪些常用方法？", size="sm"),
+                          gr.Button("💡 如何处理数据不平衡问题？", size="sm"),
+                          gr.Button("💡 如何选择机器学习算法？", size="sm"),
+                          gr.Button("💡 超参数调优有哪些方法？", size="sm")]
+            preset_btns = p1 + p2 + p3 + p4
 
 
 

@@ -63,3 +63,138 @@ def on_learning_path_click(evt: gr.EventData):
     """学习路径步骤点击时跳转到对应页面"""
 
     return gr.skip()  # 由 JS 处理跳转
+
+
+def on_ai_analyze_data(history):
+    """分析当前数据"""
+    ds = _g.get("dataset_name", "未加载")
+    if ds == "未加载":
+        resp = "当前没有加载数据集。请先到「数据工作台」页面加载数据集。"
+    else:
+        n = _g.get("X_train", None)
+        if n is not None:
+            n_samples = _g["X_train"].shape[0] + _g.get("X_test", np.array([])).shape[0]
+            n_features = _g["X_train"].shape[1]
+            task = _g.get("task_type", "未知")
+            resp = (
+                f"### 数据集分析：{ds}\n\n"
+                f"- **样本数**：{n_samples}\n"
+                f"- **特征数**：{n_features}\n"
+                f"- **任务类型**：{task}\n\n"
+                f"请告诉我你关心什么方面？例如：数据分布、特征相关性、缺失值处理等。"
+            )
+        else:
+            resp = f"当前数据集：{ds}，但尚未完成分割。请先执行数据加载。"
+    history = history or []
+    history.append({"role": "user", "content": f"分析当前数据集 {ds}"})
+    history.append({"role": "assistant", "content": resp})
+    return "", history
+
+
+def on_ai_explain_model(history):
+    """解释当前模型"""
+    algo = _g.get("last_algo_name", None)
+    if not algo:
+        resp = "当前没有训练完成的模型。请先到实验页面训练一个模型。"
+    else:
+        task = _g.get("last_task_type", "未知")
+        report = _g.get("last_eval_report", None)
+        resp = f"### 模型解释：{algo}\n\n- **任务类型**：{task}\n"
+        if report:
+            resp += f"- **评估结果**：\n```\n{report[:500]}\n```\n"
+        resp += (
+            f"\n{algo} 的主要特点：\n"
+            f"1. 可解释性方面...\n"
+            f"2. 适用场景...\n"
+            f"3. 优缺点...\n\n"
+            f"是否需要更详细的解释？"
+        )
+    history = history or []
+    history.append({"role": "user", "content": f"解释当前模型 {algo or '无'}"})
+    history.append({"role": "assistant", "content": resp})
+    return "", history
+
+
+def on_ai_test_connection():
+    """测试 LLM 连接"""
+    try:
+        from ml_lab.llm_assistant import _config
+        import requests
+        base_url = _config["base_url"].rstrip("/")
+        headers = {
+            "Authorization": f"Bearer {_config['api_key']}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": _config["model"],
+            "messages": [{"role": "user", "content": "hi"}],
+            "max_tokens": 5
+        }
+        r = requests.post(f"{base_url}/chat/completions", json=payload, headers=headers, timeout=10)
+        if r.status_code == 200:
+            return '<div style="font-size:11px;color:#059669;">\u2705 连接成功！模型响应正常</div>'
+        else:
+            return f'<div style="font-size:11px;color:#ef4444;">\u274c 连接失败: HTTP {r.status_code}</div>'
+    except Exception as e:
+        return f'<div style="font-size:11px;color:#ef4444;">\u274c 连接失败: {str(e)[:80]}</div>'
+
+
+def on_ai_save_config(base_url, model, api_key):
+    """保存 LLM 配置到 .env 文件"""
+    try:
+        from ml_lab.llm_assistant import _config, _CONFIG_PATHS
+        _config["base_url"] = base_url
+        _config["model"] = model
+        if api_key:
+            _config["api_key"] = api_key
+        # 写入 .env 文件
+        env_path = _CONFIG_PATHS[0]
+        with open(env_path, "w", encoding="utf-8") as f:
+            f.write(f"LLM_BASE_URL={base_url}\n")
+            f.write(f"LLM_MODEL={model}\n")
+            f.write(f"LLM_API_KEY={api_key}\n")
+        # 设置环境变量
+        os.environ["LLM_BASE_URL"] = base_url
+        os.environ["LLM_MODEL"] = model
+        if api_key:
+            os.environ["LLM_API_KEY"] = api_key
+        return '<div style="font-size:11px;color:#059669;">\u2705 配置已保存至 .env 文件</div>'
+    except Exception as e:
+        return f'<div style="font-size:11px;color:#ef4444;">\u274c 保存失败: {str(e)[:80]}</div>'
+
+
+def on_ai_context_chat(msg, history):
+    """上下文增强的对话"""
+    if not msg.strip():
+        return "", history
+
+    # 构建包含上下文的系统提示
+    ctx_parts = []
+    ds = _g.get("dataset_name", "未加载")
+    ctx_parts.append(f"当前数据集: {ds}")
+
+    algo = _g.get("last_algo_name", None)
+    if algo:
+        task = _g.get("last_task_type", "未知")
+        ctx_parts.append(f"最近训练的模型: {algo} ({task})")
+
+    n = _g.get("X_train", None)
+    if n is not None:
+        ctx_parts.append(f"训练样本数: {_g['X_train'].shape[0]}")
+        ctx_parts.append(f"特征数: {_g['X_train'].shape[1]}")
+
+    context_str = " | ".join(ctx_parts) if ctx_parts else ""
+
+    # 调用 LLM
+    from ml_lab.llm_assistant import ask
+    try:
+        # 将上下文拼接到消息前
+        enhanced_msg = f"[实验上下文: {context_str}]\n\n{msg}" if context_str else msg
+        resp = ask(enhanced_msg)
+    except Exception as e:
+        resp = f"抱歉，AI 助教暂时无法回答。错误: {str(e)[:100]}\n\n请检查「模型设置」中的 API 配置是否正确。"
+
+    history = history or []
+    history.append({"role": "user", "content": msg})
+    history.append({"role": "assistant", "content": resp})
+    return "", history
