@@ -28,7 +28,7 @@ def bind_events(comps):
 
     # 数据工作台
 
-    load_btn.click(fn=on_load_data, inputs=[ds_dd, ts_sl], outputs=[data_img, data_info, data_summary, status_ds, algo_rec])
+    load_btn.click(fn=on_load_data, inputs=[ds_dd, ts_sl], outputs=[data_img, data_info, data_summary, status_ds, algo_rec, ai_ctx_ds])
 
 
     # nav.change 仅作为 Radio 事件占位（避免 Radio 被 disabled）
@@ -38,7 +38,7 @@ def bind_events(comps):
 
         inputs=[upload_file, upload_path, custom_target_col, custom_task_type, custom_ts_sl],
 
-        outputs=[data_img, data_info, data_summary, status_ds, algo_rec])
+        outputs=[data_img, data_info, data_summary, status_ds, algo_rec, ai_ctx_ds])
 
     pp_btn.click(fn=on_preprocess, inputs=[method_dd, feat_sl], outputs=[pp_img, pp_info])
 

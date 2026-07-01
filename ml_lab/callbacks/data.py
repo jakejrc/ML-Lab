@@ -237,10 +237,17 @@ def on_load_data(dataset_name, test_ratio):
             rec_html = format_recommendation_html(_recs, _ctx)
         except Exception:
             rec_html = ""
-        return img, info, summary, ds_html, rec_html
+        # AI 助教上下文（动态生成）
+        ctx_html = ""
+        try:
+            from ml_lab.callbacks.assistant import get_ai_context_html
+            ctx_html = get_ai_context_html()
+        except Exception:
+            pass
+        return img, info, summary, ds_html, rec_html, ctx_html
 
     except Exception as e:
-        return None, f"加载失败: {e}", None, gr.HTML('<div class="status-card"><span class="status-value">加载失败</span></div>'), ""
+        return None, f"加载失败: {e}", None, gr.HTML('<div class="status-card"><span class="status-value">加载失败</span></div>'), "", ""
 
 
 
@@ -387,7 +394,7 @@ def on_load_custom_data(file_obj, file_path_text, target_col, task_type, test_ra
 
     if _fp is None:
 
-        return None, "请先选择 CSV 或 Excel 文件，或输入本地文件路径", None, gr.HTML('<div class="status-card"><span class="status-value">未加载</span></div>'), ""
+        return None, "请先选择 CSV 或 Excel 文件，或输入本地文件路径", None, gr.HTML('<div class="status-card"><span class="status-value">未加载</span></div>'), "", ""
 
 
 
@@ -490,10 +497,17 @@ def on_load_custom_data(file_obj, file_path_text, target_col, task_type, test_ra
             rec_html = format_recommendation_html(_recs, _ctx)
         except Exception:
             rec_html = ""
-        return img, info, summary, ds_html, rec_html
+        # AI 助教上下文（动态生成）
+        ctx_html = ""
+        try:
+            from ml_lab.callbacks.assistant import get_ai_context_html
+            ctx_html = get_ai_context_html()
+        except Exception:
+            pass
+        return img, info, summary, ds_html, rec_html, ctx_html
 
     except Exception as e:
-        return None, f"加载失败: {e}", None, gr.HTML('<div class="status-card"><span class="status-value">加载失败</span></div>'), ""
+        return None, f"加载失败: {e}", None, gr.HTML('<div class="status-card"><span class="status-value">加载失败</span></div>'), "", ""
 
         import traceback as _tb
 

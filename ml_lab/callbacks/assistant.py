@@ -207,3 +207,41 @@ def on_ai_context_chat(msg, history):
     history.append({"role": "user", "content": msg})
     history.append({"role": "assistant", "content": resp})
     return "", history
+
+
+def get_ai_context_html():
+    """从 _g 状态生成 AI 助教上下文 HTML"""
+    ds = _g.get("dataset_name", "未加载")
+    algo = _g.get("last_algo_name", None)
+    task = _g.get("last_task_type", "—")
+    n_samples = "—"
+    n_features = "—"
+    if _g.get("X_train") is not None:
+        n_samples = str(_g["X_train"].shape[0])
+        n_features = str(_g["X_train"].shape[1])
+
+    model_text = algo if algo else "未训练"
+    ds_color = "#059669" if ds != "未加载" else "#94a3b8"
+    md_color = "#059669" if algo else "#94a3b8"
+
+    html = (
+        '<div style="background:#f8fafc;border-radius:8px;padding:10px;border:1px solid #e2e8f0;font-size:12px;">'
+        '<div style="font-weight:600;color:#1e293b;margin-bottom:6px;">&#128202; 实验上下文</div>'
+        f'<div style="display:flex;justify-content:space-between;padding:2px 0;">'
+        f'<span style="color:#64748b;">数据集</span>'
+        f'<span style="color:{ds_color};font-weight:500;">{ds}</span></div>'
+        f'<div style="display:flex;justify-content:space-between;padding:2px 0;">'
+        f'<span style="color:#64748b;">模型</span>'
+        f'<span style="color:{md_color};font-weight:500;">{model_text}</span></div>'
+        f'<div style="display:flex;justify-content:space-between;padding:2px 0;">'
+        f'<span style="color:#64748b;">任务</span>'
+        f'<span style="color:#1e293b;font-weight:500;">{task}</span></div>'
+        f'<div style="display:flex;justify-content:space-between;padding:2px 0;">'
+        f'<span style="color:#64748b;">样本</span>'
+        f'<span style="color:#1e293b;font-weight:500;">{n_samples}</span></div>'
+        f'<div style="display:flex;justify-content:space-between;padding:2px 0;">'
+        f'<span style="color:#64748b;">特征</span>'
+        f'<span style="color:#1e293b;font-weight:500;">{n_features}</span></div>'
+        '</div>'
+    )
+    return html
