@@ -160,6 +160,9 @@ class KNNModel:
     def predict(self, X):
         return self.model.predict(X)
 
+    def predict_proba(self, X):
+        return self.model.predict_proba(X)
+
     def score(self, X, y):
         """计算准确率"""
         return accuracy_score(y, self.predict(X))
@@ -200,6 +203,9 @@ class DecisionTreeModel:
 
     def predict(self, X):
         return self.model.predict(X)
+
+    def predict_proba(self, X):
+        return self.model.predict_proba(X)
 
     def score(self, X, y):
         """计算准确率"""
@@ -566,6 +572,9 @@ class RidgeRegressionModel:
     def predict(self, X):
         return self.model.predict(X)
 
+    def predict_proba(self, X):
+        return self.model.predict_proba(X)
+
     def score(self, X, y):
         return r2_score(y, self.predict(X))
 
@@ -599,6 +608,9 @@ class LassoRegressionModel:
 
     def predict(self, X):
         return self.model.predict(X)
+
+    def predict_proba(self, X):
+        return self.model.predict_proba(X)
 
     def score(self, X, y):
         return r2_score(y, self.predict(X))
@@ -671,6 +683,9 @@ class SVRModel:
     def predict(self, X):
         return self.model.predict(X)
 
+    def predict_proba(self, X):
+        return self.model.predict_proba(X)
+
     def score(self, X, y):
         return r2_score(y, self.predict(X))
 
@@ -710,6 +725,9 @@ class DecisionTreeRegressorModel:
 
     def predict(self, X):
         return self.model.predict(X)
+
+    def predict_proba(self, X):
+        return self.model.predict_proba(X)
 
     def score(self, X, y):
         return r2_score(y, self.predict(X))
