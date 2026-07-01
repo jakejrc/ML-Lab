@@ -261,6 +261,70 @@ button.primary { background:linear-gradient(135deg,#2563eb,#1d4ed8)!important; b
 def _card(icon, title, desc, body=""):
     """生成 Gradio 页面顶部信息卡片 HTML
 /* ── 移动端响应式适配 ── */
+/* ════════════════════════════════════════════
+   Step4: UI/UX 优化 - 页面过渡动画
+   ════════════════════════════════════════════ */
+
+/* 页面切换动画 */
+#page-kg, #page-learning, #page-data, #page-fe,
+#page-classify, #page-regress, #page-cluster,
+#page-assoc, #page-code, #page-ai {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.ml-visible {
+    animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 卡片悬浮效果 */
+.page-panel {
+    transition: box-shadow 0.2s ease;
+}
+.page-panel:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+/* 加载状态指示 */
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* 错误信息美化 */
+.gr-box.error, [class*="error"] {
+    border-color: #f87171 !important;
+    background: rgba(248,113,113,0.08) !important;
+}
+
+/* 表格行悬停 */
+.eval-table tr:hover {
+    background: rgba(59,130,246,0.08);
+}
+
+/* 按钮点击反馈 */
+button:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(148,163,184,0.3);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(148,163,184,0.5);
+}
+
 @media (max-width: 768px) {
     /* Banner 适配 */
     .top-nav-inner {
