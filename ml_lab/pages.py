@@ -1051,24 +1051,23 @@ def build_pages():
 
                 # ── 左侧：上下文信息 + 设置 ──
                 with gr.Column(scale=1, min_width=260):
-                    gr.HTML('<div class="step-title">💬 常见问题</div>')
+                    gr.HTML('<div class="step-title">💬 常见问题（点击即问）</div>')
                     with gr.Tabs():
                         with gr.Tab("📖 基础"):
-                            for q in PRESET_QUESTIONS[:4]:
-                                gr.Button(q, size="sm")
+                            p1 = [gr.Button(q, size="sm") for q in PRESET_QUESTIONS[:4]]
                         with gr.Tab("🔬 算法"):
-                            for q in PRESET_QUESTIONS[4:8]:
-                                gr.Button(q, size="sm")
+                            p2 = [gr.Button(q, size="sm") for q in PRESET_QUESTIONS[4:8]]
                         with gr.Tab("📊 评估"):
-                            gr.Button("📊 如何解读混淆矩阵？", size="sm")
-                            gr.Button("📈 如何分析 ROC 曲线和 AUC？", size="sm")
-                            gr.Button("🎯 什么是交叉验证？为什么需要它？", size="sm")
-                            gr.Button("🎯 精确率和召回率有什么区别？", size="sm")
+                            p3 = [gr.Button("📊 如何解读混淆矩阵？", size="sm"),
+                                  gr.Button("📈 如何分析 ROC 曲线和 AUC？", size="sm"),
+                                  gr.Button("🎯 什么是交叉验证？为什么需要它？", size="sm"),
+                                  gr.Button("🎯 精确率和召回率有什么区别？", size="sm")]
                         with gr.Tab("💡 实战"):
-                            gr.Button("💡 特征工程有哪些常用方法？", size="sm")
-                            gr.Button("💡 如何处理数据不平衡问题？", size="sm")
-                            gr.Button("💡 如何选择机器学习算法？", size="sm")
-                            gr.Button("💡 超参数调优有哪些方法？", size="sm")
+                            p4 = [gr.Button("💡 特征工程有哪些常用方法？", size="sm"),
+                                  gr.Button("💡 如何处理数据不平衡问题？", size="sm"),
+                                  gr.Button("💡 如何选择机器学习算法？", size="sm"),
+                                  gr.Button("💡 超参数调优有哪些方法？", size="sm")]
+                    preset_btns = p1 + p2 + p3 + p4
                     gr.HTML('<div style="height:8px;"></div>')
 
                     # LLM 设置（可折叠）
@@ -1101,24 +1100,7 @@ def build_pages():
                         send_b = gr.Button("🚀 发送", variant="primary", scale=1)
                         clear_b = gr.Button("🗑", scale=0, min_width=40)
 
-            gr.HTML('<div class="step-title">💬 常见问题（点击即问）</div>')
-            # 分类预设问题
-            with gr.Tabs():
-                with gr.Tab("📖 基础概念"):
-                    p1 = [gr.Button(q, size="sm") for q in PRESET_QUESTIONS[:4]]
-                with gr.Tab("🔭 算法原理"):
-                    p2 = [gr.Button(q, size="sm") for q in PRESET_QUESTIONS[4:8]]
-                with gr.Tab("📊 模型评估"):
-                    p3 = [gr.Button("📊 如何解读混淆矩阵？", size="sm"),
-                          gr.Button("📈 如何分析 ROC 曲线和 AUC？", size="sm"),
-                          gr.Button("🔢 什么是交叉验证？为什么需要它？", size="sm"),
-                          gr.Button("🎯 精确率和召回率有什么区别？", size="sm")]
-                with gr.Tab("💡 实战技巧"):
-                    p4 = [gr.Button("💡 特征工程有哪些常用方法？", size="sm"),
-                          gr.Button("💡 如何处理数据不平衡问题？", size="sm"),
-                          gr.Button("💡 如何选择机器学习算法？", size="sm"),
-                          gr.Button("💡 超参数调优有哪些方法？", size="sm")]
-            preset_btns = p1 + p2 + p3 + p4
+
 
 
 
