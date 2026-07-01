@@ -114,6 +114,10 @@ def build_pages():
 
 
 
+            lp_progress = gr.HTML()
+
+
+
             gr.HTML(LEARNING_PATH_HTML)
 
 

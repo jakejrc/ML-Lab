@@ -356,6 +356,12 @@ def on_train_classification(algo, lr, ni, C, md, mi, hid, al):
         _g["last_algo_name"] = algo
 
         _g["last_task_type"] = "classification"
+        # 记录学习路径进度
+        try:
+            from ml_lab.learning_progress import auto_record_stage
+            auto_record_stage("classification", f"训练{algo}")
+        except Exception:
+            pass
 
         _g["report_images"].update({
 
@@ -860,6 +866,12 @@ def on_train_regression(algo, lr, ni, C, md, mi, hid, al, deg, eps, kern, crit):
         _g["last_algo_name"] = algo
 
         _g["last_task_type"] = "regression"
+        # 记录学习路径进度
+        try:
+            from ml_lab.learning_progress import auto_record_stage
+            auto_record_stage("regression", f"训练{algo}")
+        except Exception:
+            pass
 
         _g["report_images"].update({
 
@@ -1072,6 +1084,12 @@ def on_train_clustering(algo, n_clusters, max_iter, eps, min_samples,
         _g["last_algo_name"] = algo
 
         _g["last_task_type"] = "clustering"
+        # 记录学习路径进度
+        try:
+            from ml_lab.learning_progress import auto_record_stage
+            auto_record_stage("clustering", f"训练{algo}")
+        except Exception:
+            pass
 
         _g["report_images"].update({
 

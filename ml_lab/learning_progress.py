@@ -217,3 +217,45 @@ def get_progress_summary():
 
 # 阶段与实验模块的映射（用于自动记录活动）
 STAGE_MODULE_MAP = {s["module"]: s["id"] for s in LEARNING_STAGES}
+
+
+def get_progress_html():
+    """Generate learning progress HTML card"""
+    summary = get_progress_summary()
+    stages = summary["stages"]
+    bar_width = summary["completion_rate"]
+
+    html = '<div style="background:white;border-radius:12px;padding:16px;margin:12px 0;box-shadow:0 1px 4px rgba(0,0,0,0.06);border:1px solid #e2e8f0;">'
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'
+    html += '<div style="font-size:14px;font-weight:600;color:#1e293b;">&#128202; 学习进度</div>'
+    html += '<div style="font-size:12px;color:#64748b;">{} 个阶段完成 <span style="font-weight:600;color:#2563eb;margin-left:4px;">{}</span></div>'.format(summary["completed_stages"], summary["completion_rate"])
+    html += '</div>'
+    html += '<div style="background:#e2e8f0;border-radius:8px;height:8px;overflow:hidden;margin-bottom:14px;">'
+    html += '<div style="background:linear-gradient(90deg,#3b82f6,#8b5cf6);width:{};height:100%;border-radius:8px;transition:width 0.5s ease;"></div>'.format(bar_width)
+    html += '</div>'
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;">'
+
+    for s in stages:
+        if s["completed"]:
+            icon, bg, border = "&#9989;", "#f0fdf4", "#86efac"
+        elif s["experiments_count"] > 0:
+            icon, bg, border = "&#128260;", "#fefce8", "#fde68a"
+        else:
+            icon, bg, border = "&#9898;", "#f1f5f9", "#cbd5e1"
+
+        html += '<div style="display:flex;align-items:center;gap:6px;padding:6px 8px;background:{};border-radius:6px;border-left:3px solid {};">'.format(bg, border)
+        html += '<span>{}</span>'.format(icon)
+        html += '<span style="color:#334155;font-weight:500;">{}</span>'.format(s["title"])
+        html += '<span style="color:#94a3b8;margin-left:auto;font-size:11px;">{}次</span>'.format(s["experiments_count"])
+        html += '</div>'
+
+    html += '</div></div>'
+    return html
+
+
+def auto_record_stage(module_name, activity="完成实验"):
+    """Auto record learning stage activity by module name"""
+    stage_id = STAGE_MODULE_MAP.get(module_name)
+    if stage_id:
+        record_activity(stage_id, activity)
+    return get_progress_html()
