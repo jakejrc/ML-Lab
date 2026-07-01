@@ -283,6 +283,28 @@ def on_train_classification(algo, lr, ni, C, md, mi, hid, al):
 
                 cv_img = fig_to_image(plot_cross_validation(cv_scores, algo))
 
+            elif hasattr(model, 'model') and model.model is not None and _g["X_train"].shape[0] >= 10:
+
+                try:
+
+                    from sklearn.model_selection import cross_val_score
+
+                    cv_folds = min(5, _g["X_train"].shape[0] // 2)
+
+                    cv_scores_fallback = cross_val_score(
+
+                        model.model, _g["X_train"], _g["y_train"],
+
+                        cv=cv_folds, scoring='accuracy'
+
+                    )
+
+                    cv_img = fig_to_image(plot_cross_validation(cv_scores_fallback.tolist(), algo))
+
+                except Exception:
+
+                    pass
+
 
 
         # 如果没有内置学习曲线，手动计算（用底层 sklearn 模型避免 clone 兼容问题）
