@@ -9,6 +9,13 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+
+# ---- 中文字体配置 ----
+_CN_FONTS = [f.name for f in matplotlib.font_manager.fontManager.ttflist
+             if any(kw in f.name for kw in ['WenQuanYi', 'Noto Sans CJK', 'SimHei', 'Microsoft YaHei'])]
+if _CN_FONTS:
+    matplotlib.rcParams['font.sans-serif'] = _CN_FONTS + matplotlib.rcParams['font.sans-serif']
+    matplotlib.rcParams['axes.unicode_minus'] = False
 from sklearn.decomposition import PCA
 from sklearn.metrics import confusion_matrix, roc_curve, auc
 from sklearn.preprocessing import label_binarize
