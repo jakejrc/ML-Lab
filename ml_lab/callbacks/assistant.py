@@ -65,54 +65,6 @@ def on_learning_path_click(evt: gr.EventData):
     return gr.skip()  # 由 JS 处理跳转
 
 
-def on_ai_analyze_data(history):
-    """分析当前数据"""
-    ds = _g.get("dataset_name", "未加载")
-    if ds == "未加载":
-        resp = "当前没有加载数据集。请先到「数据工作台」页面加载数据集。"
-    else:
-        n = _g.get("X_train", None)
-        if n is not None:
-            n_samples = _g["X_train"].shape[0] + _g.get("X_test", np.array([])).shape[0]
-            n_features = _g["X_train"].shape[1]
-            task = _g.get("task_type", "未知")
-            resp = (
-                f"### 数据集分析：{ds}\n\n"
-                f"- **样本数**：{n_samples}\n"
-                f"- **特征数**：{n_features}\n"
-                f"- **任务类型**：{task}\n\n"
-                f"请告诉我你关心什么方面？例如：数据分布、特征相关性、缺失值处理等。"
-            )
-        else:
-            resp = f"当前数据集：{ds}，但尚未完成分割。请先执行数据加载。"
-    history = history or []
-    history.append({"role": "user", "content": f"分析当前数据集 {ds}"})
-    history.append({"role": "assistant", "content": resp})
-    return "", history
-
-
-def on_ai_explain_model(history):
-    """解释当前模型"""
-    algo = _g.get("last_algo_name", None)
-    if not algo:
-        resp = "当前没有训练完成的模型。请先到实验页面训练一个模型。"
-    else:
-        task = _g.get("last_task_type", "未知")
-        report = _g.get("last_eval_report", None)
-        resp = f"### 模型解释：{algo}\n\n- **任务类型**：{task}\n"
-        if report:
-            resp += f"- **评估结果**：\n```\n{report[:500]}\n```\n"
-        resp += (
-            f"\n{algo} 的主要特点：\n"
-            f"1. 可解释性方面...\n"
-            f"2. 适用场景...\n"
-            f"3. 优缺点...\n\n"
-            f"是否需要更详细的解释？"
-        )
-    history = history or []
-    history.append({"role": "user", "content": f"解释当前模型 {algo or '无'}"})
-    history.append({"role": "assistant", "content": resp})
-    return "", history
 
 
 def on_ai_test_connection(base_url, model, api_key):
@@ -209,39 +161,3 @@ def on_ai_context_chat(msg, history):
     return "", history
 
 
-def get_ai_context_html():
-    """从 _g 状态生成 AI 助教上下文 HTML"""
-    ds = _g.get("dataset_name", "未加载")
-    algo = _g.get("last_algo_name", None)
-    task = _g.get("last_task_type", "—")
-    n_samples = "—"
-    n_features = "—"
-    if _g.get("X_train") is not None:
-        n_samples = str(_g["X_train"].shape[0])
-        n_features = str(_g["X_train"].shape[1])
-
-    model_text = algo if algo else "未训练"
-    ds_color = "#059669" if ds != "未加载" else "#94a3b8"
-    md_color = "#059669" if algo else "#94a3b8"
-
-    html = (
-        '<div style="background:#f8fafc;border-radius:8px;padding:10px;border:1px solid #e2e8f0;font-size:12px;">'
-        '<div style="font-weight:600;color:#1e293b;margin-bottom:6px;">&#128202; 实验上下文</div>'
-        f'<div style="display:flex;justify-content:space-between;padding:2px 0;">'
-        f'<span style="color:#64748b;">数据集</span>'
-        f'<span style="color:{ds_color};font-weight:500;">{ds}</span></div>'
-        f'<div style="display:flex;justify-content:space-between;padding:2px 0;">'
-        f'<span style="color:#64748b;">模型</span>'
-        f'<span style="color:{md_color};font-weight:500;">{model_text}</span></div>'
-        f'<div style="display:flex;justify-content:space-between;padding:2px 0;">'
-        f'<span style="color:#64748b;">任务</span>'
-        f'<span style="color:#1e293b;font-weight:500;">{task}</span></div>'
-        f'<div style="display:flex;justify-content:space-between;padding:2px 0;">'
-        f'<span style="color:#64748b;">样本</span>'
-        f'<span style="color:#1e293b;font-weight:500;">{n_samples}</span></div>'
-        f'<div style="display:flex;justify-content:space-between;padding:2px 0;">'
-        f'<span style="color:#64748b;">特征</span>'
-        f'<span style="color:#1e293b;font-weight:500;">{n_features}</span></div>'
-        '</div>'
-    )
-    return html

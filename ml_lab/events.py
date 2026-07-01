@@ -28,7 +28,7 @@ def bind_events(comps):
 
     # 数据工作台
 
-    load_btn.click(fn=on_load_data, inputs=[ds_dd, ts_sl], outputs=[data_img, data_info, data_summary, status_ds, algo_rec, ai_ctx_ds])
+    load_btn.click(fn=on_load_data, inputs=[ds_dd, ts_sl], outputs=[data_img, data_info, data_summary, status_ds, algo_rec])
 
 
     # nav.change 仅作为 Radio 事件占位（避免 Radio 被 disabled）
@@ -38,7 +38,7 @@ def bind_events(comps):
 
         inputs=[upload_file, upload_path, custom_target_col, custom_task_type, custom_ts_sl],
 
-        outputs=[data_img, data_info, data_summary, status_ds, algo_rec, ai_ctx_ds])
+        outputs=[data_img, data_info, data_summary, status_ds, algo_rec])
 
     pp_btn.click(fn=on_preprocess, inputs=[method_dd, feat_sl], outputs=[pp_img, pp_info])
 
@@ -314,10 +314,6 @@ def bind_events(comps):
     send_b.click(fn=on_ai_context_chat, inputs=[msg_in, chatbot], outputs=[msg_in, chatbot])
 
     clear_b.click(fn=lambda: ("", []), outputs=[msg_in, chatbot])
-
-    ai_analyze_btn.click(fn=on_ai_analyze_data, inputs=[chatbot], outputs=[msg_in, chatbot])
-
-    ai_explain_btn.click(fn=on_ai_explain_model, inputs=[chatbot], outputs=[msg_in, chatbot])
 
     ai_test_btn.click(fn=on_ai_test_connection,
         inputs=[ai_base_url, ai_model, ai_api_key],

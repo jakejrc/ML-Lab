@@ -1051,19 +1051,25 @@ def build_pages():
 
                 # ── 左侧：上下文信息 + 设置 ──
                 with gr.Column(scale=1, min_width=260):
-                    # 上下文状态
-                    ai_ctx_ds = gr.HTML(
-                        '<div style="background:#f8fafc;border-radius:8px;padding:10px;border:1px solid #e2e8f0;font-size:12px;">'
-                        '<div style="font-weight:600;color:#1e293b;margin-bottom:6px;">📊 实验上下文</div>'
-                        '<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:#64748b;">数据集</span><span style="color:#1e293b;font-weight:500;" id="ai-ctx-ds">未加载</span></div>'
-                        '<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:#64748b;">模型</span><span style="color:#1e293b;font-weight:500;" id="ai-ctx-md">未训练</span></div>'
-                        '<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:#64748b;">任务</span><span style="color:#1e293b;font-weight:500;" id="ai-ctx-task">—</span></div>'
-                        '</div>')
-
-                    # 快速操作
-                    with gr.Row():
-                        ai_analyze_btn = gr.Button("🔍 分析当前数据", size="sm", scale=1)
-                        ai_explain_btn = gr.Button("📝 解释当前模型", size="sm", scale=1)
+                    gr.HTML('<div class="step-title">💬 常见问题</div>')
+                    with gr.Tabs():
+                        with gr.Tab("📖 基础"):
+                            for q in PRESET_QUESTIONS[:4]:
+                                gr.Button(q, size="sm")
+                        with gr.Tab("🔬 算法"):
+                            for q in PRESET_QUESTIONS[4:8]:
+                                gr.Button(q, size="sm")
+                        with gr.Tab("📊 评估"):
+                            gr.Button("📊 如何解读混淆矩阵？", size="sm")
+                            gr.Button("📈 如何分析 ROC 曲线和 AUC？", size="sm")
+                            gr.Button("🎯 什么是交叉验证？为什么需要它？", size="sm")
+                            gr.Button("🎯 精确率和召回率有什么区别？", size="sm")
+                        with gr.Tab("💡 实战"):
+                            gr.Button("💡 特征工程有哪些常用方法？", size="sm")
+                            gr.Button("💡 如何处理数据不平衡问题？", size="sm")
+                            gr.Button("💡 如何选择机器学习算法？", size="sm")
+                            gr.Button("💡 超参数调优有哪些方法？", size="sm")
+                    gr.HTML('<div style="height:8px;"></div>')
 
                     # LLM 设置（可折叠）
                     with gr.Accordion("⚙️ 模型设置", open=False):

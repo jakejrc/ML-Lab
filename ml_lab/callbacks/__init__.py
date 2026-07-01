@@ -28,7 +28,5 @@ from ml_lab.callbacks.feature import (
 )
 from ml_lab.callbacks.assistant import (
     on_kg_render, on_chat, on_preset, on_learning_path_click,
-    on_ai_analyze_data, on_ai_explain_model,
     on_ai_test_connection, on_ai_save_config, on_ai_context_chat,
-    get_ai_context_html,
 )

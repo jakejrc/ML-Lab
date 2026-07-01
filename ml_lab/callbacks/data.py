@@ -237,21 +237,10 @@ def on_load_data(dataset_name, test_ratio):
             rec_html = format_recommendation_html(_recs, _ctx)
         except Exception:
             rec_html = ""
-        # AI 助教上下文（动态生成）
-        ctx_html = ""
-        try:
-            from ml_lab.callbacks.assistant import get_ai_context_html
-            ctx_html = get_ai_context_html()
-        except Exception:
-            pass
-        return img, info, summary, ds_html, rec_html, ctx_html
+        return img, info, summary, ds_html, rec_html
 
     except Exception as e:
-        return None, f"加载失败: {e}", None, gr.HTML('<div class="status-card"><span class="status-value">加载失败</span></div>'), "", ""
-
-
-
-        return None, f"加载失败: {e}", None, gr.HTML('<div class="status-card"><span class="status-value">加载失败</span></div>')
+        return None, f"加载失败: {e}", None, gr.HTML('<div class="status-card"><span class="status-value">加载失败</span></div>'), ""
 
 def on_preprocess(method, feat_idx):
 
@@ -497,21 +486,11 @@ def on_load_custom_data(file_obj, file_path_text, target_col, task_type, test_ra
             rec_html = format_recommendation_html(_recs, _ctx)
         except Exception:
             rec_html = ""
-        # AI 助教上下文（动态生成）
-        ctx_html = ""
-        try:
-            from ml_lab.callbacks.assistant import get_ai_context_html
-            ctx_html = get_ai_context_html()
-        except Exception:
-            pass
-        return img, info, summary, ds_html, rec_html, ctx_html
+        return img, info, summary, ds_html, rec_html
 
     except Exception as e:
-        return None, f"加载失败: {e}", None, gr.HTML('<div class="status-card"><span class="status-value">加载失败</span></div>'), "", ""
+        return None, f"加载失败: {e}", None, gr.HTML('<div class="status-card"><span class="status-value">加载失败</span></div>'), ""
 
-        import traceback as _tb
-
-        _tb.print_exc()
 
         return None, f"加载失败: {e}", None, gr.HTML(f'<div class="status-card"><span class="status-value">加载失败: {e}</span></div>')
 
