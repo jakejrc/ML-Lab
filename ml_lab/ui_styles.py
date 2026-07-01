@@ -199,7 +199,7 @@ button.primary { background:linear-gradient(135deg,#2563eb,#1d4ed8)!important; b
 .info-table { width: 100%; border-collapse: collapse; margin: 0; }
 .info-table td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
 .info-table td:first-child { color: #64748b; font-weight: 600; width: 50px; white-space: nowrap; }
-.info-table td:last-child { color: #1e293b; font-weight: 500; text-align: right; }
+.info-table td:last-child { color: #1e293b; font-weight: 500; text-align: left; }
 .info-table tr:last-child td { border-bottom: none; }
 
 /* 报告概览 */
@@ -340,6 +340,12 @@ def _card(icon, title, desc, body=""):
         overflow-x: auto;
         white-space: nowrap;
     }
+}
+
+/* 数据工作台表格左对齐 */
+#page-data table td,
+#page-data table th {
+    text-align: left !important;
 }
 
 """
