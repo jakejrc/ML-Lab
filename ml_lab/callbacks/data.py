@@ -7,6 +7,7 @@ ML-Lab v3.8.4 — 回调函数
 import sys, os, io, traceback
 from datetime import datetime
 import numpy as np
+from functools import lru_cache
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
@@ -67,6 +68,7 @@ from ml_lab.learning_progress import (record_activity, mark_stage_completed, get
 from ml_lab.sandbox_templates import SANDBOX_TEMPLATES
 from ml_lab.ui_styles import APP_CSS, _card, ETHICS
 
+@lru_cache(maxsize=4)
 def on_load_data(dataset_name, test_ratio):
 
 

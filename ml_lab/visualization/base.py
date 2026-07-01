@@ -5,6 +5,7 @@ v3.0 新增：聚类散点图、肘部法则图、层次聚类树状图、DBSCAN
 """
 
 import numpy as np
+from functools import lru_cache
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
