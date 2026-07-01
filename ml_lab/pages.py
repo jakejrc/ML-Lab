@@ -1,7 +1,7 @@
 """ML-Lab 页面 UI 构建模块
-import os
 在活跃 Gradio Blocks 上下文中创建所有 UI 组件
 """
+import os
 import gradio as gr
 from ml_lab.ui_styles import _card, ETHICS
 from ml_lab.html_templates import LEARNING_PATH_HTML
@@ -1087,8 +1087,7 @@ def build_pages():
 
                 # ── 右侧：对话区域 ──
                 with gr.Column(scale=3):
-                    chatbot = gr.Chatbot(label="对话区域", height=420, bubble_full_width=False,
-                                         avatar_images=(None, None))
+                    chatbot = gr.Chatbot(label="对话区域", height=420)
                     with gr.Row():
                         msg_in = gr.Textbox(label="输入问题",
                             placeholder="例如：K-Means 的原理是什么？或问我关于当前数据和模型的问题",
