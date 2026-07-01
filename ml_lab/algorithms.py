@@ -321,7 +321,7 @@ class KMeansModel:
         self.init = init
         self.model = None
         self.labels_ = None
-        self.history = {"inertia": [], "n_clusters": []}
+        self.history = {"inertia": [], "k_range": []}
         self._task_type = "unsupervised"
 
     def fit(self, X, y=None):
@@ -332,8 +332,20 @@ class KMeansModel:
         )
         self.model.fit(X)
         self.labels_ = self.model.labels_
-        self.history["inertia"] = [self.model.inertia_ * (1 - i * 0.1) for i in range(5)]
-        self.history["n_clusters"] = list(range(2, min(11, len(X))))
+        # 为肘部法则计算不同 k 值下的真实 inertia
+        k_max = min(10, len(X) - 1)
+        k_range = list(range(2, k_max + 1))
+        inertia_values = []
+        for k in k_range:
+            try:
+                km = KMeans(n_clusters=k, max_iter=min(self.max_iter, 100),
+                            init=self.init, random_state=42, n_init=5)
+                km.fit(X)
+                inertia_values.append(km.inertia_)
+            except Exception:
+                inertia_values.append(0)
+        self.history["k_range"] = k_range
+        self.history["inertia"] = inertia_values
 
         # 手动 K-Means 迭代过程捕获（用于教学可视化）
         # sklearn 1.9.0 已移除 warm_start，改用纯 numpy 实现
@@ -409,6 +421,22 @@ class DBSCANModel:
         self.labels_ = self.model.labels_
         self.history["n_clusters"] = len(set(self.labels_)) - (1 if -1 in self.labels_ else 0)
         self.history["n_noise"] = list(self.labels_).count(-1)
+        # 为 eps 分析计算不同 eps 值下的聚类数
+        eps_range = []
+        cluster_counts = []
+        base_eps = self.eps
+        eps_values = [base_eps * (0.2 + 0.3 * i) for i in range(6)]
+        for eps_val in eps_values:
+            try:
+                db = DBSCAN(eps=eps_val, min_samples=self.min_samples, metric=self.metric)
+                db.fit(X)
+                n_cl = len(set(db.labels_)) - (1 if -1 in db.labels_ else 0)
+                eps_range.append(eps_val)
+                cluster_counts.append(n_cl)
+            except Exception:
+                pass
+        self.history["eps_range"] = eps_range
+        self.history["cluster_counts"] = cluster_counts
         return self
 
     def predict(self, X):
