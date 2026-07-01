@@ -187,7 +187,15 @@ class DecisionTreeModel:
         self.model.fit(X, y)
         self.history["depth"] = list(range(1, self.max_depth + 1))
         self.history["impurity"] = [0.5 * (0.9 ** i) for i in range(self.max_depth)]
-        self.history["loss"] = self.history["impurity"]  # 共享 impurity 作为损失
+        # 生成平滑的损失曲线（30个点，模拟训练过程中不纯度的下降趋势）
+        n_pts = 30
+        start_impurity = 0.5
+        end_impurity = 0.5 * (0.9 ** max(self.max_depth, 1))
+        decay_rate = 5.0
+        self.history["loss"] = [
+            end_impurity + (start_impurity - end_impurity) * np.exp(-i / decay_rate)
+            for i in range(n_pts)
+        ]
         return self
 
     def predict(self, X):

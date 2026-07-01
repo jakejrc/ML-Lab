@@ -169,23 +169,62 @@ def plot_preprocessing_comparison(X_before, X_after, title="预处理对比", fe
 # ═══════════════════════════════════════════════════════════════
 
 def plot_training_history(history, title="训练过程"):
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-    if "loss" in history and len(history["loss"]) > 1:
-        losses = history["loss"]; epochs = range(1, len(losses)+1)
+    has_loss = "loss" in history and len(history["loss"]) > 1
+    has_weights = "weights" in history and len(history["weights"]) > 1
+    if has_loss and has_weights:
+        # 有损失 + 有权重：双面板
+        fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+        # --- 损失曲线 ---
+        losses = history["loss"]; epochs = list(range(1, len(losses) + 1))
         axes[0].plot(epochs, losses, 'b-', linewidth=2, label='训练损失')
-        axes[0].set_xlabel("迭代次数"); axes[0].set_ylabel("损失值"); axes[0].set_title("损失变化曲线"); axes[0].legend(); axes[0].grid(True, alpha=0.3)
+        axes[0].set_xlabel("迭代次数"); axes[0].set_ylabel("损失值")
+        axes[0].set_title("损失变化曲线"); axes[0].legend(); axes[0].grid(True, alpha=0.3)
         min_idx = np.argmin(losses)
-        axes[0].annotate(f"最小损失: {losses[min_idx]:.4f}", xy=(min_idx+1, losses[min_idx]), xytext=(min_idx+5, losses[min_idx]*1.1), arrowprops=dict(arrowstyle='->', color='red'), fontsize=9, color='red')
-    else:
-        axes[0].text(0.5, 0.5, "无训练损失数据", ha='center', va='center', transform=axes[0].transAxes); axes[0].set_title("损失变化曲线")
-    if "weights" in history and len(history["weights"]) > 1:
+        # 标注位置在轴内（避免越界）
+        y_min, y_max = axes[0].get_ylim()
+        annot_y = losses[min_idx] - (y_max - y_min) * 0.08
+        if annot_y < y_min:
+            annot_y = losses[min_idx] + (y_max - y_min) * 0.08
+        axes[0].annotate(f"最小损失: {losses[min_idx]:.4f}",
+                         xy=(min_idx + 1, losses[min_idx]),
+                         xytext=(min_idx + 1, annot_y),
+                         arrowprops=dict(arrowstyle='->', color='red'),
+                         fontsize=9, color='red', ha='center')
+        # --- 权重曲线 ---
         weights = np.array(history["weights"])
         for i in range(min(weights.shape[1], 5)):
             axes[1].plot(range(len(weights)), weights[:, i], '-', label=f"w{i}", linewidth=1.5)
-        axes[1].set_xlabel("迭代次数"); axes[1].set_ylabel("权重值"); axes[1].set_title("权重变化曲线"); axes[1].legend(fontsize=8); axes[1].grid(True, alpha=0.3)
+        axes[1].set_xlabel("迭代次数"); axes[1].set_ylabel("权重值")
+        axes[1].set_title("权重变化曲线"); axes[1].legend(fontsize=8); axes[1].grid(True, alpha=0.3)
+    elif has_loss:
+        # 只有损失：单宽面板
+        fig, ax = plt.subplots(1, 1, figsize=(12, 4))
+        losses = history["loss"]; epochs = list(range(1, len(losses) + 1))
+        ax.plot(epochs, losses, 'b-', linewidth=2, label='训练损失')
+        ax.set_xlabel("迭代次数"); ax.set_ylabel("损失值")
+        ax.set_title("损失变化曲线"); ax.legend(); ax.grid(True, alpha=0.3)
+        min_idx = np.argmin(losses)
+        y_min, y_max = ax.get_ylim()
+        annot_y = losses[min_idx] - (y_max - y_min) * 0.08
+        if annot_y < y_min:
+            annot_y = losses[min_idx] + (y_max - y_min) * 0.08
+        ax.annotate(f"最小损失: {losses[min_idx]:.4f}",
+                    xy=(min_idx + 1, losses[min_idx]),
+                    xytext=(min_idx + 1, annot_y),
+                    arrowprops=dict(arrowstyle='->', color='red'),
+                    fontsize=9, color='red', ha='center')
+        # 在右侧添加模型说明（无权重信息）
+        ax.text(0.97, 0.95, "注：该模型无可训练权重参数\n故不显示权重变化曲线",
+                transform=ax.transAxes, fontsize=8, color='gray',
+                ha='right', va='top',
+                bbox=dict(boxstyle='round,pad=0.3', facecolor='lightyellow', alpha=0.7))
     else:
-        axes[1].text(0.5, 0.5, "无权重变化数据", ha='center', va='center', transform=axes[1].transAxes); axes[1].set_title("权重变化曲线")
-    plt.suptitle(title, fontsize=12, fontweight='bold'); plt.tight_layout(rect=[0, 0, 1, 0.95])
+        fig, ax = plt.subplots(1, 1, figsize=(12, 4))
+        ax.text(0.5, 0.5, "无训练过程数据", ha='center', va='center',
+                transform=ax.transAxes, fontsize=12, color='gray')
+        ax.set_title("训练过程")
+    plt.suptitle(title, fontsize=12, fontweight='bold')
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
     return fig
 
 
