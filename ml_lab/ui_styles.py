@@ -195,6 +195,13 @@ button.primary { background:linear-gradient(135deg,#2563eb,#1d4ed8)!important; b
 .report-info-table td { padding: 6px 12px; border: 1px solid #e2e8f0; font-size: 13px; }
 .report-info-table td:first-child { background: #f1f5f9; font-weight: 600; width: 60px; text-align: center; }
 
+/* 数据信息表格（数据工作台） */
+.info-table { width: 100%; border-collapse: collapse; margin: 0; }
+.info-table td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+.info-table td:first-child { color: #64748b; font-weight: 600; width: 50px; white-space: nowrap; }
+.info-table td:last-child { color: #1e293b; font-weight: 500; text-align: right; }
+.info-table tr:last-child td { border-bottom: none; }
+
 /* 报告概览 */
 .report-summary { background: #eff6ff; border-radius: 8px; padding: 12px 16px; margin: 12px 0; border-left: 3px solid #3b82f6; font-size: 13px; }
 

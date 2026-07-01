@@ -188,13 +188,9 @@ def build_pages():
 
 
 
-            data_img = gr.Image(label="数据分布（PCA 降维可视化）", height=360)
-
-
-
-            data_info = gr.HTML(label="数据信息")
-
-
+            with gr.Row(equal_height=True):
+                data_img = gr.Image(label="数据分布（PCA 降维可视化）", height=360, scale=2)
+                data_info = gr.HTML(label="数据信息", scale=1)
 
             data_summary = gr.Dataframe(label="数据摘要")
 
