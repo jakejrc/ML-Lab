@@ -289,6 +289,13 @@ def build_pages():
 
 
 
+
+            with gr.Accordion("🔧 超参数自动搜索", open=False):
+                with gr.Row():
+                    tune_btn_cls = gr.Button("🚀 开始自动调参", variant="secondary", scale=1)
+                    tune_status_cls = gr.Textbox(label="调参状态", value="就绪", scale=2, interactive=False)
+                tune_result_cls = gr.HTML(label="搜索结果")
+
             gr.HTML('<div class="step-title">训练结果</div>')
 
 
@@ -443,6 +450,13 @@ def build_pages():
             train_btn_reg = gr.Button("开始训练", variant="primary", size="lg")
 
 
+
+
+            with gr.Accordion("🔧 超参数自动搜索", open=False):
+                with gr.Row():
+                    tune_btn_reg = gr.Button("🚀 开始自动调参", variant="secondary", scale=1)
+                    tune_status_reg = gr.Textbox(label="调参状态", value="就绪", scale=2, interactive=False)
+                tune_result_reg = gr.HTML(label="搜索结果")
 
             gr.HTML('<div class="step-title">训练结果</div>')
 
@@ -706,6 +720,13 @@ def build_pages():
             train_btn_uns = gr.Button("开始聚类", variant="primary", size="lg")
 
 
+
+
+            with gr.Accordion("🔧 超参数自动搜索", open=False):
+                with gr.Row():
+                    tune_btn_uns = gr.Button("🚀 开始自动调参", variant="secondary", scale=1)
+                    tune_status_uns = gr.Textbox(label="调参状态", value="就绪", scale=2, interactive=False)
+                tune_result_uns = gr.HTML(label="搜索结果")
 
             gr.HTML('<div class="step-title">聚类结果</div>')
 

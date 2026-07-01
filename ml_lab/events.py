@@ -71,6 +71,16 @@ def bind_events(comps):
 
     # 分类实验
 
+    # ── 自动调参 ──
+    tune_btn_cls.click(fn=on_auto_tune, inputs=[_g, algo_dd_cls, gr.State("classification")],
+                       outputs=[tune_status_cls, tune_result_cls])
+
+    tune_btn_reg.click(fn=on_auto_tune, inputs=[_g, algo_dd_reg, gr.State("regression")],
+                       outputs=[tune_status_reg, tune_result_reg])
+
+    tune_btn_uns.click(fn=on_auto_tune, inputs=[_g, algo_dd_uns, gr.State("unsupervised")],
+                       outputs=[tune_status_uns, tune_result_uns])
+
     train_btn_cls.click(fn=on_train_classification,
 
         inputs=[algo_dd_cls, lr_c, ni_c, C_c, md_c, mi_c, hid_c, al_c],

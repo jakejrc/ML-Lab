@@ -26,6 +26,8 @@ from ml_lab.callbacks.feature import (
     on_fe_scaling, on_fe_feature_selection,
     on_fe_pca, on_fe_construct, on_fe_discretize, on_fe_correlation,
 )
+from ml_lab.callbacks.auto_tuning import on_auto_tune
+
 from ml_lab.callbacks.assistant import (
     on_kg_render, on_chat, on_preset, on_learning_path_click,
     on_ai_test_connection, on_ai_save_config, on_ai_context_chat,
