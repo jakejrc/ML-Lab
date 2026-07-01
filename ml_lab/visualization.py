@@ -194,11 +194,25 @@ def plot_training_history(history, title="训练过程"):
 # ═══════════════════════════════════════════════════════════════
 
 def plot_decision_boundary(model, X, y, title="决策边界", resolution=0.02):
+    # 提取底层 sklearn 模型（兼容 ML-Lab 包装类）
+    inner = getattr(model, 'model', model)
     pca = PCA(n_components=2); X_2d = pca.fit_transform(X)
+    model_2d = None
+    # 尝试 clone + re-fit 底层模型
     try:
-        from sklearn.base import clone; model_2d = clone(model); model_2d.fit(X_2d, y)
+        from sklearn.base import clone
+        model_2d = clone(inner)
+        model_2d.fit(X_2d, y)
     except Exception:
-        model_2d = model
+        model_2d = None
+    # 如果 clone 失败，用 KNN 在 2D 数据上快速训练用于可视化
+    if model_2d is None:
+        try:
+            from sklearn.neighbors import KNeighborsClassifier
+            model_2d = KNeighborsClassifier(n_neighbors=min(15, len(np.unique(y))*3))
+            model_2d.fit(X_2d, y)
+        except Exception:
+            return None
     x_min, x_max = X_2d[:,0].min()-1, X_2d[:,0].max()+1
     y_min, y_max = X_2d[:,1].min()-1, X_2d[:,1].max()+1
     xx, yy = np.meshgrid(np.arange(x_min, x_max, resolution), np.arange(y_min, y_max, resolution))
@@ -207,10 +221,10 @@ def plot_decision_boundary(model, X, y, title="决策边界", resolution=0.02):
     cmap_light = ListedColormap(['#FFAAAA','#AAFFAA','#AAAAFF','#FFFFAA','#FFAAFF','#AAFFFF','#FFDAB9','#D8BFD8','#B0E0E6','#98FB98'])
     cmap_bold = ListedColormap(['#FF0000','#00FF00','#0000FF','#FFD700','#FF00FF','#00FFFF','#FF6347','#9370DB','#4682B4','#3CB371'])
     n = len(np.unique(Z))
-    ax.contourf(xx, yy, Z, alpha=0.3, cmap=cmap_light[:n])
+    ax.contourf(xx, yy, Z, alpha=0.3, colors=cmap_light.colors[:n])
     ax.contour(xx, yy, Z, colors='k', linewidths=0.5, alpha=0.5)
     for i, cls in enumerate(np.unique(y)):
-        mask = y == cls; ax.scatter(X_2d[mask,0], X_2d[mask,1], c=[cmap_bold(i%10)], label=f'类别 {cls}', edgecolors='k', s=20, linewidths=0.3)
+        mask = y == cls; ax.scatter(X_2d[mask,0], X_2d[mask,1], color=cmap_bold.colors[i%10], label=f'类别 {cls}', edgecolors='k', s=20, linewidths=0.3)
     ax.set_xlabel("主成分 1"); ax.set_ylabel("主成分 2"); ax.set_title(title); ax.legend(fontsize=8); plt.tight_layout()
     return fig
 
