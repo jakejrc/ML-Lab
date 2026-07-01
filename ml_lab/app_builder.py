@@ -1407,7 +1407,7 @@ def create_app():
 
             inputs=[algo_dd_cls, lr_c, ni_c, C_c, md_c, mi_c, hid_c, al_c],
 
-            outputs=[train_img_cls, db_img_cls, result_txt_cls, cm_img_cls, roc_img_cls, lc_img_cls, cv_img_cls, sens_img_cls, fi_img_cls, status_md])
+            outputs=[train_img_cls, db_img_cls, result_txt_cls, cm_img_cls, roc_img_cls, lc_img_cls, cv_img_cls, sens_img_cls, fi_img_cls, quiz_html_cls, status_md])
 
 
 
@@ -1423,7 +1423,7 @@ def create_app():
 
             inputs=[compare_algos],
 
-            outputs=[compare_img, compare_result])
+            outputs=[compare_img, compare_multi_img, compare_result])
 
 
 

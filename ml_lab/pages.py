@@ -371,6 +371,8 @@ def build_pages():
 
             compare_img = gr.Image(label="模型性能对比", height=400)
 
+            compare_multi_img = gr.Image(label="多指标详细对比 (Acc/Precision/Recall/F1)", height=340)
+
             compare_result = gr.Textbox(label="对比结果", lines=8)
 
 

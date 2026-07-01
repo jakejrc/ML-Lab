@@ -561,7 +561,7 @@ def on_compare_models(selected_algos):
 
 
 
-        return compare_img, result_text
+        return compare_img, multi_metric_img, result_text
 
 
 
