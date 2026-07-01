@@ -319,7 +319,9 @@ def bind_events(comps):
 
     ai_explain_btn.click(fn=on_ai_explain_model, inputs=[chatbot], outputs=[msg_in, chatbot])
 
-    ai_test_btn.click(fn=on_ai_test_connection, outputs=[ai_status])
+    ai_test_btn.click(fn=on_ai_test_connection,
+        inputs=[ai_base_url, ai_model, ai_api_key],
+        outputs=[ai_status])
 
     ai_save_btn.click(fn=on_ai_save_config,
         inputs=[ai_base_url, ai_model, ai_api_key],

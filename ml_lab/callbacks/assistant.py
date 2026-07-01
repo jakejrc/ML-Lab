@@ -115,28 +115,37 @@ def on_ai_explain_model(history):
     return "", history
 
 
-def on_ai_test_connection():
-    """测试 LLM 连接"""
+def on_ai_test_connection(base_url, model, api_key):
+    """测试 LLM 连接（使用UI输入值）"""
     try:
-        from ml_lab.llm_assistant import _config
         import requests
-        base_url = _config["base_url"].rstrip("/")
+        base_url = base_url.strip().rstrip("/")
+        api_key = api_key.strip() if api_key else ""
+        if not base_url or not api_key:
+            return '<div style="font-size:11px;color:#ef4444;">&#10060; 请先填写 API Base URL 和 API Key</div>'
+        if not model:
+            model = "qwen-turbo"
         headers = {
-            "Authorization": f"Bearer {_config['api_key']}",
+            "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json"
         }
         payload = {
-            "model": _config["model"],
+            "model": model.strip(),
             "messages": [{"role": "user", "content": "hi"}],
             "max_tokens": 5
         }
-        r = requests.post(f"{base_url}/chat/completions", json=payload, headers=headers, timeout=10)
+        r = requests.post(f"{base_url}/chat/completions", json=payload, headers=headers, timeout=15)
         if r.status_code == 200:
-            return '<div style="font-size:11px;color:#059669;">\u2705 连接成功！模型响应正常</div>'
+            return '<div style="font-size:11px;color:#059669;">&#9989; 连接成功！模型响应正常</div>'
         else:
-            return f'<div style="font-size:11px;color:#ef4444;">\u274c 连接失败: HTTP {r.status_code}</div>'
+            return f'<div style="font-size:11px;color:#ef4444;">&#10060; 连接失败: HTTP {r.status_code}</div>'
+    except requests.exceptions.Timeout:
+        return '<div style="font-size:11px;color:#ef4444;">&#10060; 连接超时（15s），请检查 Base URL 是否正确</div>'
+    except requests.exceptions.ConnectionError:
+        return '<div style="font-size:11px;color:#ef4444;">&#10060; 无法连接服务器，请检查 Base URL 和网络</div>'
     except Exception as e:
-        return f'<div style="font-size:11px;color:#ef4444;">\u274c 连接失败: {str(e)[:80]}</div>'
+        return f'<div style="font-size:11px;color:#ef4444;">&#10060; 连接失败: {str(e)[:80]}</div>'
+
 
 
 def on_ai_save_config(base_url, model, api_key):
