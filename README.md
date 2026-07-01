@@ -20,6 +20,11 @@
 
 ## 更新日志
 
+### v3.8.6
+- 代码清理：删除 app_builder.py 死代码（1802行）
+- 模块拆分：algorithms.py → algorithms/ 包（分类/回归/无监督子模块）
+- 模块拆分：visualization.py → visualization/ 包（6个子模块）
+
 ### v3.8.5 (2026-07-01)
 
 #### 新增：P2 级功能 — 算法推荐向导 & 学习路径联动
