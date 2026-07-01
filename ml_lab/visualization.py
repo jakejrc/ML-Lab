@@ -730,6 +730,54 @@ def plot_model_comparison(model_names, train_scores, test_scores, cv_scores=None
 # 回归扩展可视化（v3.1 新增）
 # ═══════════════════════════════════════════════════════════════
 
+
+
+def plot_multi_metric_comparison(model_names, accuracies, precisions, recalls, f1_scores):
+    """绘制多指标详细对比图 (Acc/Precision/Recall/F1)
+
+    Args:
+        model_names: 模型名称列表
+        accuracies: 准确率列表
+        precisions: 精确率列表
+        recalls: 召回率列表
+        f1_scores: F1分数列表
+    """
+    fig, ax = plt.subplots(figsize=(12, 6))
+    x = np.arange(len(model_names))
+    width = 0.18
+
+    bars1 = ax.bar(x - 1.5 * width, accuracies, width, label='Accuracy',
+                   color='#93c5fd', edgecolor='white')
+    bars2 = ax.bar(x - 0.5 * width, precisions, width, label='Precision',
+                   color='#34d399', edgecolor='white')
+    bars3 = ax.bar(x + 0.5 * width, recalls, width, label='Recall',
+                   color='#fbbf24', edgecolor='white')
+    bars4 = ax.bar(x + 1.5 * width, f1_scores, width, label='F1-Score',
+                   color='#f87171', edgecolor='white')
+
+    # 添加数值标签
+    for bars in [bars1, bars2, bars3, bars4]:
+        for bar in bars:
+            height = bar.get_height()
+            if height > 0:
+                ax.text(bar.get_x() + bar.get_width()/2, height + 0.01,
+                        f'{height:.2f}', ha='center', va='bottom', fontsize=7, rotation=45)
+
+    ax.set_xlabel("模型", fontsize=12)
+    ax.set_ylabel("得分", fontsize=12)
+    ax.set_title("多指标详细对比 (Acc/Precision/Recall/F1)", fontsize=14, fontweight='bold')
+    ax.set_xticks(x)
+    ax.set_xticklabels(model_names, fontsize=10)
+    ax.legend(loc='lower right', fontsize=10, ncol=4)
+    ax.set_ylim(0, 1.15)
+    ax.grid(True, alpha=0.3, axis='y')
+
+    # 用灰色虚线标记 0.5/0.8 参考线
+    for threshold in [0.5, 0.8]:
+        ax.axhline(y=threshold, color='gray', linestyle='--', alpha=0.3, linewidth=0.8)
+
+    plt.tight_layout()
+    return fig
 def plot_regularization_comparison(X_train, y_train, X_test, y_test,
                                    alphas=None, title="正则化强度对比"):
     """对比不同正则化强度下的系数变化（Ridge / Lasso 通用）

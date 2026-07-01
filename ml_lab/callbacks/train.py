@@ -20,7 +20,7 @@ from ml_lab.visualization import (
     plot_confusion_matrix, plot_roc_curve, plot_feature_importance,
     plot_regression_results, plot_gradient_descent_2d, fig_to_image,
     plot_clustering_scatter, plot_elbow_curve, plot_dendrogram,
-    plot_model_comparison,
+    plot_model_comparison, plot_multi_metric_comparison,
     plot_dbscan_eps_analysis, plot_pca_variance, plot_pca_projection,
     plot_regularization_comparison, plot_polynomial_comparison,
     plot_regression_comparison, plot_search_results,
@@ -385,17 +385,18 @@ def on_compare_models(selected_algos):
 
     if _g["X_train"] is None:
 
-        return None, "请先加载数据集"
+        return None, None, "请先加载数据集"
 
     if not selected_algos:
 
-        return None, "请至少选择一个算法"
+        return None, None, "请至少选择一个算法"
 
 
 
     try:
 
         from sklearn.model_selection import cross_val_score
+        from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
         import time
 
@@ -549,6 +550,35 @@ def on_compare_models(selected_algos):
 
 
 
+        # 计算多指标 (precision, recall, f1)
+        accuracies = []
+        precisions = []
+        recalls = []
+        f1_scores_list = []
+        for algo in selected_algos:
+            try:
+                params = default_params.get(algo, {})
+                model = create_algorithm(algo, **params)
+                model.fit(_g["X_train"], _g["y_train"])
+                y_pred = model.predict(_g["X_test"]) if hasattr(model, 'predict') else None
+                if y_pred is not None:
+                    acc = accuracy_score(_g["y_test"], y_pred)
+                    accuracies.append(acc)
+                    precisions.append(precision_score(_g["y_test"], y_pred, average='weighted', zero_division=0))
+                    recalls.append(recall_score(_g["y_test"], y_pred, average='weighted', zero_division=0))
+                    f1_scores_list.append(f1_score(_g["y_test"], y_pred, average='weighted', zero_division=0))
+                else:
+                    accuracies.append(0); precisions.append(0); recalls.append(0); f1_scores_list.append(0)
+            except Exception:
+                accuracies.append(0); precisions.append(0); recalls.append(0); f1_scores_list.append(0)
+
+        if accuracies:
+            multi_metric_img = fig_to_image(plot_multi_metric_comparison(
+                model_names, accuracies, precisions, recalls, f1_scores_list
+            ))
+        else:
+            multi_metric_img = None
+
         # 找出最佳模型
 
         if cv_scores_list:
@@ -567,7 +597,7 @@ def on_compare_models(selected_algos):
 
     except Exception as e:
 
-        return None, f"对比失败: {e}\n{traceback.format_exc()}"
+        return None, None, f"对比失败: {e}\n{traceback.format_exc()}"
 
 def on_train_regression(algo, lr, ni, C, md, mi, hid, al, deg, eps, kern, crit):
 
