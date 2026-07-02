@@ -41,7 +41,7 @@ from ml_lab.pages import build_pages
 from ml_lab.events import bind_events
 from ml_lab.version import VERSION, FULL_NAME
 from ml_lab.ui_styles import APP_CSS, ETHICS
-from ml_lab.jedi_backend import handle_completion
+from ml_lab.jedi_backend import handle_completion, handle_signatures
 
 
 def create_app():
@@ -92,6 +92,10 @@ if __name__ == "__main__":
     async def jedi_complete_endpoint(request: Request):
         data = await request.json()
         return handle_completion(data)
+    @app.post("/api/jedi_signatures")
+    async def jedi_signatures_endpoint(request: Request):
+        data = await request.json()
+        return handle_signatures(data)
     
     app.queue(max_size=20).launch(
         css=APP_CSS,

@@ -149,3 +149,44 @@ def handle_completion(request_data: dict) -> dict:
         "elapsed_ms": round(elapsed, 1),
         "count": len(completions),
     }
+
+
+def get_signatures(code, line, col):
+    """获取函数参数签名（用于函数调用时的参数提示）"""
+    try:
+        script = jedi.Script(code)
+        signatures = script.get_signatures(line, col)
+        results = []
+        for s in signatures:
+            params = []
+            for p in s.params:
+                desc = p.description
+                # 尝试获取默认值
+                default = ""
+                try:
+                    if p.has_default():
+                        default = str(p.default_value)
+                except Exception:
+                    pass
+                if default:
+                    params.append(f"{desc}={default}")
+                else:
+                    params.append(desc)
+            results.append({
+                "name": s.name,
+                "params": params,
+                "index": s.index if hasattr(s, "index") else 0,
+                "docstring": (s.docstring() or "").split("\n")[0][:100],
+            })
+        return results
+    except Exception as e:
+        return []
+
+
+def handle_signatures(request_data: dict) -> dict:
+    """FastAPI 处理器：参数签名"""
+    code = request_data.get("code", "")
+    line = request_data.get("line", 1)
+    col = request_data.get("col", 0)
+    sigs = get_signatures(code, line, col)
+    return {"signatures": sigs, "count": len(sigs)}
