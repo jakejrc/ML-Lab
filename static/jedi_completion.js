@@ -207,5 +207,60 @@
   document.addEventListener('keyup', onKeyUp);
   document.addEventListener('keydown', onKeyDown);
   document.addEventListener('click', onClick);
-  console.log('[Jedi] Enhanced completion with keyboard nav + signatures');
+  // ── 代码实时诊断 ──
+  var DIAG_URL = window.location.origin + '/api/jedi_diagnostics';
+  var diagTimer = null;
+  var lastDiagCode = '';
+
+  function fetchDiagnostics(code) {
+    fetch(DIAG_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({code:code})})
+    .then(function(r){return r.json()})
+    .then(function(d){showDiagnostics(d.issues)})
+    .catch(function(){});
+  }
+
+  function showDiagnostics(issues) {
+    var old = document.getElementById('jedi-diagnostics'); if(old) old.remove();
+    if (!issues || !issues.length) return;
+
+    var container = document.createElement('div');
+    container.id = 'jedi-diagnostics';
+    container.style.cssText = 'margin:4px 0;font-size:11px;font-family:monospace;';
+
+    for (var i = 0; i < Math.min(issues.length, 5); i++) {
+      var it = issues[i];
+      var color = it.severity === 'error' ? '#f87171' : '#facc15';
+      var icon = it.severity === 'error' ? '\u2716' : '\u26a0';
+      var badge = document.createElement('div');
+      badge.style.cssText = 'padding:2px 8px;border-left:3px solid ' + color + ';margin:2px 0;background:rgba(0,0,0,0.2);border-radius:2px;color:' + color + ';';
+      badge.textContent = icon + ' L' + it.line + ': ' + it.message;
+      container.appendChild(badge);
+    }
+
+    // 插入到代码编辑器上方
+    var editor = getEditor();
+    if (editor && editor.parentNode) {
+      editor.parentNode.insertBefore(container, editor);
+    }
+  }
+
+  function scheduleDiagnostics() {
+    if (diagTimer) clearTimeout(diagTimer);
+    diagTimer = setTimeout(function() {
+      var code = getCode();
+      if (!code || code === lastDiagCode) return;
+      lastDiagCode = code;
+      // 仅在代码变更后1秒无输入时检查
+      if (code.trim()) fetchDiagnostics(code);
+    }, 1000);
+  }
+
+  // 重写 onKeyUp 在现有逻辑后添加诊断调度
+  var _origKeyUp = onKeyUp;
+  onKeyUp = function(e) {
+    _origKeyUp(e);
+    scheduleDiagnostics();
+  };
+
+  console.log('[Jedi] Enhanced completion with keyboard nav + signatures + diagnostics');
 })();
