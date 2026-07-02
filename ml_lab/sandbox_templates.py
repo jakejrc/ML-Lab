@@ -16,7 +16,7 @@ import pandas as pd
 
 # 查看数据形状
 print("数据形状:", X.shape)
-print("前5行:\\n", pd.DataFrame(X[:5], columns=feature_names))
+print("前5行:\\\\n", pd.DataFrame(X[:5], columns=feature_names))
 """,
 
     "基础折线图": """import matplotlib.pyplot as plt
@@ -329,7 +329,7 @@ for idx, (name, model) in enumerate(models.items()):
     min_val = min(y_test.min(), y_pred.min())
     max_val = max(y_test.max(), y_pred.max())
     ax.plot([min_val, max_val], [min_val, max_val], 'r--', linewidth=2, label='理想预测')
-    ax.set_title(f'{name}\nR²={r2:.4f}', fontsize=13)
+    ax.set_title(f'{name}\\nR²={r2:.4f}', fontsize=13)
     ax.set_xlabel('真实值')
     ax.set_ylabel('预测值')
     ax.legend(fontsize=10)
