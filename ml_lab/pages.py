@@ -1020,19 +1020,10 @@ def build_pages():
 
 
             with gr.Row():
-
-
-
                 template_dd = gr.Dropdown(choices=list(SANDBOX_TEMPLATES.keys()),
-            gr.HTML('''<div style="display:flex;align-items:center;gap:12px;font-size:11px;color:#64748b;padding:4px 8px;">
-<span>⌨ <kbd style="background:#1e293b;padding:1px 6px;border-radius:3px;border:1px solid #475569;">Ctrl+Enter</kbd> 运行</span>
-<span>⏎ <kbd style="background:#1e293b;padding:1px 6px;border-radius:3px;border:1px solid #475569;">Ctrl+A</kbd> 全选</span>
-<span>📋 点击下方片段按钮即插入代码</span>
-</div>''')
-
                                          value=list(SANDBOX_TEMPLATES.keys())[0],
-
                                          label="代码模板", show_label=True, scale=3)
+                gr.HTML('''<div style="display:flex;align-items:center;gap:12px;font-size:11px;color:#64748b;padding:4px 8px;"><span>⌨ <kbd style="background:#1e293b;padding:1px 6px;border-radius:3px;border:1px solid #475569;">Ctrl+Enter</kbd> 运行</span></div>''')
 
 
 

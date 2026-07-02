@@ -41,6 +41,7 @@ from ml_lab.pages import build_pages
 from ml_lab.events import bind_events
 from ml_lab.version import VERSION, FULL_NAME
 from ml_lab.ui_styles import APP_CSS, ETHICS
+from ml_lab.jedi_backend import handle_completion
 
 
 def create_app():
@@ -85,6 +86,13 @@ if __name__ == "__main__":
         print("  [INFO] root_path 未设置 (直连模式)")
 
     app = create_app()
+    # 注册 Jedi 补全 API 端点
+    from fastapi import Request
+    @app.post("/api/jedi_complete")
+    async def jedi_complete_endpoint(request: Request):
+        data = await request.json()
+        return handle_completion(data)
+    
     app.queue(max_size=20).launch(
         css=APP_CSS,
         server_name="0.0.0.0",
