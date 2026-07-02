@@ -13,6 +13,8 @@ from ml_lab.callbacks import (
     on_fe_construct, on_fe_discretize, on_fe_correlation,
     on_kg_render, on_chat, on_preset,
     on_learning_path_click,
+    on_auto_tune,
+    on_insert_snippet, on_get_context_snippets,
     on_ai_test_connection, on_ai_save_config, on_ai_context_chat,
 )
 
@@ -72,13 +74,13 @@ def bind_events(comps):
     # 分类实验
 
     # ── 自动调参 ──
-    tune_btn_cls.click(fn=on_auto_tune, inputs=[_g, algo_dd_cls, gr.State("classification")],
+    tune_btn_cls.click(fn=on_auto_tune, inputs=[algo_dd_cls, gr.State("classification")],
                        outputs=[tune_status_cls, tune_result_cls])
 
-    tune_btn_reg.click(fn=on_auto_tune, inputs=[_g, algo_dd_reg, gr.State("regression")],
+    tune_btn_reg.click(fn=on_auto_tune, inputs=[algo_dd_reg, gr.State("regression")],
                        outputs=[tune_status_reg, tune_result_reg])
 
-    tune_btn_uns.click(fn=on_auto_tune, inputs=[_g, algo_dd_uns, gr.State("unsupervised")],
+    tune_btn_uns.click(fn=on_auto_tune, inputs=[algo_dd_uns, gr.State("unsupervised")],
                        outputs=[tune_status_uns, tune_result_uns])
 
     train_btn_cls.click(fn=on_train_classification,

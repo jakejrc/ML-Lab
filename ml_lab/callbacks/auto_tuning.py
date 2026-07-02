@@ -4,6 +4,7 @@ import json
 import itertools
 import time
 import numpy as np
+from ml_lab.state import _g
 from sklearn.model_selection import cross_val_score
 
 
@@ -65,11 +66,11 @@ def format_param_grid_html(algo, grid):
     return html
 
 
-def on_auto_tune(g, algo, task_type):
+def on_auto_tune(algo, task_type):
     """自动调参回调"""
     from ml_lab.algorithms import create_algorithm
 
-    if g.get("X_train") is None:
+    if _g.get("X_train") is None:
         return "请先在数据工作台加载数据集", ""
 
     grid = get_param_grid(algo)
@@ -100,14 +101,14 @@ def on_auto_tune(g, algo, task_type):
         try:
             start_t = time.time()
             model = create_algorithm(algo, **params)
-            model.fit(g["X_train"], g["y_train"])
+            model.fit(_g["X_train"], _g["y_train"])
             elapsed = time.time() - start_t
 
             # 评分
             score = 0
             if hasattr(model, "score"):
                 try:
-                    score = model.score(g["X_test"], g["y_test"])
+                    score = model.score(_g["X_test"], _g["y_test"])
                 except Exception:
                     pass
 
@@ -115,7 +116,7 @@ def on_auto_tune(g, algo, task_type):
             if hasattr(model, "model") and model.model is not None:
                 try:
                     cv_scores = cross_val_score(
-                        model.model, g["X_train"], g["y_train"],
+                        model.model, _g["X_train"], _g["y_train"],
                         cv=3, scoring=scoring
                     )
                     cv_mean = cv_scores.mean()
