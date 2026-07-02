@@ -1007,7 +1007,7 @@ def build_pages():
 
 
 
-            code_editor = gr.Code(label="Python 代码", language="python", lines=30,
+            code_editor = gr.Code(label="Python 代码", language="python", lines=30, autocomplete=True,
 
 
 
